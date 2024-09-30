@@ -7,16 +7,21 @@
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "strictPropertyInitialization": false,
     "importHelpers": true,
     "target": "es2015",
     "module": "esnext",
     "lib": ["es2020", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
+    "esModuleInterop": true,
     "baseUrl": ".",
     "paths": {
       "@backend/authentication": ["libs/account/authentication/src/index.ts"],
+      "@backend/data-access": ["libs/shared/data-access/src/index.ts"],
       "@backend/shared-core": ["libs/shared/core/src/index.ts"],
+      "@backend/shared-helpers": ["libs/shared/helpers/src/index.ts"],
+      "@backend/shared-pipes": ["libs/shared/pipes/src/index.ts"],
       "@backend/user": ["libs/account/user/src/index.ts"],
       "@backend/user-config": ["libs/account/config/src/index.ts"]
     }

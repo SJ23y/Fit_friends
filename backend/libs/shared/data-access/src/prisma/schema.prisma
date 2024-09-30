@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+  output = "../../../../../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id String @id @default(uuid()) @map("id")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+  name  String
+  email String @unique
+  avatar String @default("")
+  passwordHash String @map("password_hash")
+  gender String
+  birthDate String @map("birth_date") @default("")
+  description String
+  location String
+  backgroundImage String  @map("background_image")
+  questionnaire Questionnaire?
+
+  @@map("users")
+}
+
+model Questionnaire {
+  id String @id @default(uuid()) @map("id")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+  userLevel String @map("user_level")
+  trainType  String[] @map("train_type")
+  trainDuration  String @map("train_duration")
+  calorieGoal  Int @map("calorie_goal")
+  caloriePerDay  Int @map("calorie_per_day")
+  isReadyForTrain  Boolean @map("is_ready_for_train")
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId String @unique @map("user_id")
+
+  @@map("questionnaires")
+}
+
+model Token {
+  id String @id @default(uuid()) @map("id")
+  createdAt  DateTime @default(now()) @map("created_at")
+  tokenId String @map("token_id")
+  userId String @map("user_id")
+  expiresIn DateTime @map("expires_in")
+
+  @@map("tokens")
+}
