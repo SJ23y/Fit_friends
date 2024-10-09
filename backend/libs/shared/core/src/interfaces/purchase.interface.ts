@@ -1,11 +1,13 @@
-import { PaymentType } from '../setting/common.setting';
+import { PaymentType } from '../settings/common.setting';
 
 export interface Purchase {
+  id?: string;
   type: string;
-  train: string;
+  trainId: string;
+  userId: string;
   price: number;
   trainCount: number;
   totalPrice: number;
   paymentType: PaymentType;
-  createdAt: string;
+  createdAt?: Date;
 }

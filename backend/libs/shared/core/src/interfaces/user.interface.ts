@@ -1,5 +1,5 @@
-import { Gender } from '../settings/user.setting';
-
+import { Gender, Role } from '../settings/user.setting';
+import { Review, Training, Purchase} from '@prisma/client';
 export interface User {
   id?: string;
   name:  string;
@@ -12,4 +12,8 @@ export interface User {
   backgroundImage: string;
   createdAt?: Date;
   questionnaire?: string;
+  role: Role;
+  reviews?: Review[];
+  trainings?: Training[];
+  purchases?: Purchase[];
 }

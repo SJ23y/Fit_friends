@@ -1,0 +1,19 @@
+# Create new Review
+
+POST http://localhost:3000/api/reviews HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmOWVmY2JhMC0zYmMyLTQ5YTAtYmFiMi0xYzAyYmYyNWFlMzMiLCJuYW1lIjoiUm9uYWxkIiwiaWF0IjoxNzI4NDQzNTc4LCJleHAiOjE3Mjg0NDQ0Nzh9.2uM0B2RXHcaL0ylMrY1Myk3kH-WNWkX89uH5pvfe9tI
+
+{
+  "trainId": "8e3504b2-0102-4c95-8c43-d7bb39d37f32",
+  "content": "Objectively empower leveraged infomediaries after error-free experiences. Interactively re-engineer.",
+  "rate": 2
+}
+###
+
+# Get all reviews of specific training
+
+GET http://localhost:3000/api/reviews/714761d7-2535-4edb-99f1-906b4ec71f4f HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmOWVmY2JhMC0zYmMyLTQ5YTAtYmFiMi0xYzAyYmYyNWFlMzMiLCJuYW1lIjoiUm9uYWxkIiwiaWF0IjoxNzI4NDQzNTc4LCJleHAiOjE3Mjg0NDQ0Nzh9.2uM0B2RXHcaL0ylMrY1Myk3kH-WNWkX89uH5pvfe9tI
+
+###

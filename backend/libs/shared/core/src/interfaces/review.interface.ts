@@ -1,8 +1,11 @@
+import { User } from "@prisma/client";
+
 export interface Review {
   id?: string;
-  author: string;
-  train: string;
+  author?: User;
+  userId: string;
+  trainId: string;
   rate: number;
   content: string;
-  createdAt: string;
+  createdAt?: string;
 }

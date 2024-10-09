@@ -1,0 +1,12 @@
+# Get All trainings
+
+GET http://localhost:3000/api/trainings?count=2&page=2 HTTP/1.1
+
+###
+
+# Get specific training
+
+GET http://localhost:3000/api/trainings/714761d7-2535-4edb-99f1-906b4ec71f4f HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0ZjY0YTNkYy00ZjI3LTRjY2EtYmMxOS05YTkyMWU2YjdlOTkiLCJuYW1lIjoiUm9uYWxkIiwiaWF0IjoxNzI4MzQ1ODQ1LCJleHAiOjE3MjgzNDY3NDV9.mIRhV3U4eT2Yom-v5rNhD_RBFXrzH4u3f69ysLPJ_Ys
+
+###

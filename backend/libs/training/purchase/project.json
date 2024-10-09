@@ -1,0 +1,9 @@
+{
+  "name": "training-purchase",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/training/purchase/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project training-purchase --web",
+  "targets": {}
+}

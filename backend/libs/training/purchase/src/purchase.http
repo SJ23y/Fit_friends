@@ -1,0 +1,41 @@
+# Create new purchase
+
+POST http://localhost:3000/api/purchase HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmOWVmY2JhMC0zYmMyLTQ5YTAtYmFiMi0xYzAyYmYyNWFlMzMiLCJuYW1lIjoiUm9uYWxkIiwiaWF0IjoxNzI4NDQ5MjI5LCJleHAiOjE3Mjg0NTAxMjl9.xQd_YXveCdZUAj72RNZPR4qw0dqIN51Mg9cpy5J7LQA
+
+{
+  "type": "абонемент",
+  "trainId": "9a6b5900-4f5f-4a58-9386-d8c0f37e53fe",
+  "price": 1000,
+  "trainCount": 5,
+  "paymentType": "visa"
+}
+###
+
+# Get all user purchases
+
+GET http://localhost:3000/api/purchase/user HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmOWVmY2JhMC0zYmMyLTQ5YTAtYmFiMi0xYzAyYmYyNWFlMzMiLCJuYW1lIjoiUm9uYWxkIiwiaWF0IjoxNzI4NDQ2ODg4LCJleHAiOjE3Mjg0NDc3ODh9.DkbskZ1iUCANA5yYhsfhuevJqQclWnExuGOLXqr3ng0
+
+###
+
+# Get balance of trainings of specific purchase
+
+GET http://localhost:3000/api/purchase/00111449-79b9-4a5e-88cf-dd9e5a054ac4 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmOWVmY2JhMC0zYmMyLTQ5YTAtYmFiMi0xYzAyYmYyNWFlMzMiLCJuYW1lIjoiUm9uYWxkIiwiaWF0IjoxNzI4NDQ5MjI5LCJleHAiOjE3Mjg0NTAxMjl9.xQd_YXveCdZUAj72RNZPR4qw0dqIN51Mg9cpy5J7LQA
+
+###
+
+# Reduce trainings count of specific purchase
+
+PATCH http://localhost:3000/api/purchase/60b84b76-2039-405a-b2ed-869eef31f127 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmOWVmY2JhMC0zYmMyLTQ5YTAtYmFiMi0xYzAyYmYyNWFlMzMiLCJuYW1lIjoiUm9uYWxkIiwiaWF0IjoxNzI4NDQ5MjI5LCJleHAiOjE3Mjg0NTAxMjl9.xQd_YXveCdZUAj72RNZPR4qw0dqIN51Mg9cpy5J7LQA
+
+{
+  "trainId": "9a6b5900-4f5f-4a58-9386-d8c0f37e53fe",
+  "trainCount": 1
+}
+
+###

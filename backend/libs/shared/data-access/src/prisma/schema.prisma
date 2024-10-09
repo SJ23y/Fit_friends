@@ -22,6 +22,10 @@ model User {
   location String
   backgroundImage String  @map("background_image")
   questionnaire Questionnaire?
+  role String
+  reviews Review[]
+  trainings Deposit[]
+  purchases Purchase[]
 
   @@map("users")
 }
@@ -50,4 +54,65 @@ model Token {
   expiresIn DateTime @map("expires_in")
 
   @@map("tokens")
+}
+
+model Training {
+  id String @id @default(uuid()) @map("id")
+  createdAt  DateTime @default(now()) @map("created_at")
+  title String
+  image String
+  level String
+  type String
+  duration String
+  price Int
+  callorieQuantity Int @map("callorie_quantity")
+  description String
+  gender String
+  video String
+  rate Float
+  coach String
+  isSpecialOffer Boolean @map("is_special_offer")
+  reviews Review[]
+  purchases Purchase[]
+
+  @@map("trainings")
+}
+
+model Review {
+  id String @id @default(uuid()) @map("id")
+  createdAt  DateTime @default(now()) @map("created_at")
+  author User  @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId String @map("user_id")
+  train Training @relation(fields: [trainId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  trainId String @map("train_id")
+  rate Int
+  content String
+
+  @@map("reviews")
+}
+
+model Purchase {
+  id String @id @default(uuid()) @map("id")
+  createdAt  DateTime @default(now()) @map("created_at")
+  type String
+  train Training @relation(fields: [trainId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  trainId String @map("train_id")
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId String @map("user_id")
+  price Int
+  trainCount Int @map("train_count")
+  totalPrice Int @map("total_price")
+  paymentType String @map("payment_type")
+
+  @@map("purchases")
+}
+
+model Deposit {
+  trainId String @map("train_id")
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId String @map("user_id")
+  count Int
+
+  @@id([userId, trainId])
+  @@map("deposits")
 }

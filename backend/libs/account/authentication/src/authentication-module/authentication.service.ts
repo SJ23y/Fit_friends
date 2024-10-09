@@ -5,7 +5,7 @@ import { AUTH_USER_EXIST, AUTH_USER_NOT_FOUND, AUTH_USER_PASSWORD_WRONG, AUTH_US
 import { LoginUserDto } from '../dto/login-user.dto';
 import { ConfigType } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { Token, User } from '@backend/shared-core';
+import { Role, Token, User } from '@backend/shared-core';
 import { jwtConfig } from '@backend/user-config';
 import { RefreshTokenService } from '../refresh-token-module/refresh-token.service';
 import { createJwtPayload } from '@backend/shared-helpers';
@@ -29,7 +29,11 @@ export class AuthenticationService {
       ...dto,
       avatar: dto.avatar ?? '',
       birthDate: dto.birthDate ?? '',
-      passwordHash: ''
+      passwordHash: '',
+      trainigs: undefined,
+      reviews: undefined,
+      purchaces: undefined,
+      role: Role.USER
     }
     const existUser = await this.userRepository.findByEmail(dto.email);
 

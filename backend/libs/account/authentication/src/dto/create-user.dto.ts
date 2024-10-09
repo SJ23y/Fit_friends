@@ -24,6 +24,8 @@ export class CreateUserDto {
     description: 'User avatar',
     example: 'avatar.jpg'
   })
+  @IsOptional()
+  @IsString()
   public avatar?: string;
 
   @ApiProperty({
@@ -70,5 +72,7 @@ export class CreateUserDto {
     description: 'Background image for user page',
     example: 'back.jpg'
   })
+  @IsOptional()
+  @IsString()
   backgroundImage: string;
 }

@@ -17,15 +17,16 @@ import { CreateUserDto } from '../dto/create-user.dto';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthenticationMessages } from './authentication.consts';
 import { LoggedUserRdo } from '../rdo/logged-user.rdo';
-import { UserRdo } from '../rdo/user.rdo';
 import { fillDto } from '@backend/shared-helpers';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { RequestWithUser } from './request-with-user.interface';
 import { LoacalAuthGuard } from '../guards/local-auth.quard';
 import { JwtRefreshGuard } from '../guards/jwt-refresh.guard';
 import { RequestWithTokenPayload } from '@backend/shared-core';
+import { UserRdo } from '../rdo/user.rdo';
 import { UpdateUserDto } from '../dto/update-user.dto';
-
+import { TrainingBalanceService } from '@backend/user-balance';
+import { UserBalanceRdo } from '../rdo/user-balance.rdo';
 
 @ApiTags('authentication')
 @Controller('')
@@ -33,7 +34,8 @@ export class AuthenticationController {
   private logger = new Logger('Authentication controller');
 
   constructor(
-    private readonly authenticationService: AuthenticationService
+    private readonly authenticationService: AuthenticationService,
+    private readonly userBalanceservice: TrainingBalanceService
   ) {}
 
   @ApiResponse({
@@ -71,7 +73,7 @@ export class AuthenticationController {
   }
 
   @ApiResponse({
-    status: HttpStatus.CREATED,
+    status: HttpStatus.OK,
     description: AuthenticationMessages.PasswordUpdated
   })
   @ApiResponse({
@@ -100,10 +102,10 @@ export class AuthenticationController {
     description: AuthenticationMessages.UserNotFound
   })
   @UseGuards(JwtAuthGuard)
-  @Get('user/:id')
-  public async showUser(@Param('id', ParseUUIDPipe) id: string) {
-    const user = await this.authenticationService.getUser(id);
-    return fillDto(UserRdo, { ...user.toPOJO(), subscribersCount: 0, postsCount: 0})
+  @Get('user/balance/:id')
+  public async showUserBalance(@Param('id', ParseUUIDPipe) id: string) {
+    const totalTrainingsCount = await this.userBalanceservice.getUserTrainingsCount(id);
+    return fillDto(UserBalanceRdo, { totalTrainingsCount })
   }
 
   @ApiResponse({
@@ -115,13 +117,13 @@ export class AuthenticationController {
     description: AuthenticationMessages.WrongToken
   })
   @UseGuards(JwtRefreshGuard)
-  @Post('refresh')
+  @Post('auth/refresh')
   public async refreshToken(@Req() {user}: RequestWithUser) {
     return this.authenticationService.createUserToken(user);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post('check')
+  @Post('auth/check')
   public async checkToken(@Req() { user: payload }: RequestWithTokenPayload) {
     return payload;
   }

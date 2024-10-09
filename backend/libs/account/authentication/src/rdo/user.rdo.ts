@@ -78,4 +78,11 @@ export class UserRdo {
   })
   @Expose()
   public questionnaire: string;
+
+  @ApiProperty({
+    description: 'Role of the user',
+    example: 'User'
+  })
+  @Expose()
+  public role: string;
 }

@@ -11,3 +11,8 @@ export enum Gender {
   FEMALE = 'женский',
   NONE = 'неважно'
 };
+
+export enum Role {
+  USER =  'user',
+  COACH = 'coach'
+};

@@ -19,7 +19,16 @@ export class UserRepository extends BasePostgresRepository<UserEntity, PrismaUse
     const newUser = await this.client.user.create({
       data: {
         ...user.toPOJO(),
-        questionnaire: undefined
+        questionnaire: undefined,
+        reviews: undefined,
+        trainings: undefined,
+        purchases: undefined
+      },
+      include: {
+        questionnaire: true,
+        reviews: true,
+        trainings: true,
+        purchases: true
       }
     });
     user.id = newUser.id
@@ -44,7 +53,13 @@ export class UserRepository extends BasePostgresRepository<UserEntity, PrismaUse
 
   public async findById(userId: string): Promise<UserEntity | null> {
     const foundUser = await this.client.user.findFirst({
-      where: { id: userId }
+      where: { id: userId },
+      include: {
+        questionnaire: true,
+        reviews: true,
+        trainings: true,
+        purchases: true
+      }
     });
 
     if (! foundUser) {
@@ -59,7 +74,16 @@ export class UserRepository extends BasePostgresRepository<UserEntity, PrismaUse
       where: {id: userId},
       data: {
         ...user,
-        questionnaire: undefined
+        questionnaire: undefined,
+        reviews:undefined,
+        trainings: undefined,
+        purchases: undefined
+      },
+      include: {
+        questionnaire: true,
+        reviews: true,
+        trainings: true,
+        purchases: true
       }
     });
 
