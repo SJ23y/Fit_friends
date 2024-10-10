@@ -5,12 +5,14 @@ import { AUTH_USER_EXIST, AUTH_USER_NOT_FOUND, AUTH_USER_PASSWORD_WRONG, AUTH_US
 import { LoginUserDto } from '../dto/login-user.dto';
 import { ConfigType } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { Role, Token, User } from '@backend/shared-core';
+import { DEFAULT_AVATAR_NAMES, DEFAULT_BACKGROUND_IMAGE_NAMES, Role, Token, User } from '@backend/shared-core';
 import { jwtConfig } from '@backend/user-config';
 import { RefreshTokenService } from '../refresh-token-module/refresh-token.service';
-import { createJwtPayload } from '@backend/shared-helpers';
+import { createJwtPayload, getRanndomElement } from '@backend/shared-helpers';
 import { randomUUID } from 'crypto';
 import { UpdateUserDto } from '../dto/update-user.dto';
+import { UserWithFiles } from './user-with-files.interface';
+import { FileManagerService } from '@backend/file-manager';
 
 @Injectable()
 export class AuthenticationService {
@@ -20,14 +22,21 @@ export class AuthenticationService {
     private readonly jwtService: JwtService,
     private readonly refsreshTokenService: RefreshTokenService,
     private readonly userRepository: UserRepository,
+    private readonly fileService: FileManagerService,
     @Inject(jwtConfig.KEY) private readonly jwtOptions: ConfigType<typeof jwtConfig>
   ) {
   }
 
-  public async register(dto: CreateUserDto) {
+  public async register(dto: CreateUserDto, files: UserWithFiles) {
+    const [avatar, backgroundImage] = await Promise.all([
+      this.fileService.writeFile(files.avatar?.[0]),
+      this.fileService.writeFile(files.backgroundImage?.[0])
+    ])
+
     const newUser = {
       ...dto,
-      avatar: dto.avatar ?? '',
+      avatar: avatar ?? getRanndomElement(DEFAULT_AVATAR_NAMES),
+      backgroundImage: backgroundImage ?? getRanndomElement(DEFAULT_BACKGROUND_IMAGE_NAMES),
       birthDate: dto.birthDate ?? '',
       passwordHash: '',
       trainigs: undefined,
@@ -70,10 +79,17 @@ export class AuthenticationService {
     return existUser;
   }
 
-  public async update( dto: UpdateUserDto, id?: string,) {
+  public async update( dto: UpdateUserDto, files: UserWithFiles, id?: string,) {
     if (!id) {
       throw new UnauthorizedException(AUTH_USER_UNAUTHORISED)
     }
+
+    const [avatar, backgroundImage] = await Promise.all([
+      this.fileService.writeFile(files.avatar?.[0]),
+      this.fileService.writeFile(files.backgroundImage?.[0])
+    ]);
+    dto.avatar = avatar ?? undefined;
+    dto.backgroundImage = backgroundImage ?? undefined;
 
     const existUser = await this.userRepository.findById(id);
 

@@ -1,17 +1,23 @@
+import 'multer';
 import {
   BadRequestException,
   Body,
   Controller,
   Delete,
+  FileTypeValidator,
   Get,
   HttpStatus,
   Logger,
+  MaxFileSizeValidator,
   Param,
+  ParseFilePipe,
   ParseUUIDPipe,
   Patch,
   Post,
   Req,
-  UseGuards } from '@nestjs/common';
+  UploadedFiles,
+  UseGuards,
+  UseInterceptors} from '@nestjs/common';
 import { AuthenticationService } from './authentication.service';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -27,6 +33,8 @@ import { UserRdo } from '../rdo/user.rdo';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { TrainingBalanceService } from '@backend/user-balance';
 import { UserBalanceRdo } from '../rdo/user-balance.rdo';
+import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import { UserWithFiles } from './user-with-files.interface';
 
 @ApiTags('authentication')
 @Controller('')
@@ -46,9 +54,23 @@ export class AuthenticationController {
     status: HttpStatus.CONFLICT,
     description: AuthenticationMessages.UserExist
   })
+  @UseInterceptors(FileFieldsInterceptor([
+    { name: 'avatar', maxCount: 1 },
+    { name: 'backgroundImage', maxCount: 1 },
+  ]))
   @Post('register')
-  public async create(@Body() dto: CreateUserDto) {
-    const user = await this.authenticationService.register(dto);
+  public async create(
+    @Body() dto: CreateUserDto,
+    @UploadedFiles(
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({ maxSize: 1000000 }),
+          new FileTypeValidator({ fileType: '.(png|jpeg|jpg)' }),
+        ],
+        fileIsRequired: false
+      }),
+    ) files: UserWithFiles) {
+    const user = await this.authenticationService.register(dto, files);
     return fillDto(UserRdo, user.toPOJO());
   }
 
@@ -86,8 +108,19 @@ export class AuthenticationController {
   })
   @UseGuards(JwtAuthGuard)
   @Patch('user/update')
-  public async update(@Body() dto: UpdateUserDto, @Req() { user: payload }: RequestWithTokenPayload) {
-    const user = await this.authenticationService.update(dto, payload?.sub);
+  public async update(
+    @Body() dto: UpdateUserDto,
+    @Req() { user: payload }: RequestWithTokenPayload,
+    @UploadedFiles(
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({ maxSize: 1000000 }),
+          new FileTypeValidator({ fileType: '.(png|jpeg|jpg)' }),
+        ],
+        fileIsRequired: false
+      }),
+    ) files: UserWithFiles) {
+    const user = await this.authenticationService.update(dto, files, payload?.sub);
 
     return fillDto(UserRdo, user.toPOJO());
   }
