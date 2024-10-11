@@ -11,7 +11,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const globalPrefix = 'api';
+  const globalPrefix = '';
   const config = new DocumentBuilder()
                       .setTitle('Fitfriends service API ')
                       .setDescription('Fitfriends service for search trainmates')

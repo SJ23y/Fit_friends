@@ -1,5 +1,5 @@
 #create a new user
-POST http://localhost:3000/api/register HTTP/1.1
+POST http://localhost:3000/register HTTP/1.1
 Content-Type: application/json
 
 {
@@ -17,13 +17,13 @@ Content-Type: application/json
 ###
 
 #Get user by id
-GET http://localhost:3000/api/user/balance/f9efcba0-3bc2-49a0-bab2-1c02bf25ae33 HTTP/1.1
+GET http://localhost:3000/user/balance/f9efcba0-3bc2-49a0-bab2-1c02bf25ae33 HTTP/1.1
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmOWVmY2JhMC0zYmMyLTQ5YTAtYmFiMi0xYzAyYmYyNWFlMzMiLCJuYW1lIjoiUm9uYWxkIiwiaWF0IjoxNzI4NDQ5MjI5LCJleHAiOjE3Mjg0NTAxMjl9.xQd_YXveCdZUAj72RNZPR4qw0dqIN51Mg9cpy5J7LQA
 
 ###
 
 #Login user
-POST http://localhost:3000/api/login HTTP/1.1
+POST http://localhost:3000/login HTTP/1.1
 Content-Type: application/json
 
 {
@@ -35,20 +35,20 @@ Content-Type: application/json
 
 
 #Refresh tokens
-POST http://localhost:3000/api/auth/refresh HTTP/1.1
+POST http://localhost:3000/auth/refresh HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0ZjY0YTNkYy00ZjI3LTRjY2EtYmMxOS05YTkyMWU2YjdlOTkiLCJuYW1lIjoiUm9uYWxkIiwidG9rZW5JZCI6ImIxMTA0ZmMyLTVjMWItNDFmMC04ODk2LWI0ODE4ZDYxOWJmYSIsImlhdCI6MTcyODM0MTQ4OSwiZXhwIjoxNzI4OTQ2Mjg5fQ.eoks70A2_UiG1kiy_JvOaNeTJnxfWY8rtc5qQJr40Js
 
 ###
 
 # Check user token
-POST http://localhost:3000/api/auth/check HTTP/1.1
+POST http://localhost:3000/auth/check HTTP/1.1
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0ZjY0YTNkYy00ZjI3LTRjY2EtYmMxOS05YTkyMWU2YjdlOTkiLCJuYW1lIjoiUm9uYWxkIiwiaWF0IjoxNzI4MzQxNDg5LCJleHAiOjE3MjgzNDIzODl9.B_OxqaDOmdbiBqXlyjy7-YhH399OBrvdy-_8RIo34vY
 
 ###
 
 # Update
-PATCH http://localhost:3000/api/user/update HTTP/1.1
+PATCH http://localhost:3000/user/update HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0ZjY0YTNkYy00ZjI3LTRjY2EtYmMxOS05YTkyMWU2YjdlOTkiLCJuYW1lIjoiUm9uYWxkIiwiaWF0IjoxNzI4MzQxNDg5LCJleHAiOjE3MjgzNDIzODl9.B_OxqaDOmdbiBqXlyjy7-YhH399OBrvdy-_8RIo34vY
 
@@ -59,7 +59,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0ZjY0YTNkY
 ###
 
 # Logout
-DELETE http://localhost:3000/api/logout HTTP/1.1
+DELETE http://localhost:3000/logout HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0ZjY0YTNkYy00ZjI3LTRjY2EtYmMxOS05YTkyMWU2YjdlOTkiLCJuYW1lIjoiUm9uYWxkIiwiaWF0IjoxNzI4MzQxNDg5LCJleHAiOjE3MjgzNDIzODl9.B_OxqaDOmdbiBqXlyjy7-YhH399OBrvdy-_8RIo34vY
 

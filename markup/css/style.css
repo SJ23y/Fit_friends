@@ -8174,7 +8174,7 @@ input:active + .custom-textarea__text {
 }
 
 .intro {
-  position: fixed;
+  position: relative;
   top: 0;
   right: 0;
   bottom: 0;
