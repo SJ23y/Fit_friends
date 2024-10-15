@@ -3,41 +3,49 @@ import { AxiosInstance } from 'axios';
 import { Dispatch, State } from '../../types/state';
 import { ApiRoute } from '../../consts';
 import { dropToken, saveToken } from '../../services/token';
-import { AuthData, NewUser, Token, UserData } from '../../types/auth';
+import { AuthData, NewUser, TokenData, UserData } from '../../types/auth';
 
 
 const checkAuthorization = createAsyncThunk<
-  Boolean,
+  UserData,
   undefined,
   { dispatch: Dispatch; state: State; extra: AxiosInstance }
 >('checkAuthorization', async (_arg, { extra: api }) => {
-  const { data } = await api.get<Boolean>(ApiRoute.Login);
-  return data;
+  try {
+    const { data } = await api.post<UserData>(ApiRoute.Check);
+    return data;
+  } catch {
+    const { data:{accessToken, refreshToken} } = await api.post<TokenData>(ApiRoute.Refresh);
+    saveToken(accessToken, refreshToken);
+  } finally {
+     const { data } = await api.post<UserData>(ApiRoute.Check);
+    return data;
+  }
 });
 
 const registerUser = createAsyncThunk<
-  Omit<UserData, Token>,
-  NewUser,
+  UserData,
+  FormData,
   { dispatch: Dispatch; state: State; extra: AxiosInstance }
->('loginUser', async (newUser, { extra: api }) => {
-  const { data } = await api.post<Omit<UserData, Token>>(ApiRoute.Register, {
-    ...newUser
-  });
-  console.log('data: ', data);
+>('registerUser', async (newUser, { extra: api }) => {
+  const { data } = await api.post<UserData>(ApiRoute.Register, newUser);
+  const { data:{accessToken, refreshToken} } = await api.post<TokenData>(ApiRoute.Login, {email: newUser.get('email'), password: newUser.get('password')});
+  saveToken(accessToken, refreshToken);
   return data;
 });
 
 
 const loginUser = createAsyncThunk<
-  UserData,
+  UserData & TokenData,
   AuthData,
   { dispatch: Dispatch; state: State; extra: AxiosInstance }
 >('loginUser', async ({ email, password }, { extra: api }) => {
-  const { data } = await api.post<UserData>(ApiRoute.Login, {
+  const { data } = await api.post<UserData & TokenData>(ApiRoute.Login, {
     email,
     password,
   });
-  saveToken(data.token);
+  console.log('Login data: ', data);
+  saveToken(data.accessToken, data.refreshToken);
   return data;
 });
 

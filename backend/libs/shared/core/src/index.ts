@@ -33,3 +33,5 @@ export {
   DEFAULT_VIDEO_NAMES,
   DEFAULT_FILE_NAMES,
   FILE_FIELDS_KEYS } from './settings/file.setting';
+
+  export { CustomError } from './interfaces/custom-error.interface';

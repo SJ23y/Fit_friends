@@ -3,11 +3,9 @@ import { AxiosInstance } from 'axios';
 import { Dispatch, State } from '../types/state';
 import { ApiRoute } from '../consts';
 import { dropToken, saveToken } from '../services/token';
-import { AuthData, UserData } from '../types/auth';
-import { Guitar, Guitars } from '../types/guitars';
-import { GuitarQuery } from '../types/query';
-import { createQueryString } from '../utils';
+import { AuthData, TokenData, UserData } from '../types/auth';
 
+/*
 const uploadGuitars = createAsyncThunk<Guitars, GuitarQuery, {dispatch: Dispatch; state: State; extra: AxiosInstance}>('uploadGuitars', async (query, {extra: api}) => {
   const { data } = await api.get<Guitars>(`${ApiRoute.Guitars}?${createQueryString(query)}`);
   return data;
@@ -39,16 +37,24 @@ const updateGuitar = createAsyncThunk<
   } catch {
     disableForm(false);
   }
-});
+});*/
 
 const checkAuthorization = createAsyncThunk<UserData, undefined, {dispatch: Dispatch; state: State; extra: AxiosInstance}>('checkAuthorization', async (_arg, {extra: api}) => {
-  const { data } = await api.get<UserData>(ApiRoute.Login);
-  return data;
+  try {
+    const { data } = await api.post<UserData>(ApiRoute.Check);
+    return data;
+  } catch {
+    const { data:{accessToken, refreshToken} } = await api.post<TokenData>(ApiRoute.Refresh, {});
+    saveToken(accessToken, refreshToken);
+  } finally {
+     const { data } = await api.post<UserData>(ApiRoute.Check);
+    return data;
+  }
 });
 
-const loginUser = createAsyncThunk<UserData, AuthData, {dispatch: Dispatch; state: State; extra: AxiosInstance}>('loginUser', async ({ email, password }, { extra: api}) => {
-  const { data } = await api.post<UserData>(ApiRoute.Login, {email, password});
-  saveToken(data.token);
+const loginUser = createAsyncThunk<UserData & TokenData, AuthData, {dispatch: Dispatch; state: State; extra: AxiosInstance}>('loginUser', async ({ email, password }, { extra: api}) => {
+  const { data } = await api.post<UserData & TokenData>(ApiRoute.Login, {email, password});
+  saveToken(data.accessToken, data.refreshToken);
   return data;
 });
 
@@ -57,20 +63,16 @@ const logoutUser = createAsyncThunk<void, undefined, {dispatch: Dispatch; state:
   dropToken();
 });
 
-
+/*
 const uploadGuitarById = createAsyncThunk<Guitar | void, string, {dispatch: Dispatch; state: State; extra: AxiosInstance}>('uploadGuitarById', async (guitarId, { extra: api}) => {
   const { data } = await api.get<Guitar>(`${ApiRoute.Guitars}/${guitarId}`);
     return data;
-  });
+  });*/
 
 export {
-  uploadGuitars,
   checkAuthorization,
   loginUser,
-  logoutUser,
-  uploadGuitarById,
-  saveNewGuitar,
-  updateGuitar
+  logoutUser
 };
 
 

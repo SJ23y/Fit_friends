@@ -27,16 +27,14 @@ export class AuthenticationService {
   ) {
   }
 
-  public async register(dto: CreateUserDto, files: UserWithFiles) {
-    const [avatar, backgroundImage] = await Promise.all([
-      this.fileService.writeFile(files.avatar?.[0]),
-      this.fileService.writeFile(files.backgroundImage?.[0])
-    ])
+  public async register(dto: CreateUserDto, file: Express.Multer.File) {
+    const avatar = await this.fileService.writeFile(file);
 
     const newUser = {
       ...dto,
+      description: '',
       avatar: avatar ?? getRanndomElement(DEFAULT_AVATAR_NAMES),
-      backgroundImage: backgroundImage ?? getRanndomElement(DEFAULT_BACKGROUND_IMAGE_NAMES),
+      backgroundImage: getRanndomElement(DEFAULT_BACKGROUND_IMAGE_NAMES),
       birthDate: dto.birthDate ?? '',
       passwordHash: '',
       trainigs: undefined,

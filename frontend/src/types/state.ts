@@ -1,4 +1,4 @@
-import { ThunkDispatch } from '@reduxjs/toolkit';
+import { SerializedError, ThunkDispatch } from '@reduxjs/toolkit';
 import { AuthorizationStatus, SortBy, SortDirection } from '../consts';
 import { store } from '../store';
 import { createAPI } from '../services/api';
@@ -20,6 +20,7 @@ export type GuitarProcess = {
 export type UserProcess = {
   authorizationStatus: AuthorizationStatus;
   user: UserData | null;
+  error: SerializedError | null;
 };
 
 export type State = ReturnType<typeof store.getState>;

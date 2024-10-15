@@ -21,10 +21,12 @@ export const AuthenticationMessages = {
 
 
 export const AuthenticationValidateMessage = {
-  EmailNotValid: 'The email is not valid',
-  NameNotValid: 'Name should be string with the length within 1-15 charactres',
-  PasswordNotValid: 'Pssword should be string with the length within 6-12 charactres',
+  EmailNotValid: 'Email is not valid',
+  NameLengthNotValid: 'Name should be string with the length within 1-15 charactres',
+  NameNotValid: 'Name should be consist only of latin or russian letters',
+  PasswordNotValid: 'Password should be string with the length within 6-12 charactres',
   Gender: 'Gender should be "мужской", "женский" or "неважно"',
   Description: 'Description should be string with the length within 10-140 charactres',
-  Locations: `Available values for location is: ${LOCATIONS.join(',')}`
+  Locations: `Location available values is: ${LOCATIONS.join(',')}`,
+  Role: 'Role value should be user or coach'
 } as const;

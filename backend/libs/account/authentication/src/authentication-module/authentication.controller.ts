@@ -1,6 +1,5 @@
 import 'multer';
 import {
-  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -15,6 +14,7 @@ import {
   Patch,
   Post,
   Req,
+  UploadedFile,
   UploadedFiles,
   UseGuards,
   UseInterceptors} from '@nestjs/common';
@@ -33,7 +33,7 @@ import { UserRdo } from '../rdo/user.rdo';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { TrainingBalanceService } from '@backend/user-balance';
 import { UserBalanceRdo } from '../rdo/user-balance.rdo';
-import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { UserWithFiles } from './user-with-files.interface';
 
 @ApiTags('authentication')
@@ -54,14 +54,11 @@ export class AuthenticationController {
     status: HttpStatus.CONFLICT,
     description: AuthenticationMessages.UserExist
   })
-  @UseInterceptors(FileFieldsInterceptor([
-    { name: 'avatar', maxCount: 1 },
-    { name: 'backgroundImage', maxCount: 1 },
-  ]))
+  @UseInterceptors(FileInterceptor('avatar'))
   @Post('register')
   public async create(
     @Body() dto: CreateUserDto,
-    @UploadedFiles(
+    @UploadedFile(
       new ParseFilePipe({
         validators: [
           new MaxFileSizeValidator({ maxSize: 1000000 }),
@@ -69,8 +66,8 @@ export class AuthenticationController {
         ],
         fileIsRequired: false
       }),
-    ) files: UserWithFiles) {
-    const user = await this.authenticationService.register(dto, files);
+    ) file: Express.Multer.File) {
+    const user = await this.authenticationService.register(dto, file);
     return fillDto(UserRdo, user.toPOJO());
   }
 
@@ -86,9 +83,7 @@ export class AuthenticationController {
   @UseGuards(LoacalAuthGuard)
   @Post('login')
   public async login(@Req() { user }: RequestWithUser) {
-    if (! user) {
-      throw new BadRequestException('User not found');
-    }
+
     const userToken = await this.authenticationService.createUserToken(user);
 
     return fillDto(LoggedUserRdo, {...user.toPOJO(), ...userToken});
@@ -157,8 +152,10 @@ export class AuthenticationController {
 
   @UseGuards(JwtAuthGuard)
   @Post('auth/check')
-  public async checkToken() {
-    return true;
+  public async checkToken(@Req() {user: payload}: RequestWithTokenPayload) {
+    const user = await this.authenticationService.getUser(payload.sub);
+
+    return  fillDto(UserRdo, user.toPOJO());;
   }
 
   @ApiResponse({

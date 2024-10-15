@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsIn, IsOptional, IsString, Length } from 'class-validator';
 import { AuthenticationValidateMessage } from '../authentication-module/authentication.consts';
-import { Gender, LOCATIONS } from '@backend/shared-core';
+import { Gender, LOCATIONS, Role } from '@backend/shared-core';
 
 export class CreateUserDto {
 
@@ -17,7 +17,7 @@ export class CreateUserDto {
     example: 'Vasiliy Pupkin'
   })
   @IsString()
-  @Length(1,15, {message: AuthenticationValidateMessage.NameNotValid})
+  @Length(1,15, {message: AuthenticationValidateMessage.NameLengthNotValid})
   public name: string;
 
   @ApiProperty({
@@ -25,7 +25,6 @@ export class CreateUserDto {
     example: 'avatar.jpg'
   })
   @IsOptional()
-  @IsString()
   public avatar?: string;
 
   @ApiProperty({
@@ -57,6 +56,7 @@ export class CreateUserDto {
     example: 'I am a good boy, like my dog.'
   })
   @IsString()
+  @IsOptional()
   @Length(10,140, {message: AuthenticationValidateMessage.Description})
   description: string;
 
@@ -73,6 +73,13 @@ export class CreateUserDto {
     example: 'back.jpg'
   })
   @IsOptional()
-  @IsString()
   backgroundImage: string;
+
+  @ApiProperty({
+    description: 'Short characteristic user about himself',
+    example: 'I am a good boy, like my dog.'
+  })
+  @IsIn(Object.values(Role), {message: AuthenticationValidateMessage.Role})
+  @IsString()
+  role: string;
 }

@@ -1526,8 +1526,8 @@ input:disabled ~ .role-btn__btn,
   transition: opacity 0.3s ease;
 }
 
-.custom-input--error .custom-input__error,
-.custom-input--error .custom-textarea__error {
+.custom-input__error,
+.custom-textarea__error {
   opacity: 1;
 }
 
@@ -8001,6 +8001,7 @@ input:active + .custom-textarea__text {
   -webkit-box-shadow: 0 0 0 2px #c5ec2a;
   box-shadow: 0 0 0 2px #c5ec2a;
   outline: none;
+  overflow: hidden;
 }
 
 .my-progress {

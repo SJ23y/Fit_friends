@@ -25,8 +25,13 @@ async function bootstrap() {
     transform: true,
     stopAtFirstError: false,
     whitelist: true,
-    forbidNonWhitelisted: true
+    forbidNonWhitelisted: true,
+    validationError: {
+      target: true
+    }
   }));
+
+  app.enableCors();
 
   app.setGlobalPrefix(globalPrefix);
   const port = process.env.PORT || 3000;

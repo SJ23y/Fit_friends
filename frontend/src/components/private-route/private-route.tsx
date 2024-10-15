@@ -9,7 +9,7 @@ type PrivateRouteProps = {
 
 function PrivateRoute({ children }: PrivateRouteProps): JSX.Element {
   const isAuth = useAppSelector(checkAuthentication);
-  return isAuth ? children : <Navigate to={AppRoute.Login} />;
+  return isAuth ? children : <Navigate to={AppRoute.Intro} />;
 }
 
 export default PrivateRoute;

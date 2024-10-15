@@ -2,6 +2,11 @@ import { Gender } from "../consts";
 
 export type Token = string;
 
+export type TokenData = {
+  "refreshToken": Token,
+  "accessToken": Token
+}
+
 export type UserData = {
   "email": string,
   "name": string,
@@ -10,10 +15,7 @@ export type UserData = {
   "gender": Gender,
   "birthDate": string,
   "description": string,
-  "location": string,
-  "backgroundImage": File,
-  "refreshToken": Token,
-  "accessToken": Token
+  "location": string
 };
 
 export type NewUser = {
