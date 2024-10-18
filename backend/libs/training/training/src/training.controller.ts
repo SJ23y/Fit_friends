@@ -1,4 +1,4 @@
-import { Controller, Get, HttpStatus, Param, ParseUUIDPipe, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, HttpStatus, Param, ParseUUIDPipe, Query, Req, UseGuards } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { TrainingService } from './training.service';
 import { TrainingQuery } from './training.query';
@@ -6,6 +6,7 @@ import { TrainingsWithPaginationRdo } from './rdo/trainings-with-pagination.rdo'
 import { TrainingRdo } from './rdo/training.rdo';
 import { fillDto } from '@backend/shared-helpers';
 import { JwtAuthGuard } from '@backend/authentication';
+import { RequestWithTokenPayload } from '@backend/shared-core';
 
 @ApiTags('Training')
 @Controller('trainings')
@@ -19,9 +20,10 @@ export class TrainingController {
     status: HttpStatus.OK,
     description: 'Предоставляет список тренировок'
   })
+  @UseGuards(JwtAuthGuard)
   @Get('')
-  public async index(@Query() query?: TrainingQuery) {
-    const paginationResult = await this.trainingService.getAllTrainings(query);
+  public async index(@Req() { user }: RequestWithTokenPayload, @Query() query?: TrainingQuery) {
+    const paginationResult = await this.trainingService.getAllTrainings(user.sub, query);
 
     return fillDto(TrainingsWithPaginationRdo, paginationResult);
   }

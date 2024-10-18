@@ -3,7 +3,7 @@ import { AxiosInstance } from 'axios';
 import { Dispatch, State } from '../../types/state';
 import { ApiRoute } from '../../consts';
 import { dropToken, saveToken } from '../../services/token';
-import { AuthData, NewUser, TokenData, UserData } from '../../types/auth';
+import { AuthData, TokenData, UserData } from '../../types/auth';
 
 
 const checkAuthorization = createAsyncThunk<

@@ -3,15 +3,18 @@ import { TrainingQuery } from "./training.query";
 import { TrainigRepository } from "./training.repository";
 import { TrainingEntity } from "./training.entity";
 import { Injectable, NotFoundException } from "@nestjs/common";
+import { AuthenticationService } from "@backend/authentication";
 
 @Injectable()
 export class TrainingService {
   constructor(
-    private readonly trainigRepository: TrainigRepository
+    private readonly trainigRepository: TrainigRepository,
+    private readonly userService: AuthenticationService
   ) {}
 
-  public async getAllTrainings(query?: TrainingQuery): Promise<PaginationResult<TrainingEntity>> {
-    return await this.trainigRepository.getAllTrainings(query);
+  public async getAllTrainings(userId: string, query?: TrainingQuery, ): Promise<PaginationResult<TrainingEntity>> {
+    const existUser = await this.userService.getUser(userId);
+    return await this.trainigRepository.getAllTrainings(query, existUser.toPOJO());
   }
 
   public async getTraining(trainingId: string):  Promise<TrainingEntity | null> {

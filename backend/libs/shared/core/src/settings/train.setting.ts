@@ -10,4 +10,5 @@ export enum TrainDuration {
 export const DEFAULT_TRAIN_RATE = 0;
 
 export const MAX_TRAINING_COUNT_LIMIT = 50;
+export const MAX_FEATURED_COUNT_LIMIT = 9;
 export const MAX_REVIEW_COUNT_LIMIT = 50;

@@ -2,16 +2,16 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosInstance } from 'axios';
 import { Dispatch, State } from '../../types/state';
 import { ApiRoute } from '../../consts';
-import { Guitar } from '../../types/guitars';
+import { Training } from '../../types/trainings';
 
 
-const uploadGuitarById = createAsyncThunk<
-  Guitar | void,
+const uploadTrainingById = createAsyncThunk<
+  Training | void,
   string,
   { dispatch: Dispatch; state: State; extra: AxiosInstance }
->('uploadGuitarById', async (guitarId, { extra: api }) => {
-  const { data } = await api.get<Guitar>(
-      `${ApiRoute.Guitars}/${guitarId}`,
+>('uploadTrainingById', async (trainingId, { extra: api }) => {
+  const { data } = await api.get<Training>(
+      `${ApiRoute.Trainings}/${trainingId}`,
     );
     return data;
 
@@ -20,5 +20,5 @@ const uploadGuitarById = createAsyncThunk<
 
 
 export {
-  uploadGuitarById
+  uploadTrainingById
 }

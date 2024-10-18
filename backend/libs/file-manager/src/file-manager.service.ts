@@ -47,7 +47,7 @@ export class FileManagerService {
       await ensureDir(join(this.getRootDirectoryPath(), subDirectory));
       await writeFile(path, file.buffer);
 
-      return join(uploadDirectoryPath, subDirectory, fileName, fileExtension)
+      return join(uploadDirectoryPath, subDirectory, fileName);
     } catch(error) {
       this.logger.error(`Error while saving file: ${error}`);
       throw new Error('Can\'t save file');

@@ -98,6 +98,9 @@ export class DataGenerator {
   private async generateReviews(client: PrismaClient) {
     for (let i=0; i < this.reviews; i++) {
       const review = generateMockReview();
+      const trainingId = getRanndomElement(this.trainingIds)
+      const trainingRate = await client.training.findFirst({where: {id: trainingId}, select: {rate: true}});
+      const newRate = (trainingRate && trainingRate.rate > 0) ? (trainingRate?.rate + review.rate) / 2 : review.rate;
       await client.review.create({
         data: {
           rate: review.rate,
@@ -106,10 +109,30 @@ export class DataGenerator {
             connect: {id: getRanndomElement(this.userIds)}
           },
           train: {
-            connect: {id: getRanndomElement(this.trainingIds)}
+            connect: {id: trainingId}
           }
         }
       });
+      await client.training.update({
+        where: {id: trainingId},
+        data: {
+          id: undefined,
+          title: undefined,
+          image: undefined,
+          level: undefined,
+          type: undefined,
+          duration: undefined,
+          price: undefined,
+          callorieQuantity: undefined,
+          description: undefined,
+          gender: undefined,
+          video: undefined,
+          rate: newRate,
+          coach: undefined,
+          isSpecialOffer: undefined
+        }
+      });
+
     };
     console.log(`${this.reviews} reviews was created`);
   }

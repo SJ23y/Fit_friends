@@ -1,17 +1,29 @@
 import { NameSpace } from '../../consts';
 import { State } from '../../types/state';
 
-const getInitialGuitars = (state: Pick<State, NameSpace.GUITARS>) =>
-  state[NameSpace.GUITARS].initialGuitars;
+const getTrainings = (state: Pick<State, NameSpace.MAIN>) =>
+  state[NameSpace.MAIN].trainings;
 
-const getQuery = (state: Pick<State, NameSpace.GUITARS>) =>
-  state[NameSpace.GUITARS].query;
+const getSpecialTrainings = (state: Pick<State, NameSpace.MAIN>) =>
+  state[NameSpace.MAIN].specialTrainings;
 
-const getErrorStatus = (state: Pick<State, NameSpace.GUITARS>) =>
-  state[NameSpace.GUITARS].errorStatus;
+const getPopularlTrainings = (state: Pick<State, NameSpace.MAIN>) =>
+  state[NameSpace.MAIN].popularTrainings;
+
+const getFeaturedTrainings = (state: Pick<State, NameSpace.MAIN>) =>
+  state[NameSpace.MAIN].featuredTrainings;
+
+/*const getQuery = (state: Pick<State, NameSpace.MAIN>) =>
+  state[NameSpace.MAIN].query;*/
+
+const getErrorStatus = (state: Pick<State, NameSpace.MAIN>) =>
+  state[NameSpace.MAIN].errorStatus;
 
 export {
-  getInitialGuitars,
-  getQuery,
+  getTrainings,
+  getFeaturedTrainings,
+  getSpecialTrainings,
+  //getQuery,
   getErrorStatus,
+  getPopularlTrainings
 };

@@ -29,6 +29,7 @@ import { FileManagerModule } from '@backend/file-manager'
     LocalStartegy,
     JwtRefreshStrategy
   ],
+  exports: [AuthenticationService]
 })
 export class AuthenticationModule {
   constructor(

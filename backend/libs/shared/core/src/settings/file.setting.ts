@@ -7,10 +7,10 @@ export const DEFAULT_AVATAR_NAMES = [
 ]
 
 export const DEFAULT_TRAIN_IMAGE_NAMES = [
-  'default-tarining-image-1.png',
-  'default-tarining-image-2.png',
-  'default-tarining-image-3.png',
-  'default-tarining-image-4.png',
+  'default-training-image-1.png',
+  'default-training-image-2.png',
+  'default-training-image-3.png',
+  'default-training-image-4.png',
 ]
 
 export const DEFAULT_BACKGROUND_IMAGE_NAMES = [

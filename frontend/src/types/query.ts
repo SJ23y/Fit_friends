@@ -1,10 +1,9 @@
-import { SortBy, SortDirection } from "../consts";
+import { FilterBy, SortBy, SortDirection } from "../consts";
 
-export type GuitarQuery = {
+export type Query = {
   count: number;
-  sortDirection: SortDirection;
-  sortBy: SortBy;
+  sortDirection?: SortDirection;
+  sortBy?: SortBy;
+  filterBy?: FilterBy;
   page: number;
-  types: string[];
-  strings: number[]
 }

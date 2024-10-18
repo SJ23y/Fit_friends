@@ -1,20 +1,24 @@
 import { SerializedError, ThunkDispatch } from '@reduxjs/toolkit';
-import { AuthorizationStatus, SortBy, SortDirection } from '../consts';
+import { AuthorizationStatus } from '../consts';
 import { store } from '../store';
 import { createAPI } from '../services/api';
 import { Action } from 'redux';
 import { UserData } from './auth';
-import { Guitar, Guitars } from './guitars';
-import { GuitarQuery } from './query';
+import { Training, Trainings } from './trainings';
+import { PaginatedResult } from './paginatedResult';
+import { Query } from './query';
 
 export type MainProcess = {
-  initialGuitars: null | Guitars;
+  trainings: null | PaginatedResult<Training>;
+  featuredTrainings: null | Trainings;
+  specialTrainings: null | Trainings;
+  popularTrainings: null | Trainings;
   errorStatus: boolean;
-  query: GuitarQuery;
+  query: Query;
 };
 
-export type GuitarProcess = {
-  currentGuitar: null | Guitar;
+export type TrainingProcess = {
+  currentTraining: null | Training;
 };
 
 export type UserProcess = {

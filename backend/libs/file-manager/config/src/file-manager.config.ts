@@ -22,8 +22,7 @@ function validateConfig(config: FileManagerConfig): void {
 function getConfig(): FileManagerConfig {
   const config: FileManagerConfig = {
     uploadsDirectory: process.env['UPLOADS_DIRECTORY_PATH'] ?? '',
-    staticDirectory: process.env['STATIC_DIRECTORY_PATH'] ?? '',
-
+    staticDirectory: process.env['STATIC_DIRECTORY_PATH'] ?? ''
   }
 
   validateConfig(config);

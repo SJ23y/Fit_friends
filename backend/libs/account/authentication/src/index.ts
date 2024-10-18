@@ -4,3 +4,4 @@ export { AuthenticationModule } from './authentication-module/authentication.mod
 export { JwtAuthGuard } from './guards/jwt-auth.guard';
 export { UserRdo } from './rdo/user.rdo';
 export { RequestWithUser } from './authentication-module/request-with-user.interface';
+export { AuthenticationService } from './authentication-module/authentication.service';

@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
-import { join } from 'path';
 import { FileManagerService } from './file-manager.service';
 
 
@@ -9,9 +8,10 @@ import { FileManagerService } from './file-manager.service';
   imports: [ServeStaticModule.forRootAsync({
                 inject: [ConfigService],
                 useFactory: (configService: ConfigService) => {
-                  const uploadDirectory = configService.get<string>('application.uploadDirectory') ?? '';
+                  const uploadDirectory = configService.get<string>('application.staticDirectory') ?? '';
+                  console.log('uploadDirectory', uploadDirectory)
                   return [{
-                  rootPath: join(__dirname, uploadDirectory),
+                  rootPath: uploadDirectory,
                   serveStaticOptions: {
                     fallthrough: true,
                     etag: true

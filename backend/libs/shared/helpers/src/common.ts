@@ -66,7 +66,8 @@ export function getArrayOfUniques<T>(arr: T[]): T[] {
   return Array.from(set);
 }
 
-export function createUrlForFile(fileMetaData: File, host: string): string {
-  const subDirectory = fileMetaData.subDirectory.replace('\\', '/');
+export function createUrlForFile(filePath: string, host: string): string {
+  filePath.replace('\\', '/');
   return `${host}/static/${subDirectory}/${fileMetaData.hashName}`
-}*/
+}
+*/

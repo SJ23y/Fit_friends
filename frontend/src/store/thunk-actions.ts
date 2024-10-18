@@ -4,6 +4,10 @@ import { Dispatch, State } from '../types/state';
 import { ApiRoute } from '../consts';
 import { dropToken, saveToken } from '../services/token';
 import { AuthData, TokenData, UserData } from '../types/auth';
+import { PaginatedResult } from '../types/paginatedResult';
+import { Training, Trainings } from '../types/trainings';
+import { createQueryString } from '../utils';
+import { Query } from '../types/query';
 
 /*
 const uploadGuitars = createAsyncThunk<Guitars, GuitarQuery, {dispatch: Dispatch; state: State; extra: AxiosInstance}>('uploadGuitars', async (query, {extra: api}) => {
@@ -63,16 +67,54 @@ const logoutUser = createAsyncThunk<void, undefined, {dispatch: Dispatch; state:
   dropToken();
 });
 
-/*
-const uploadGuitarById = createAsyncThunk<Guitar | void, string, {dispatch: Dispatch; state: State; extra: AxiosInstance}>('uploadGuitarById', async (guitarId, { extra: api}) => {
-  const { data } = await api.get<Guitar>(`${ApiRoute.Guitars}/${guitarId}`);
-    return data;
-  });*/
+const uploadTrainings = createAsyncThunk<
+  PaginatedResult<Training>,
+  Query,
+  { dispatch: Dispatch; state: State; extra: AxiosInstance }
+>('uploadTrainings', async (query, { extra: api }) => {
+  const { data } = await api.get<PaginatedResult<Training>>(`${ApiRoute.Trainings}?${createQueryString(query)}`);
+  console.log('Data: ', data);
+  return data;
+});
+
+const uploadFeaturedTrainings = createAsyncThunk<
+  Trainings,
+  Query,
+  { dispatch: Dispatch; state: State; extra: AxiosInstance }
+>('uploadFeaturedTrainings', async (query, { extra: api }) => {
+  const { data } = await api.get<PaginatedResult<Training>>(`${ApiRoute.Trainings}?${createQueryString(query)}`);
+  console.log('Featured: ', data);
+  return data.entities;
+});
+
+const uploadSpecialTrainings = createAsyncThunk<
+  Trainings,
+  Query,
+  { dispatch: Dispatch; state: State; extra: AxiosInstance }
+>('uploadSpecialTrainings', async (query, { extra: api }) => {
+  const { data } = await api.get<PaginatedResult<Training>>(`${ApiRoute.Trainings}?${createQueryString(query)}`);
+  console.log('Special: ', data);
+  return data.entities;
+});
+
+const uploadPopularTrainings = createAsyncThunk<
+  Trainings,
+  Query,
+  { dispatch: Dispatch; state: State; extra: AxiosInstance }
+>('uploadPopularTrainings', async (query, { extra: api }) => {
+  const { data } = await api.get<PaginatedResult<Training>>(`${ApiRoute.Trainings}?${createQueryString(query)}`);
+  console.log('Popular: ', data);
+  return data.entities;
+});
 
 export {
   checkAuthorization,
   loginUser,
-  logoutUser
+  logoutUser,
+  uploadFeaturedTrainings,
+  uploadSpecialTrainings,
+  uploadPopularTrainings,
+  uploadTrainings
 };
 
 
