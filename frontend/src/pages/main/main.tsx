@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import FeaturedTrainingsBox from "../../components/featured-trainings-box/featured-trainings-box";
-import Header from "../../components/header/header";
 import PopularTrainingsBox from "../../components/popular-trainings-box/popular-trainings-box";
 import SpecialTrainingsBox from "../../components/special-trainings-box/special-trainings-box";
 import { uploadFeaturedTrainings, uploadPopularTrainings, uploadSpecialTrainings } from "../../store/main-process/thunk-actions";
@@ -31,9 +30,9 @@ function Main(): JSX.Element {
         filterBy: FilterBy.SPECIAL
     }));
   }, [])
+
   return(
-    <div className="wrapper">
-      <Header />
+
       <main>
         <h1 className="visually-hidden">FitFriends — Время находить тренировки, спортзалы и друзей спортсменов</h1>
         <FeaturedTrainingsBox />
@@ -179,7 +178,6 @@ function Main(): JSX.Element {
           </div>
         </section>
       </main>
-    </div>
   )
 }
 

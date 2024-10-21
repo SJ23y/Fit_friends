@@ -11,15 +11,12 @@ import PersonalAccount from '../../pages/personal-account/personal-account';
 import MyOrders from '../../pages/my-orders/my-orders';
 import TrainingCatalog from '../../pages/training-catalog/training-catalog';
 import TrainingPage from '../../pages/training-page/training-page';
+import Layout from '../layout/layout';
+import MyPurchases from '../../pages/my-purchases/my-purchases';
 
 
 function App(): JSX.Element {
-  /*const isError = useAppSelector(getErrorStatus);
 
-  if (isError) {
-    return <ErrorScreen />;
-  }
-*/
   return (
     <HelmetProvider>
       <BrowserRouter>
@@ -42,6 +39,7 @@ function App(): JSX.Element {
               }
             />
 
+            <Route path="" element={<Layout />}>
             <Route
               path={AppRoute.Main}
               element={
@@ -70,6 +68,16 @@ function App(): JSX.Element {
             />
 
             <Route
+              path={AppRoute.Purchases}
+              element={
+                <PrivateRoute>
+                  <MyPurchases />
+                </PrivateRoute>
+              }
+            />
+          </Route>
+
+          <Route
               path={`${AppRoute.Training}/:trainingId`}
               element={
                 <PrivateRoute>

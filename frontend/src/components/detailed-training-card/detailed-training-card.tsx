@@ -6,10 +6,12 @@ import { useAppDispatch } from "../../hooks/use-app-dispatch";
 import { changeCurrentTraining } from "../../store/training-process/training-process";
 
 type DetailedTrainingCardProps = {
-  training: Training
+  training: Training,
+  totalPrice?: number,
+  totalCount?: number
 }
 
-function DetailedTrainingCardTemplate({training}: DetailedTrainingCardProps): JSX.Element {
+function DetailedTrainingCardTemplate({training, totalPrice, totalCount}: DetailedTrainingCardProps): JSX.Element {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -20,8 +22,7 @@ function DetailedTrainingCardTemplate({training}: DetailedTrainingCardProps): JS
   }
 
   return(
-    <li className="popular-trainings__item">
-      <div className="thumbnail-training">
+    <div className="thumbnail-training">
         <div className="thumbnail-training__inner">
           <div className="thumbnail-training__image">
             <picture>
@@ -57,20 +58,53 @@ function DetailedTrainingCardTemplate({training}: DetailedTrainingCardProps): JS
           <div className="thumbnail-training__text-wrapper">
             <p className="thumbnail-training__text">{training.description}</p>
           </div>
-          <div className="thumbnail-training__button-wrapper">
+          {
+            !totalCount && !totalPrice &&
+            <div className="thumbnail-training__button-wrapper">
+              <Link
+                className="btn btn--small thumbnail-training__button-catalog"
+                to={`${AppRoute.Training}/${training.id}`}
+                onClick={trainingLinkClickHandler}
+              >Подробнее</Link>
+              <Link
+                className="btn btn--small btn--outlined thumbnail-training__button-catalog"
+                to="#"
+              >Отзывы</Link>
+            </div>
+          }
+          {
+            totalCount !== undefined && totalPrice &&
             <Link
-              className="btn btn--small thumbnail-training__button-catalog"
+              className="btn-flat btn-flat--underlined thumbnail-training__button-orders"
               to={`${AppRoute.Training}/${training.id}`}
               onClick={trainingLinkClickHandler}
-            >Подробнее</Link>
-            <Link
-              className="btn btn--small btn--outlined thumbnail-training__button-catalog"
-              to="#"
-            >Отзывы</Link>
-          </div>
+            >
+              <svg width="18" height="18" aria-hidden="true">
+                <use xlinkHref="#icon-info"></use>
+              </svg><span>Подробнее</span>
+            </Link>
+          }
         </div>
-      </div>
-    </li>
+        {
+          totalCount !== undefined && totalPrice &&
+          <div className="thumbnail-training__total-info">
+          <div className="thumbnail-training__total-info-card">
+            <svg width="32" height="32" aria-hidden="true">
+              <use xlinkHref="#icon-chart"></use>
+            </svg>
+            <p className="thumbnail-training__total-info-value">{totalCount}</p>
+            <p className="thumbnail-training__total-info-text">Куплено тренировок</p>
+          </div>
+          <div className="thumbnail-training__total-info-card">
+            <svg width="31" height="28" aria-hidden="true">
+              <use xlinkHref="#icon-wallet"></use>
+            </svg>
+            <p className="thumbnail-training__total-info-value">{totalPrice}<span>₽</span></p>
+            <p className="thumbnail-training__total-info-text">Общая сумма</p>
+          </div>
+          </div>
+        }
+    </div>
   );
 }
 

@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { NameSpace, Setting, /*Setting, SortBy, SortDirection*/ } from '../../consts';
+import { NameSpace, Setting } from '../../consts';
 import { MainProcess } from '../../types/state';
 import {
   uploadTrainings,
@@ -7,6 +7,7 @@ import {
   uploadSpecialTrainings,
   uploadPopularTrainings
 } from './thunk-actions';
+import { Query } from '../../types/query';
 
 const initialState: MainProcess = {
   trainings: null,
@@ -15,10 +16,18 @@ const initialState: MainProcess = {
   specialTrainings: null,
   popularTrainings: null,
   query: {
-    count: Setting.DefaultTrainingPerPage,
+    count: Setting.TrainingsCatalogItemsPerPage,
     sortBy: Setting.DefaultSortBy,
     sortDirection: Setting.DefaultSortDirection,
-    page: Setting.DefaultStartPage
+    page: Setting.DefaultStartPage,
+    maxPrice: null,
+    minPrice: null,
+    maxCallories: null,
+    minCallories: null,
+    maxRating: null,
+    minRating: null,
+    type: null,
+    free: null
   }
 
 };
@@ -27,60 +36,34 @@ const mainProcess = createSlice({
   name: NameSpace.MAIN,
   initialState,
   reducers: {
-    /*changeSort: (state, action: PayloadAction<{ sortBy: SortBy, sortDirection: SortDirection }>) => {
-      state.query.sortBy = action.payload.sortBy;
-      state.query.sortDirection = action.payload.sortDirection;
-    },
-    changeFilters: (state, action: PayloadAction<{ selectedTypes: string[], selectedStrings: number[] }>) => {
-      state.query.types = action.payload.selectedTypes;
-      state.query.strings = action.payload.selectedStrings;
-      state.query.page = Setting.DefaultStartPage;
-    },
-    changeCurrentPage: (state, action: PayloadAction<{ page: number }>) => {
-      state.query.page = action.payload.page;
-    }*/
+    changeQuery: (state, action: PayloadAction<Query>) => {
+      state.query = action.payload
+    }
   },
   extraReducers(builder) {
     builder
-      .addCase(uploadTrainings.pending, (state) => {
-        state.errorStatus = false;
-      })
       .addCase(uploadTrainings.fulfilled, (state, action) => {
-        state.trainings = action.payload;
-      })
-      .addCase(uploadTrainings.rejected, (state) => {
-        state.errorStatus = true;
-      })
-      .addCase(uploadFeaturedTrainings.pending, (state) => {
-        state.errorStatus = false;
+        if (state.trainings && action.payload.currentPage > 1) {
+          state.trainings = {
+            ...action.payload,
+            entities: [...state.trainings.entities, ...action.payload.entities]
+          }
+        } else {
+          state.trainings = action.payload;
+        }
       })
       .addCase(uploadFeaturedTrainings.fulfilled, (state, action) => {
         state.featuredTrainings = action.payload;
       })
-      .addCase(uploadFeaturedTrainings.rejected, (state) => {
-        state.errorStatus = true;
-      })
-      .addCase(uploadSpecialTrainings.pending, (state) => {
-        state.errorStatus = false;
-      })
       .addCase(uploadSpecialTrainings.fulfilled, (state, action) => {
         state.specialTrainings = action.payload;
-      })
-      .addCase(uploadSpecialTrainings.rejected, (state) => {
-        state.errorStatus = true;
-      })
-      .addCase(uploadPopularTrainings.pending, (state) => {
-        state.errorStatus = false;
       })
       .addCase(uploadPopularTrainings.fulfilled, (state, action) => {
         state.popularTrainings = action.payload;
       })
-      .addCase(uploadPopularTrainings.rejected, (state) => {
-        state.errorStatus = true;
-      })
   },
 });
 
-//const {  changeSort, changeFilters, changeCurrentPage } = mainProcess.actions;
+const { changeQuery } = mainProcess.actions;
 
-export {   mainProcess, /*changeSort, changeFilters, changeCurrentPage*/ };
+export {   mainProcess, changeQuery };

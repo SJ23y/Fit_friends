@@ -6,11 +6,16 @@ export enum PaymentType {
 
 export enum FilterBy {
   SPECIAL = 'isSpecialOffer',
-  USER = 'user'
+  USER = 'user',
+  ACTIVE_PURCHASE = 'active'
 }
 
 export enum SortBy {
-  POPULAR = 'rating'
+  POPULAR = 'rating',
+  DATE = 'createdAt',
+  TOTAL_PRICE = 'totalPrice',
+  TRAININGS_COUNT = 'trainingsCount',
+  PRICE = 'price'
 }
 
 export enum SortDirection {

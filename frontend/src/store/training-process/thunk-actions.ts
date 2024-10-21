@@ -14,7 +14,6 @@ const uploadTrainingById = createAsyncThunk<
       `${ApiRoute.Trainings}/${trainingId}`,
     );
     return data;
-
 });
 
 

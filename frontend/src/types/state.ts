@@ -5,16 +5,27 @@ import { createAPI } from '../services/api';
 import { Action } from 'redux';
 import { UserData } from './auth';
 import { Training, Trainings } from './trainings';
-import { PaginatedResult } from './paginatedResult';
+import { PaginatedResult, TrainingPaginatedResult } from './paginatedResult';
 import { Query } from './query';
+import { Review } from './review';
+import { Purchase } from './purchase';
 
 export type MainProcess = {
-  trainings: null | PaginatedResult<Training>;
+  trainings: null | TrainingPaginatedResult<Training>;
   featuredTrainings: null | Trainings;
   specialTrainings: null | Trainings;
   popularTrainings: null | Trainings;
   errorStatus: boolean;
   query: Query;
+};
+
+export type ReviewProcess = {
+  reviews: null | PaginatedResult<Review>;
+};
+
+export type PurchaseProcess = {
+  purchases: null | PaginatedResult<Purchase>;
+  currentTrainingPurchase: null | Purchase;
 };
 
 export type TrainingProcess = {

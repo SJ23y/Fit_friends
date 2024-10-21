@@ -1,3 +1,4 @@
+import { Training } from '@prisma/client';
 import { PaymentType } from '../settings/common.setting';
 
 export interface Purchase {
@@ -10,4 +11,5 @@ export interface Purchase {
   totalPrice: number;
   paymentType: PaymentType;
   createdAt?: Date;
+  train?: Training
 }

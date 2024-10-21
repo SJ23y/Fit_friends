@@ -1,6 +1,7 @@
 export const ACCESS_TOKEN_KEY_NAME = 'fitfriendsAccess';
 export const REFRESH_TOKEN_KEY_NAME = 'fitfriendsRefresh';
 export const LOCATIONS = ['Пионерская', 'Петроградская', 'Удельная', 'Звёздная', 'Спортивная'];
+export const TRAIN_TYPES = ['йога', 'бег', 'бокс', 'стрейчинг', 'кроссфит', 'аэробика', 'пилатес'];
 
 export enum AppRoute {
   Intro = '/',
@@ -10,6 +11,7 @@ export enum AppRoute {
   Main = '/index',
   Account = '/account',
   Orders = '/orders',
+  Purchases = '/purchases',
   Trainings = '/trainings',
   Training = '/training'
 }
@@ -27,17 +29,29 @@ export enum TrainDuration {
   LONG = '80-100 мин'
 }
 
+export enum PaymentType {
+  VISA = 'visa',
+  MIR = 'mir',
+  UMONEY = 'umoney'
+}
+
 export enum NameSpace {
   USER = 'USER',
   TRAINING = 'TRAINING',
-  MAIN = 'MAIN'
+  MAIN = 'MAIN',
+  REVIEW = 'Review',
+  PURCHASE = 'Purchase'
 }
 
 export const ValidationSetting = {
   passwordMinLength: 6,
   passwordMaxLength: 12,
   userNameMinLength: 1,
-  userNameMaxLength: 15
+  userNameMaxLength: 15,
+  ReviewContentMaxLength: 1024,
+  ReviewContentMinLength: 100,
+  PurchaseMaxCount: 50,
+  PurchaseMinCount: 1
 } as const;
 
 export enum ApiRoute {
@@ -47,7 +61,10 @@ export enum ApiRoute {
   Refresh = '/auth/refresh',
   Logout = '/logout',
   Trainings = '/trainings',
-  Featured = '/trainings/featured'
+  Featured = '/trainings/featured',
+  Reviews = '/reviews',
+  Purchases = '/purchase',
+  UserUpdate = '/user/update'
 }
 
 export enum UserLevel {
@@ -70,12 +87,15 @@ export enum Role {
 export enum FilterBy {
   SPECIAL = 'isSpecialOffer',
   USER = 'user',
+  ACTIVE_PURCHASE = 'active'
 }
 
 export enum SortBy {
   POPULAR = 'rating',
-
-  DATE = 'createdAt'
+  DATE = 'createdAt',
+  TOTAL_PRICE = 'totalPrice',
+  TRAININGS_COUNT = 'trainingsCount',
+  PRICE = 'price'
 }
 
 export enum SortDirection {
@@ -86,6 +106,7 @@ export enum SortDirection {
 export const Setting = {
   ApiTimeout: 5000,
   BaseUrl: 'http://localhost:3000',
+  StaticUrl: 'http://localhost:5173/public',
   DefaultSortDirection: SortDirection.DESC,
   DefaultSortBy: SortBy.DATE,
   DefaultStartPage: 1,
@@ -98,7 +119,11 @@ export const Setting = {
   PopularSliderStep: 1,
   FeaturedCardPerStep: 3,
   PopularCardPerStep: 4,
-  SPECIAL_TRAINING_DISCONT: 0.2
+  SPECIAL_TRAINING_DISCONT: 0.2,
+  MaxRating: 5,
+  DefaultPurchaseType: 'абонемент',
+  OrdersPerPageCount: 4,
+  TrainingsCatalogItemsPerPage: 6
 } as const;
 
 

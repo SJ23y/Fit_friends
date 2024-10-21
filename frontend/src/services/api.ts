@@ -20,7 +20,6 @@ const createAPI = (): AxiosInstance => {
       config.headers['Authorization'] = `Bearer ${accessToken}`;
     }
 
-
     return config;
   });
 

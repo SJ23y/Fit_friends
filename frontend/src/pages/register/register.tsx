@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks/use-app-dispatch";
 import { checkAuthentication, getUserError } from "../../store/user-process/selectors";
 import { ApiRoute, AppRoute, Gender, LOCATIONS, Role, Setting, ValidationSetting } from "../../consts";
 import { registerUser } from "../../store/user-process/thunk-actions";
+import CustomSelect from "../../components/custom-select/custom-select";
 function Register(): JSX.Element {
   const navigate = useNavigate();
   const [avatar, setAvatar] = useState<string | null>(null);
@@ -43,7 +44,6 @@ const selectLocationClickHandler = (evt: React.MouseEvent<HTMLElement>) => {
     locationRef.current.style.visibility = 'hidden';
     locationRef.current.style.opacity = '0';
   }
-
 }
 
 const formSubmitHandler = (evt: React.FormEvent<HTMLFormElement>) => {
@@ -134,30 +134,14 @@ const formSubmitHandler = (evt: React.FormEvent<HTMLFormElement>) => {
                               <input type="date" name="birthDate" max="2099-12-31" /></span>
                           </label>
                         </div>
-                        <div className="custom-select custom-select--not-selected">
-                          <span className="custom-select__label">Ваша локация</span>
-                          {location && <div className="custom-select__placeholder">{`ст. м. ${location}`}</div>}
-                          <button className="custom-select__button" type="button" aria-label="Выберите одну из опций" onClick={customSelectBtnClickHandler}>
-                            <span className="custom-select__text">{location}</span>
-                            <span className="custom-select__icon">
-                              <svg width="15" height="6" aria-hidden="true">
-                                <use xlinkHref="#arrow-down"></use>
-                              </svg>
-                            </span>
-                          </button>
-                          <ul
-                            ref={locationRef}
-                            className="custom-select__list"
-                            role="listbox"
-                            onClick={selectLocationClickHandler}
-                            >
-                              {
-                                LOCATIONS.map((location, index) => (
-                                <li role="option" key={`${location}-${index}`}>{location}</li>
-                                ))
-                              }
-                          </ul>
-                        </div>
+                        <CustomSelect
+                          title="Ваша локация"
+                          items={LOCATIONS}
+                          cb={(value) => setLocation(value)}
+                          disableStatus={false}
+                          defaultValue={location ? location : ''}
+                          additionalClassName=""
+                        />
                         <div className="custom-input">
                           <label><span className="custom-input__label">Пароль</span><span className="custom-input__wrapper">
                               <input

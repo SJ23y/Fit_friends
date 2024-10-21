@@ -1,4 +1,4 @@
-import { UserLevel } from '../setting/user.setting';
+import { UserLevel } from '../settings/user.setting';
 
 export interface UserQuestionnarie {
   userLevel:UserLevel;

@@ -10966,4 +10966,9 @@ input:active + .custom-textarea__text {
     border: 1px solid #333333;
     background-color: #f7f7f7;
   }
+
+  .modal-open {
+    height: 100vh;
+    overflow: hidden;
+  }
 }

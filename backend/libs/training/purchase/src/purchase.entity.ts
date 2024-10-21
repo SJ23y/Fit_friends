@@ -1,4 +1,5 @@
 import { Entity, PaymentType, Purchase, StorableEntity } from '@backend/shared-core';
+import { Training } from '@prisma/client';
 
 export class PurchaseEntity extends Entity implements StorableEntity<Purchase> {
   public type: string;
@@ -9,6 +10,7 @@ export class PurchaseEntity extends Entity implements StorableEntity<Purchase> {
   public totalPrice: number;
   public paymentType: PaymentType;
   public createdAt?: Date;
+  public train?: Training;
 
   constructor(purchase?: Purchase) {
     super();
@@ -27,6 +29,7 @@ export class PurchaseEntity extends Entity implements StorableEntity<Purchase> {
     this.paymentType =  purchase.paymentType;
     this.createdAt = purchase.createdAt;
     this.userId = purchase.userId
+    this.train = purchase.train
     }
   }
 
@@ -40,7 +43,8 @@ export class PurchaseEntity extends Entity implements StorableEntity<Purchase> {
       totalPrice: this.totalPrice,
       paymentType:  this.paymentType,
       createdAt: this.createdAt,
-      userId: this.userId
+      userId: this.userId,
+      train: this.train
     }
   }
 }

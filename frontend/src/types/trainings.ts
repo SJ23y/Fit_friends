@@ -12,7 +12,7 @@ export type Training = {
   description: string;
   gender: Gender;
   video: string;
-  rate: number;
+  rate: string;
   coach: string;
   isSpecialOffer: boolean;
   createdAt: Date;

@@ -39,4 +39,33 @@ export class TrainingsWithPaginationRdo {
   @Expose()
   public itemsPerPage: number;
 
+  @ApiProperty({
+    description: 'Max price',
+    example: 20
+  })
+  @Expose()
+  public maxPrice: number;
+
+  @ApiProperty({
+    description: 'Min price',
+    example: 20
+  })
+  @Expose()
+  public minPrice: number;
+
+  @ApiProperty({
+    description: 'Max callories',
+    example: 20
+  })
+  @Expose()
+  public maxCallories: number;
+
+  @ApiProperty({
+    description: 'Min callories',
+    example: 20
+  })
+  @Expose()
+  public minCallories: number;
+
+
 }

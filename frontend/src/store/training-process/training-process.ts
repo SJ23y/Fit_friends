@@ -13,7 +13,7 @@ const trainingProcess = createSlice({
   initialState,
   reducers: {
     changeCurrentTraining: (state, action: PayloadAction<Training>) => {
-      console.log('[Training process] ction.payload', action.payload);
+      console.log('[Training process] action.payload', action.payload);
       state.currentTraining = action.payload;
     },
   },

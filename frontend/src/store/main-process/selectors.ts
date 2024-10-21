@@ -13,8 +13,8 @@ const getPopularlTrainings = (state: Pick<State, NameSpace.MAIN>) =>
 const getFeaturedTrainings = (state: Pick<State, NameSpace.MAIN>) =>
   state[NameSpace.MAIN].featuredTrainings;
 
-/*const getQuery = (state: Pick<State, NameSpace.MAIN>) =>
-  state[NameSpace.MAIN].query;*/
+const getQuery = (state: Pick<State, NameSpace.MAIN>) =>
+  state[NameSpace.MAIN].query;
 
 const getErrorStatus = (state: Pick<State, NameSpace.MAIN>) =>
   state[NameSpace.MAIN].errorStatus;
@@ -23,7 +23,7 @@ export {
   getTrainings,
   getFeaturedTrainings,
   getSpecialTrainings,
-  //getQuery,
+  getQuery,
   getErrorStatus,
   getPopularlTrainings
 };

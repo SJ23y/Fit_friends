@@ -51,7 +51,7 @@ function FeaturedTrainingsBoxTemplate(): JSX.Element {
                   trainings &&
                   trainings
                   .slice(startIndex, startIndex + Setting.FeaturedCardPerStep)
-                  .map((training) => <FeaturedTrainingCard training={training} key={training.id} />)
+                  .map((training) => <FeaturedTrainingCard training={training} key={`featured-${training.id}`} />)
                 }
               </ul>
             </div>

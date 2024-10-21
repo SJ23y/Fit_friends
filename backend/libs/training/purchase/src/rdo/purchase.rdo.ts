@@ -1,5 +1,6 @@
+import { TrainingRdo } from '@backend/training';
 import { ApiProperty } from '@nestjs/swagger';
-import { Expose } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
 
 export class PurchaseRdo {
   @ApiProperty({
@@ -65,5 +66,13 @@ export class PurchaseRdo {
   })
   @Expose()
   createdAt: Date;
+
+  @ApiProperty({
+    description: 'Buyed training info',
+    example: '{Training}'
+  })
+  @Expose()
+  @Type(() => TrainingRdo)
+  train: TrainingRdo;
 }
 

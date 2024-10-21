@@ -4,7 +4,7 @@ import { PurchaseFactory } from './purchase.factory';
 import {  Prisma, Purchase as PrismaPurchase } from '@prisma/client';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PurchaseQuery } from './purchase.query';
-import { DEFAULT_PAGE_NUMBER, MAX_PURCHASE_COUNT_LIMIT, PaginationResult } from '@backend/shared-core';
+import { DEFAULT_PAGE_NUMBER, MAX_PURCHASE_COUNT_LIMIT, PaginationResult, SortBy } from '@backend/shared-core';
 
 @Injectable()
 export class PurchaseRepository extends BasePostgresRepository<PurchaseEntity, PrismaPurchase> {
@@ -51,15 +51,17 @@ export class PurchaseRepository extends BasePostgresRepository<PurchaseEntity, P
     return this.createEntityFromDocument(purchase);
   }
 
-  public async getPurchaseTrainingsCount(purchaseId: string): Promise<number | undefined> {
-    const purchase = await this.client.purchase.findFirst({
-      where: {id: purchaseId},
-      select: {
-        trainCount: true
-      }
+  public async getTrainingPurchase(trainingId: string, userId: string): Promise<PurchaseEntity | null> {
+    const purchases = await this.client.purchase.findMany({
+      where: {trainId: trainingId, userId },
+      orderBy: {trainCount: 'desc'}
     });
 
-    return purchase?.trainCount;
+    if (purchases.length === 0) {
+      return null;
+    }
+
+    return this.createEntityFromDocument(purchases[0]);
   }
 
   public async changePurchaseTrainingsCount(purchase: PurchaseEntity): Promise<void> {
@@ -85,10 +87,31 @@ export class PurchaseRepository extends BasePostgresRepository<PurchaseEntity, P
     const skip = (query?.page && query?.count) ? (query.page - 1) * query.count : undefined;
     const where: Prisma.PurchaseWhereInput = {userId: userId ?? ''};
     const orderBy: Prisma.PurchaseOrderByWithRelationInput = {};
+
+    console.log('purchase sortBy', query?.sortBy);
+    if (query?.sortBy) {
+      switch (query.sortBy) {
+        case SortBy.DATE:
+          orderBy.createdAt = query.sortDirection;
+          break;
+        case SortBy.TRAININGS_COUNT:
+          orderBy.trainCount = query.sortDirection;
+          break;
+        case SortBy.TOTAL_PRICE:
+          orderBy.totalPrice = query.sortDirection;
+          break;
+      }
+      if (query?.filterBy) {
+        where.trainCount = {gt: 0}
+      }
+    }
+    console.log('orderBy', orderBy)
+
     const [purchasesCount, userPurchaces] = await Promise.all([
       this.client.purchase.count({where}),
-      this.client.purchase.findMany({where, take, skip, orderBy})
+      this.client.purchase.findMany({where, take, skip, orderBy, include: {train: true}})
     ]);
+
 
     return {
       entities: userPurchaces.map((purchase) => this.createEntityFromDocument(purchase)),

@@ -44,7 +44,7 @@ export class PurchaseController {
     description: 'Предоставляет список тренировок'
   })
   @UseGuards(JwtAuthGuard)
-  @Get('/user')
+  @Get('')
   public async getUserPurchases(@Req() { user }: RequestWithTokenPayload, @Query() query?: PurchaseQuery) {
     const paginationResult = await this.purchaseService.getUserPurchases(user?.sub, query);
 
@@ -60,11 +60,11 @@ export class PurchaseController {
     description: 'Тренировка с указаным ID не найдена'
   })
   @UseGuards(JwtAuthGuard)
-  @Get('/:purchaseId')
-  public async getTrainingBalance(@Param('purchaseId', ParseUUIDPipe) purchaseId: string) {
-    const trainingCount = await this.purchaseService.getTrainingCount(purchaseId);
+  @Get('/:trainingId')
+  public async getTrainingBalance(@Param('trainingId', ParseUUIDPipe) trainingId: string, @Req() { user }: RequestWithTokenPayload) {
+    const training = await this.purchaseService.getTrainingPurchase(trainingId, user.sub);
 
-    return {trainings: trainingCount};
+    return fillDto(PurchaseRdo, training);
   }
 
   @ApiResponse({

@@ -33,7 +33,7 @@ export {
   SortBy,
   SortDirection
  } from './settings/common.setting'
-export { PaginationResult } from './interfaces/pagination-result.interface';
+export { PaginationResult, TrainingPaginationResult } from './interfaces/pagination-result.interface';
 export { Review } from './interfaces/review.interface';
 export { Purchase } from './interfaces/purchase.interface';
 export { TrainingBalance } from './interfaces/training-balance.itreface';
@@ -45,4 +45,5 @@ export {
   DEFAULT_FILE_NAMES,
   FILE_FIELDS_KEYS } from './settings/file.setting';
 
-  export { CustomError } from './interfaces/custom-error.interface';
+export { CustomError } from './interfaces/custom-error.interface';
+export { TrainingStats } from './interfaces/training-stats.interface';

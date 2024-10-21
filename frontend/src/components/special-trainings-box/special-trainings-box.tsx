@@ -22,7 +22,7 @@ function SpecialTrainingsBoxTemplate(): JSX.Element {
                         trainingIndex={index + 1}
                         currentIndex={currentIndex}
                         onPromoSliderBtnClick={(index) => setCurrentIndex(index)}
-                        key={training.id}
+                        key={`special-${training.id}`}
                       />
                     ))
                   }

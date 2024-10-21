@@ -2,7 +2,7 @@ import { PaginationResult, PaymentType } from "@backend/shared-core";
 import { PurchaseQuery } from "./purchase.query";
 import { PurchaseRepository } from "./purchase.repository";
 import { PurchaseEntity } from "./purchase.entity";
-import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
 import { CreatePurchaseDto } from "./dto/create-purchase.dto";
 import { ReduceTrainingsDto } from "./dto/reduce-trainings.dto";
 import { TrainingBalanceService } from "@backend/user-balance";
@@ -41,14 +41,18 @@ export class PurchaseService {
     return paginationResult;
   }
 
-  public async getTrainingCount(purchaseId: string):  Promise<number> {
-    const trainingCount =  await this.purchaseRepository.getPurchaseTrainingsCount(purchaseId);
+  public async getTrainingPurchase(purchaseId: string, userId?: string):  Promise<PurchaseEntity> {
+    if (!userId) {
+      throw new UnauthorizedException('Please, login to get this information');
+    }
 
-    if (! trainingCount) {
+    const training =  await this.purchaseRepository.getTrainingPurchase(purchaseId, userId);
+
+    if (! training) {
       throw new NotFoundException(`Purchase with id ${purchaseId} not found`);
     }
 
-    return trainingCount;
+    return training;
   }
 
   public async reduceTrainingsCount(purchaseId: string, dto: ReduceTrainingsDto, userId?: string):  Promise<PurchaseEntity> {

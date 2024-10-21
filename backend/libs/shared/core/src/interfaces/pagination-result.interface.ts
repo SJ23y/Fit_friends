@@ -5,3 +5,10 @@ export interface PaginationResult<T> {
   totalItems: number;
   itemsPerPage: number;
 }
+
+export interface TrainingPaginationResult<T> extends PaginationResult<T> {
+  minPrice: number,
+  maxPrice: number,
+  minCallories: number,
+  maxCallories: number
+}

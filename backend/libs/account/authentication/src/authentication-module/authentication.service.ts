@@ -5,7 +5,7 @@ import { AUTH_USER_EXIST, AUTH_USER_NOT_FOUND, AUTH_USER_PASSWORD_WRONG, AUTH_US
 import { LoginUserDto } from '../dto/login-user.dto';
 import { ConfigType } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { DEFAULT_AVATAR_NAMES, DEFAULT_BACKGROUND_IMAGE_NAMES, Role, Token, User } from '@backend/shared-core';
+import { DEFAULT_AVATAR_NAMES, DEFAULT_BACKGROUND_IMAGE_NAMES, DefaultQuestionnaireMan, DefaultQuestionnaireWoman, Gender, Role, Token, User } from '@backend/shared-core';
 import { jwtConfig } from '@backend/user-config';
 import { RefreshTokenService } from '../refresh-token-module/refresh-token.service';
 import { createJwtPayload, getRanndomElement } from '@backend/shared-helpers';
@@ -64,6 +64,10 @@ export class AuthenticationService {
       throw new UnauthorizedException(AUTH_USER_PASSWORD_WRONG);
     }
 
+    if (!existUser.questionnaire) {
+      existUser.questionnaire = (existUser.gender === Gender.FEMALE) ? DefaultQuestionnaireWoman : DefaultQuestionnaireMan;
+    }
+
     return existUser;
   }
 
@@ -72,6 +76,10 @@ export class AuthenticationService {
 
     if (! existUser) {
       throw new NotFoundException(AUTH_USER_NOT_FOUND);
+    }
+
+    if (!existUser.questionnaire) {
+      existUser.questionnaire = (existUser.gender === Gender.FEMALE) ? DefaultQuestionnaireWoman : DefaultQuestionnaireMan;
     }
 
     return existUser;
@@ -96,6 +104,9 @@ export class AuthenticationService {
     }
 
     const updatedUser = await this.userRepository.update(id, {...existUser.toPOJO(), ...dto });
+    if (!updatedUser.questionnaire) {
+      updatedUser.questionnaire = (updatedUser.gender === Gender.FEMALE) ? DefaultQuestionnaireWoman : DefaultQuestionnaireMan;
+    }
     return updatedUser;
   }
 
