@@ -1,5 +1,5 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { NameSpace /*Setting, SortBy, SortDirection*/ } from '../../consts';
+import { createSlice } from '@reduxjs/toolkit';
+import { NameSpace  } from '../../consts';
 import { ReviewProcess } from '../../types/state';
 import {
   uploadReviews,
@@ -27,6 +27,5 @@ const reviewProcess = createSlice({
   },
 });
 
-//const {  changeSort, changeFilters, changeCurrentPage } = ReviewProcess.actions;
 
-export {   reviewProcess, /*changeSort, changeFilters, changeCurrentPage*/ };
+export { reviewProcess };

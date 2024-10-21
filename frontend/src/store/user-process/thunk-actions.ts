@@ -34,6 +34,15 @@ const registerUser = createAsyncThunk<
   return data;
 });
 
+const updateUser = createAsyncThunk<
+  UserData,
+  FormData,
+  { dispatch: Dispatch; state: State; extra: AxiosInstance }
+>('updateUser', async (newUser, { extra: api }) => {
+  const { data } = await api.patch<UserData>(ApiRoute.UserUpdate, newUser);
+  return data;
+});
+
 
 const loginUser = createAsyncThunk<
   UserData & TokenData,
@@ -44,7 +53,6 @@ const loginUser = createAsyncThunk<
     email,
     password,
   });
-  console.log('Login data: ', data);
   saveToken(data.accessToken, data.refreshToken);
   return data;
 });
@@ -62,5 +70,6 @@ export {
   checkAuthorization,
   loginUser,
   logoutUser,
-  registerUser
+  registerUser,
+  updateUser
 };

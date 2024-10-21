@@ -56,7 +56,6 @@ function TrainingPage(): JSX.Element {
       dispatch(uploadTrainingById(trainingId));
     }
     if (trainingId && trainingId !== purchase?.trainId) {
-      console.log('dispatching new purchase');
       dispatch(uploadPurchaseByTrainingId(trainingId));
     }
   }, [])

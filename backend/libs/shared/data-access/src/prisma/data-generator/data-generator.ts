@@ -54,8 +54,7 @@ export class DataGenerator {
       const userId = getRanndomElement(this.userIds);
       const trainingId = getRanndomElement(this.trainingIds);
       const purchase = generateMockPurchase();
-      Promise.all([
-        client.purchase.create({
+      client.purchase.create({
           data: {
             price: purchase.price,
             trainCount: purchase.trainCount,
@@ -69,28 +68,7 @@ export class DataGenerator {
               connect: {id: trainingId}
             }
           }
-        }),
-        client.deposit.upsert({
-          where: {
-            userId_trainId: {
-              userId: userId,
-              trainId: trainingId
-            }
-          },
-          create: {
-            count: purchase.trainCount,
-            trainId: trainingId,
-            user: {
-              connect: {id: userId}
-            }
-          },
-          update: {
-            count: {
-              increment: purchase.trainCount
-            }
-          }
         })
-      ])
     };
     console.log(`${this.purchaces} purchases was created`);
   }

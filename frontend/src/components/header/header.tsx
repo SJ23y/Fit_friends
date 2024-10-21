@@ -5,7 +5,6 @@ import { memo } from "react";
 
 function HeaderTemplate(): JSX.Element {
   const location = useLocation();
-  console.log(location);
   return(
     <header className="header">
         <div className="container">

@@ -1,4 +1,4 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { NameSpace /*Setting, SortBy, SortDirection*/ } from '../../consts';
 import { PurchaseProcess } from '../../types/state';
 import {
@@ -47,6 +47,4 @@ const purchaseProcess = createSlice({
   },
 });
 
-//const {  changeSort, changeFilters, changeCurrentPage } = ReviewProcess.actions;
-
-export {   purchaseProcess, /*changeSort, changeFilters, changeCurrentPage*/ };
+export {   purchaseProcess };

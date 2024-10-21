@@ -8,7 +8,7 @@ export class LoginUserDto {
     example: 'pupkin@mail.com'
   })
   @IsEmail({}, {message: AuthenticationValidateMessage.EmailNotValid})
-  public email: string;
+  email: string;
 
   @ApiProperty({
     description: 'User password',
@@ -16,5 +16,5 @@ export class LoginUserDto {
   })
   @IsString()
   @Length(6, 12, {message: AuthenticationValidateMessage.PasswordNotValid})
-  public password: string;
+  password: string;
 }

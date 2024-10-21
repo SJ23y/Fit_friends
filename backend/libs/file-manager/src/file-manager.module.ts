@@ -9,7 +9,6 @@ import { FileManagerService } from './file-manager.service';
                 inject: [ConfigService],
                 useFactory: (configService: ConfigService) => {
                   const uploadDirectory = configService.get<string>('application.staticDirectory') ?? '';
-                  console.log('uploadDirectory', uploadDirectory)
                   return [{
                   rootPath: uploadDirectory,
                   serveStaticOptions: {

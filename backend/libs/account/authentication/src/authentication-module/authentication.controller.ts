@@ -15,7 +15,6 @@ import {
   Post,
   Req,
   UploadedFile,
-  UploadedFiles,
   UseGuards,
   UseInterceptors} from '@nestjs/common';
 import { AuthenticationService } from './authentication.service';
@@ -34,7 +33,6 @@ import { UpdateUserDto } from '../dto/update-user.dto';
 import { TrainingBalanceService } from '@backend/user-balance';
 import { UserBalanceRdo } from '../rdo/user-balance.rdo';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { UserWithFiles } from './user-with-files.interface';
 
 @ApiTags('authentication')
 @Controller('')
@@ -106,7 +104,7 @@ export class AuthenticationController {
   public async update(
     @Body() dto: UpdateUserDto,
     @Req() { user: payload }: RequestWithTokenPayload,
-    @UploadedFiles(
+    @UploadedFile(
       new ParseFilePipe({
         validators: [
           new MaxFileSizeValidator({ maxSize: 1000000 }),
@@ -114,8 +112,9 @@ export class AuthenticationController {
         ],
         fileIsRequired: false
       }),
-    ) files: UserWithFiles) {
-    const user = await this.authenticationService.update(dto, files, payload?.sub);
+    ) file: Express.Multer.File) {
+    const user = await this.authenticationService.update(dto, file, payload?.sub);
+
 
     return fillDto(UserRdo, user.toPOJO());
   }

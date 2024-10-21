@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks/use-app-dispatch";
-import { checkAuthentication, getUserError } from "../../store/user-process/selectors";
+import { checkAuthentication } from "../../store/user-process/selectors";
 import { ApiRoute, AppRoute, Gender, LOCATIONS, Role, Setting, ValidationSetting } from "../../consts";
 import { registerUser } from "../../store/user-process/thunk-actions";
 import CustomSelect from "../../components/custom-select/custom-select";
@@ -11,10 +11,8 @@ function Register(): JSX.Element {
   const [location, setLocation] = useState<string | null>(null);
   const formRef = useRef<HTMLFormElement | null>(null);
   const avatarRef = useRef<HTMLInputElement | null>(null);
-  const locationRef = useRef<HTMLUListElement | null>(null);
   const dispatch = useAppDispatch();
   const isAuth = useAppSelector(checkAuthentication);
-  const validationError = useAppSelector(getUserError);
 
   useEffect(() => {
     if (isAuth) {
@@ -30,29 +28,12 @@ const loadAvatarInputClickHandler = (evt: React.FormEvent<HTMLInputElement>) => 
   }
 }
 
-const customSelectBtnClickHandler = () => {
-  if (locationRef.current) {
-    locationRef.current.style.visibility = 'visible';
-    locationRef.current.style.opacity = '1';
-  }
-}
-
-const selectLocationClickHandler = (evt: React.MouseEvent<HTMLElement>) => {
-  const locationElement = evt.target as HTMLElement;
-  setLocation(locationElement.innerText);
-  if (locationRef.current) {
-    locationRef.current.style.visibility = 'hidden';
-    locationRef.current.style.opacity = '0';
-  }
-}
-
 const formSubmitHandler = (evt: React.FormEvent<HTMLFormElement>) => {
   evt.preventDefault();
     if (formRef.current) {
       const formData = new FormData(formRef.current);
       formData.set('location', location ?? '');
       formData.delete('user-agreement');
-      console.log(Object.fromEntries(formData));
       dispatch(registerUser(formData));
     }
   }
@@ -165,7 +146,7 @@ const formSubmitHandler = (evt: React.FormEvent<HTMLFormElement>) => {
                             </div>
                             <div className="custom-toggle-radio__block">
                               <label>
-                                <input type="radio" name="gender" value="{Gender.FEMALE}" required />
+                                <input type="radio" name="gender" value={Gender.FEMALE} required />
                                 <span className="custom-toggle-radio__icon"></span>
                                 <span className="custom-toggle-radio__label">{Gender.FEMALE}</span>
                               </label>

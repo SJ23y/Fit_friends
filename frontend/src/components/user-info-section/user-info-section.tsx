@@ -1,8 +1,10 @@
-import { memo, useState } from "react";
+import { memo, useRef, useState } from "react";
 import { UserData } from "../../types/auth";
 import { ApiRoute, Gender, LOCATIONS, Setting, TRAIN_TYPES, UserLevel } from "../../consts";
 import CustomSelect from "../custom-select/custom-select";
 import classNames from "classnames";
+import { updateUser } from "../../store/user-process/thunk-actions";
+import { useAppDispatch } from "../../hooks/use-app-dispatch";
 
 type UserInfoSectionProps = {
   user: UserData
@@ -11,11 +13,22 @@ type UserInfoSectionProps = {
 function UserInfoSectionTemplate({user}: UserInfoSectionProps): JSX.Element {
   const [editStatus, setEditStatus] = useState(false);
   const [formData, setFormData] = useState<UserData>(user);
+  const [avatar, setAvatar] = useState<string>(`${Setting.BaseUrl}/${user.avatar}`);
+  const avatarRef = useRef<HTMLInputElement | null>(null);
+  const dispatch = useAppDispatch();
 
   const formDataChangeHandler = (evt: React.FormEvent) => {
     evt.preventDefault();
     const {name, value} = evt.target as HTMLInputElement;
     setFormData({...formData, [name]: value })
+  }
+
+  const loadAvatarInputClickHandler = (evt: React.FormEvent<HTMLInputElement>) => {
+    evt.preventDefault();
+    const file = avatarRef.current?.files?.[0];
+    if (file) {
+      setAvatar(URL.createObjectURL(file));
+    }
   }
 
   const changeSpecializationHandler = (evt: React.FormEvent) => {
@@ -35,10 +48,16 @@ function UserInfoSectionTemplate({user}: UserInfoSectionProps): JSX.Element {
       setEditStatus(true)
     } else {
       evt.preventDefault();
-      console.log('update form data: ', formData);
       setEditStatus(false);
+      const data = new FormData();
+      const file = avatarRef.current?.files?.[0];
+      data.set("name", formData.name);
+      data.set("description", formData.description);
+      data.set("gender", formData.gender);
+      data.set("location", formData.location);
+      file && data.set("avatar", file);
+      dispatch(updateUser(data));
     }
-
   }
 
   return(
@@ -47,11 +66,13 @@ function UserInfoSectionTemplate({user}: UserInfoSectionProps): JSX.Element {
         <div className="input-load-avatar">
           <label>
             <input
+            ref={avatarRef}
               className="visually-hidden"
               type="file"
               name="user-photo-1"
               accept="image/png, image/jpeg"
               disabled={!editStatus}
+              onChange={loadAvatarInputClickHandler}
             />
             <span className={
               classNames({
@@ -59,7 +80,7 @@ function UserInfoSectionTemplate({user}: UserInfoSectionProps): JSX.Element {
               })
             }>
             <img
-              src={`${Setting.BaseUrl}/${user.avatar}`}
+              src={avatar}
               width="98" height="98"
               alt="user photo"
             />

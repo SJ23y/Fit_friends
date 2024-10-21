@@ -10,7 +10,7 @@ export class CreateUserDto {
     example: 'pupkin@mail.com'
   })
   @IsEmail({}, {message: AuthenticationValidateMessage.EmailNotValid})
-  public email: string;
+  email: string;
 
   @ApiProperty({
     description: 'User firstname and lastname',
@@ -18,14 +18,14 @@ export class CreateUserDto {
   })
   @IsString()
   @Length(1,15, {message: AuthenticationValidateMessage.NameLengthNotValid})
-  public name: string;
+  name: string;
 
   @ApiProperty({
     description: 'User avatar',
     example: 'avatar.jpg'
   })
   @IsOptional()
-  public avatar?: string;
+  avatar?: string;
 
   @ApiProperty({
     description: 'User password',
@@ -33,7 +33,7 @@ export class CreateUserDto {
   })
   @IsString()
   @Length(6,12, {message: AuthenticationValidateMessage.PasswordNotValid})
-  public password: string;
+  password: string;
 
   @ApiProperty({
     description: 'User password',

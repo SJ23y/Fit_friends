@@ -16,7 +16,7 @@ const uploadReviews = createAsyncThunk<
   { dispatch: Dispatch; state: State; extra: AxiosInstance }
 >('uploadReviews', async ({trainingId, query}, { extra: api }) => {
   const { data } = await api.get<PaginatedResult<Review>>(`${ApiRoute.Reviews}/${trainingId}?${createQueryString(query)}`);
-  console.log('Reviews data: ', data);
+
   return data;
 });
 

@@ -5,7 +5,6 @@ import { Injectable } from '@nestjs/common';
 import { User as PrismaUser } from '@prisma/client';
 import { AuthUser } from '@backend/shared-core';
 
-
 @Injectable()
 export class UserRepository extends BasePostgresRepository<UserEntity, PrismaUser> {
   constructor(
@@ -25,10 +24,7 @@ export class UserRepository extends BasePostgresRepository<UserEntity, PrismaUse
         purchases: undefined
       },
       include: {
-        questionnaire: true,
-        reviews: true,
-        trainings: true,
-        purchases: true
+        questionnaire: true
       }
     });
     user.id = newUser.id
@@ -55,10 +51,7 @@ export class UserRepository extends BasePostgresRepository<UserEntity, PrismaUse
     const foundUser = await this.client.user.findFirst({
       where: { id: userId },
       include: {
-        questionnaire: true,
-        reviews: true,
-        trainings: true,
-        purchases: true
+        questionnaire: true
       }
     });
 
@@ -74,16 +67,36 @@ export class UserRepository extends BasePostgresRepository<UserEntity, PrismaUse
       where: {id: userId},
       data: {
         ...user,
-        questionnaire: undefined,
+        questionnaire: user.questionnaire && {
+          upsert: {
+            where: {userId},
+            create: {
+              userLevel: user.questionnaire.userLevel,
+              trainDuration: user.questionnaire.trainDuration,
+              trainType: user.questionnaire.trainType,
+              isReadyForTrain: user.questionnaire.isReadyForTrain,
+              calorieGoal: user.questionnaire.calorieGoal,
+              caloriePerDay: user.questionnaire.caloriePerDay
+            },
+            update: {
+              userLevel: user.questionnaire.userLevel,
+              trainDuration: user.questionnaire.trainDuration,
+              trainType: user.questionnaire.trainType,
+              isReadyForTrain: user.questionnaire.isReadyForTrain,
+              calorieGoal: user.questionnaire.calorieGoal,
+              caloriePerDay: user.questionnaire.caloriePerDay,
+              createdAt: undefined,
+              updatedAt: undefined,
+              id: undefined
+            }
+          }
+        },
         reviews:undefined,
         trainings: undefined,
         purchases: undefined
       },
       include: {
-        questionnaire: true,
-        reviews: true,
-        trainings: true,
-        purchases: true
+        questionnaire: true
       }
     });
 

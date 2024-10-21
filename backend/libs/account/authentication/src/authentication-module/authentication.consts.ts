@@ -1,4 +1,4 @@
-import { LOCATIONS } from "@backend/shared-core";
+import { LOCATIONS, TRAIN_TYPES, TrainDuration, UserLevel } from "@backend/shared-core";
 
 export const AUTH_USER_EXIST = 'User with this email exists';
 export const AUTH_USER_NOT_FOUND = 'User not found';
@@ -28,5 +28,10 @@ export const AuthenticationValidateMessage = {
   Gender: 'Gender should be "мужской", "женский" or "неважно"',
   Description: 'Description should be string with the length within 10-140 charactres',
   Locations: `Location available values is: ${LOCATIONS.join(',')}`,
-  Role: 'Role value should be user or coach'
+  Role: 'Role value should be user or coach',
+  InvalidUserLevel: `User level available values is: ${Object.values(UserLevel).join(',')}`,
+  InvalidTrainType: `Train types available values is: ${TRAIN_TYPES.join(',')}`,
+  InvalidTrainDuration: `Train durtion available values is: ${Object.values(TrainDuration).join(',')}`,
+  InvalidCallorieGoalQuantity: 'Callorie goal should be in the range 1000-5000',
+  InvalidCalloriePerDayQuantity: 'Callorie per day should be in the range 1000-5000',
 } as const;

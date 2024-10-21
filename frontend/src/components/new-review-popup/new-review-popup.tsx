@@ -25,7 +25,6 @@ function NewReviewPopup({trainingId, onClosePopup}: NewReviewPopupProps): JSX.El
     }
     contentRef.current?.reportValidity();
     if (contentRef.current && contentRef.current.checkValidity() && rate > 0) {
-      console.log('dispatched');
       dispatch(
         addNewReview({
           newReview: {rate, content: contentRef.current.value, trainId: trainingId},

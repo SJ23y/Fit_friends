@@ -11,7 +11,6 @@ import { RefreshTokenService } from '../refresh-token-module/refresh-token.servi
 import { createJwtPayload, getRanndomElement } from '@backend/shared-helpers';
 import { randomUUID } from 'crypto';
 import { UpdateUserDto } from '../dto/update-user.dto';
-import { UserWithFiles } from './user-with-files.interface';
 import { FileManagerService } from '@backend/file-manager';
 
 @Injectable()
@@ -50,6 +49,7 @@ export class AuthenticationService {
 
     const userEntity = await new UserEntity(newUser).setPassword(dto.password);
     await this.userRepository.save(userEntity);
+    userEntity.questionnaire = (userEntity.gender === Gender.FEMALE) ? DefaultQuestionnaireWoman : DefaultQuestionnaireMan;
     return userEntity;
   }
 
@@ -64,9 +64,7 @@ export class AuthenticationService {
       throw new UnauthorizedException(AUTH_USER_PASSWORD_WRONG);
     }
 
-    if (!existUser.questionnaire) {
-      existUser.questionnaire = (existUser.gender === Gender.FEMALE) ? DefaultQuestionnaireWoman : DefaultQuestionnaireMan;
-    }
+    existUser.questionnaire = (existUser.gender === Gender.FEMALE) ? DefaultQuestionnaireWoman : DefaultQuestionnaireMan;
 
     return existUser;
   }
@@ -78,24 +76,19 @@ export class AuthenticationService {
       throw new NotFoundException(AUTH_USER_NOT_FOUND);
     }
 
-    if (!existUser.questionnaire) {
-      existUser.questionnaire = (existUser.gender === Gender.FEMALE) ? DefaultQuestionnaireWoman : DefaultQuestionnaireMan;
-    }
+    existUser.questionnaire = (existUser.gender === Gender.FEMALE) ? DefaultQuestionnaireWoman : DefaultQuestionnaireMan;
 
     return existUser;
   }
 
-  public async update( dto: UpdateUserDto, files: UserWithFiles, id?: string,) {
+  public async update( dto: UpdateUserDto, file: Express.Multer.File, id?: string,) {
     if (!id) {
       throw new UnauthorizedException(AUTH_USER_UNAUTHORISED)
     }
 
-    const [avatar, backgroundImage] = await Promise.all([
-      this.fileService.writeFile(files.avatar?.[0]),
-      this.fileService.writeFile(files.backgroundImage?.[0])
-    ]);
-    dto.avatar = avatar ?? undefined;
-    dto.backgroundImage = backgroundImage ?? undefined;
+    const avatar = await this.fileService.writeFile(file);
+
+    dto.avatar = avatar?.replace('\\', '/') ?? undefined;
 
     const existUser = await this.userRepository.findById(id);
 
@@ -103,10 +96,17 @@ export class AuthenticationService {
       throw new NotFoundException(AUTH_USER_NOT_FOUND);
     }
 
-    const updatedUser = await this.userRepository.update(id, {...existUser.toPOJO(), ...dto });
-    if (!updatedUser.questionnaire) {
-      updatedUser.questionnaire = (updatedUser.gender === Gender.FEMALE) ? DefaultQuestionnaireWoman : DefaultQuestionnaireMan;
-    }
+
+    const questionnaire = (existUser.gender === Gender.FEMALE) ? DefaultQuestionnaireWoman : DefaultQuestionnaireMan;
+
+    const updatedUser = await this.userRepository.update(
+      id,
+      {
+        ...existUser.toPOJO(),
+        ...dto,
+        questionnaire: {
+          ...questionnaire
+        } });
     return updatedUser;
   }
 

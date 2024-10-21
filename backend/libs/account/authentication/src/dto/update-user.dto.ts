@@ -2,6 +2,8 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsIn, IsOptional, IsString, Length } from 'class-validator';
 import { AuthenticationValidateMessage } from '../authentication-module/authentication.consts';
 import { Gender, LOCATIONS } from '@backend/shared-core'
+import { QuestionnaireDto } from './questionnaire.dto';
+import { Type } from 'class-transformer';
 
 export class UpdateUserDto {
 
@@ -12,14 +14,14 @@ export class UpdateUserDto {
   @IsOptional()
   @IsString()
   @Length(1,15, {message: AuthenticationValidateMessage.NameNotValid})
-  public name?: string;
+  name?: string;
 
   @ApiProperty({
     description: 'User avatar',
     example: 'avatar.jpg'
   })
   @IsOptional()
-  public avatar?: string;
+  avatar?: string;
 
   @ApiProperty({
     description: 'User password',
@@ -62,4 +64,12 @@ export class UpdateUserDto {
   })
   @IsOptional()
   backgroundImage?: string;
+
+  @ApiProperty({
+    description: 'Questionnaire for the user',
+    example: '{QuestionnaireObject}'
+  })
+  @IsOptional()
+  @Type(() => QuestionnaireDto)
+  questionnaire?: QuestionnaireDto;
 }

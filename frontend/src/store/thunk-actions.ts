@@ -9,40 +9,6 @@ import { Training, Trainings } from '../types/trainings';
 import { createQueryString } from '../utils';
 import { Query } from '../types/query';
 
-/*
-const uploadGuitars = createAsyncThunk<Guitars, GuitarQuery, {dispatch: Dispatch; state: State; extra: AxiosInstance}>('uploadGuitars', async (query, {extra: api}) => {
-  const { data } = await api.get<Guitars>(`${ApiRoute.Guitars}?${createQueryString(query)}`);
-  return data;
-});
-
-const saveNewGuitar = createAsyncThunk<
-  Guitar | undefined,
-  {formData: FormData, disableForm: (status?: boolean) => void},
-  {dispatch: Dispatch; state: State; extra: AxiosInstance}
-  >('saveNewGuitar', async ({formData, disableForm}, { extra: api}) => {
-  try {
-    const { data } = await api.post<Guitar>(ApiRoute.Guitars, formData);
-    disableForm(true);
-    return data;
-  } catch {
-    disableForm(false);
-  }
-});
-
-const updateGuitar = createAsyncThunk<
-  Guitar | undefined,
-  {formData: FormData, disableForm: (status?: boolean) => void, guitarId: string},
-  {dispatch: Dispatch; state: State; extra: AxiosInstance}
-  >('updateGuitar', async ({formData, disableForm, guitarId }, { extra: api}) => {
-  try {
-    const { data } = await api.patch<Guitar>(`${ApiRoute.Guitars}/${guitarId}`, formData);
-    disableForm(true);
-    return data;
-  } catch {
-    disableForm(false);
-  }
-});*/
-
 const checkAuthorization = createAsyncThunk<UserData, undefined, {dispatch: Dispatch; state: State; extra: AxiosInstance}>('checkAuthorization', async (_arg, {extra: api}) => {
   try {
     const { data } = await api.post<UserData>(ApiRoute.Check);

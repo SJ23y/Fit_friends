@@ -63,8 +63,8 @@ function PopularTrainingsBoxTemplate(): JSX.Element {
                   trainings
                   .slice(startIndex, startIndex + Setting.PopularCardPerStep)
                   .map((training) => (
-                    <li className="popular-trainings__item">
-                      <DetailedTrainingCard training={training} key={`popular-${training.id}`} />
+                    <li className="popular-trainings__item" key={`popular-${training.id}`}>
+                      <DetailedTrainingCard training={training}  />
                     </li>
                   ))
                 }
