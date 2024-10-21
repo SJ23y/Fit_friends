@@ -39,7 +39,7 @@ const updateUser = createAsyncThunk<
   FormData,
   { dispatch: Dispatch; state: State; extra: AxiosInstance }
 >('updateUser', async (newUser, { extra: api }) => {
-  const { data } = await api.patch<UserData>(ApiRoute.UserUpdate, newUser);
+  const { data } = await api.patch<UserData>(ApiRoute.UserUpdate, {...Object.fromEntries(newUser)});
   return data;
 });
 

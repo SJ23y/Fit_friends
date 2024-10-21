@@ -27,7 +27,7 @@ POST http://localhost:3000/login HTTP/1.1
 Content-Type: application/json
 
 {
-  "email": "mcfall@mail.com",
+  "email": "testo@mail.ru",
   "password": "111111"
 }
 
@@ -50,10 +50,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0ZjY0YTNkY
 # Update
 PATCH http://localhost:3000/user/update HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0ZjY0YTNkYy00ZjI3LTRjY2EtYmMxOS05YTkyMWU2YjdlOTkiLCJuYW1lIjoiUm9uYWxkIiwiaWF0IjoxNzI4MzQxNDg5LCJleHAiOjE3MjgzNDIzODl9.B_OxqaDOmdbiBqXlyjy7-YhH399OBrvdy-_8RIo34vY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkYTlkMjRlNS0yZTI5LTRlMTItYjEwNy01NTk2YjMzMmE2NmYiLCJuYW1lIjoiVGVzdG8iLCJpYXQiOjE3Mjk1MDk1NTcsImV4cCI6MTcyOTUxMDQ1N30.IkM3IqcFxO1vNguwEcSftoYuK9hK8amfQ26J6eSCNQo
 
 {
-  "gender": "неважно"
+  "description": "неважноdffffffffffffffffffffffffffffffffffffff"
 }
 
 ###
