@@ -1,11 +1,11 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Header from "../../components/header/header";
 import ReviewSidebar from "../../components/reviews-sidebar/reviews-sidebar";
 import { useAppDispatch, useAppSelector } from "../../hooks/use-app-dispatch";
 import { getCurrentTraining } from "../../store/training-process/selectors";
 import { useEffect, useRef, useState } from "react";
 import { uploadTrainingById } from "../../store/training-process/thunk-actions";
-import { Gender, Setting } from "../../consts";
+import { AppRoute, Gender, Setting } from "../../consts";
 import NewReviewPopup from "../../components/new-review-popup/new-review-popup";
 import NewPurchasePopup from "../../components/new-purchase-popup/new-purchase-popup";
 import classNames from "classnames";
@@ -105,7 +105,7 @@ function TrainingPage(): JSX.Element {
                           </div>
                           <div className="training-info__coach-info">
                             <span className="training-info__label">Тренер</span>
-                            <span className="training-info__name">Валерия</span>
+                            <Link className="training-info__name" to={`${AppRoute.User}/sdshdhskd`}>Валерия</Link>
                           </div>
                         </div>
                       </div>

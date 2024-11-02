@@ -2,10 +2,13 @@ import { PrismaClient } from "@prisma/client";
 import { generateMockTraining } from "../mock-data/mock-trainings";
 import { generateMockUser } from "../mock-data/mock-users";
 import { genSalt, hash } from 'bcrypt';
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import { Role } from "../../../../core/src/index";
 import { generateMockPurchase } from "../mock-data/mock-purchases";
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import { getRanndomElement } from '../../../../helpers/src/common';
 import { generateMockReview } from "../mock-data/mock-reviews";
+import { generateMockCoachQuestionnaire, generateMockUserQuestionnaire } from "../mock-data/mock-questionnaire";
 
 export class DataGenerator {
   private trainingIds: string[] = [];
@@ -20,9 +23,15 @@ export class DataGenerator {
 
   private async generateTrainings(client: PrismaClient) {
     for (let i=0; i < this.trainings; i++) {
+      const userId = getRanndomElement(this.userIds);
       const training = await client.training.create({
         data: {
-          ...generateMockTraining()
+          ...generateMockTraining(),
+          coach: {
+            connect: {
+              id: userId
+            }
+          }
         }
       });
       this.trainingIds.push(training.id);
@@ -34,12 +43,19 @@ export class DataGenerator {
     const salt = await genSalt(5);
     const passwordHash = await hash('password', salt);
     for (let i=0; i < this.users; i++) {
+      const mockUser = generateMockUser();
+      const mockQuestionnaire = (mockUser.role === Role.USER) ? generateMockUserQuestionnaire() : generateMockCoachQuestionnaire();
       const user = await client.user.create({
         data: {
-          ...generateMockUser(),
+          ...mockUser,
           purchases: undefined,
           trainings: undefined,
-          questionnaire: undefined,
+          questionnaire: {
+            create: {
+              ...mockQuestionnaire
+
+            }
+          },
           reviews: undefined,
           passwordHash
         }
@@ -54,7 +70,7 @@ export class DataGenerator {
       const userId = getRanndomElement(this.userIds);
       const trainingId = getRanndomElement(this.trainingIds);
       const purchase = generateMockPurchase();
-      client.purchase.create({
+      await client.purchase.create({
           data: {
             price: purchase.price,
             trainCount: purchase.trainCount,
@@ -118,11 +134,8 @@ export class DataGenerator {
 
 
   public async generate(client: PrismaClient) {
-    await Promise.all([
-      this.generateTrainings(client),
-      this.generateUsers(client)
-    ]);
-
+    await  this.generateUsers(client);
+    await  this.generateTrainings(client);
     await Promise.all([
       this.generatePurchases(client),
       this.generateReviews(client)

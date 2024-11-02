@@ -4,6 +4,7 @@ import { useAppSelector } from "../../hooks/use-app-dispatch";
 import { getPopularlTrainings } from "../../store/main-process/selectors";
 import { useNavigate } from "react-router-dom";
 import DetailedTrainingCard from "../detailed-training-card/detailed-training-card";
+import EmptyListCard from "../empty-list-card/empty-list-card";
 
 function PopularTrainingsBoxTemplate(): JSX.Element {
   const [startIndex, setStartIndex] = useState(0);
@@ -67,6 +68,10 @@ function PopularTrainingsBoxTemplate(): JSX.Element {
                       <DetailedTrainingCard training={training}  />
                     </li>
                   ))
+                }
+                {
+                  trainings && trainings.length === 0
+                  && <EmptyListCard />
                 }
               </ul>
             </div>

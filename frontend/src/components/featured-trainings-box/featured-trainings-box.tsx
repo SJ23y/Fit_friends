@@ -3,6 +3,7 @@ import { Setting } from "../../consts";
 import { useAppSelector } from "../../hooks/use-app-dispatch";
 import { getFeaturedTrainings } from "../../store/main-process/selectors";
 import FeaturedTrainingCard from "./featured-training-card";
+import EmptyListCard from "../empty-list-card/empty-list-card";
 
 function FeaturedTrainingsBoxTemplate(): JSX.Element {
   const [startIndex, setStartIndex] = useState(0);
@@ -52,6 +53,10 @@ function FeaturedTrainingsBoxTemplate(): JSX.Element {
                   trainings
                   .slice(startIndex, startIndex + Setting.FeaturedCardPerStep)
                   .map((training) => <FeaturedTrainingCard training={training} key={`featured-${training.id}`} />)
+                }
+                {
+                  trainings && trainings.length === 0
+                  && <EmptyListCard />
                 }
               </ul>
             </div>

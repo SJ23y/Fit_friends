@@ -1,4 +1,4 @@
-import { Controller, Get, HttpStatus, Param, ParseUUIDPipe, Query, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, FileTypeValidator, Get, HttpStatus, Param, ParseFilePipe, ParseUUIDPipe, Post, Query, Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { TrainingService } from './training.service';
 import { TrainingQuery } from './training.query';
@@ -7,6 +7,8 @@ import { TrainingRdo } from './rdo/training.rdo';
 import { fillDto } from '@backend/shared-helpers';
 import { JwtAuthGuard } from '@backend/authentication';
 import { RequestWithTokenPayload } from '@backend/shared-core';
+import { CreateTrainingDto } from './dto/create-training.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('Training')
 @Controller('trainings')
@@ -15,6 +17,35 @@ export class TrainingController {
   constructor(
     private readonly trainingService: TrainingService
    ) {}
+
+
+   @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'Успешно создана новая тренировка'
+  })
+  @ApiResponse({
+    status: HttpStatus.CONFLICT,
+    description: 'Данное действие доступно только тренерам'
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Данное действие доступно только авторизованным пользователям'
+  })
+  @UseInterceptors(FileInterceptor('video'))
+  @UseGuards(JwtAuthGuard)
+  @Post('')
+  public async create(
+    @Body() dto: CreateTrainingDto,
+    @Req() {user}: RequestWithTokenPayload,
+    @UploadedFile(new ParseFilePipe({
+      validators: [
+        new FileTypeValidator({ fileType: '.(mov|avi|mp4)' }),
+      ],
+      fileIsRequired: false})) file: Express.Multer.File) {
+
+    const newTraining = await this.trainingService.createTraining(dto, user, file);
+    return fillDto(TrainingRdo, newTraining);
+  }
 
   @ApiResponse({
     status: HttpStatus.OK,

@@ -3,15 +3,14 @@ POST http://localhost:3000/register HTTP/1.1
 Content-Type: application/json
 
 {
-  "email": "ronald@notfound.local",
-  "name": "Ronald",
-  "password": "123456",
-  "avatar": "image.jpg",
+  "email": "ted@mail.com",
+  "name": "Ted Lasso",
+  "password": "111111",
   "gender": "неважно",
-  "birthDate": "23.03.2004",
+  "birthDate": "23.03.1990",
   "description": "Assertively architect frictionless processes rather than enterprise-wide testing procedures.",
   "location": "Пионерская",
-  "backgroundImage": "back.jpg"
+  "role": "user"
   }
 
 ###
@@ -27,8 +26,8 @@ POST http://localhost:3000/login HTTP/1.1
 Content-Type: application/json
 
 {
-  "email": "testo@mail.ru",
-  "password": "111111"
+  "email": "Dustin_Ortiz34@hotmail.com",
+  "password": "password"
 }
 
 ###
@@ -48,12 +47,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0ZjY0YTNkY
 ###
 
 # Update
-PATCH http://localhost:3000/user/update HTTP/1.1
+POST http://localhost:3000/user/update HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkYTlkMjRlNS0yZTI5LTRlMTItYjEwNy01NTk2YjMzMmE2NmYiLCJuYW1lIjoiVGVzdG8iLCJpYXQiOjE3Mjk1MDk1NTcsImV4cCI6MTcyOTUxMDQ1N30.IkM3IqcFxO1vNguwEcSftoYuK9hK8amfQ26J6eSCNQo
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhY2VhYmQxZi0wNGM5LTQyZDQtOWNjOS00NGE4Y2ZiMGYwMjEiLCJuYW1lIjoiVGVkIExhc3NvIiwicm9sZSI6InVzZXIiLCJpYXQiOjE3MzA1NjE0MDksImV4cCI6MTczMDU2MjMwOX0.ZGLqAF0zjbLFd8L04hqQcmDjI5nq4ToSxnNNpoi7NWw
 
 {
-  "description": "неважноdffffffffffffffffffffffffffffffffffffff"
+  "role": "coach"
 }
 
 ###

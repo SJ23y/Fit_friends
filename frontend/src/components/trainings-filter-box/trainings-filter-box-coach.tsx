@@ -1,0 +1,251 @@
+import { memo, useEffect, useState } from "react";
+import { AppRoute, Setting, SortBy, SortDirection, TRAIN_TYPES } from "../../consts";
+import { useNavigate } from "react-router-dom";
+import { Box, Slider } from "@mui/material";
+import { useAppDispatch, useAppSelector } from "../../hooks/use-app-dispatch";
+import { getQuery } from "../../store/main-process/selectors";
+import { changeQuery } from "../../store/main-process/main-process";
+
+type TrainingFilterBoxCoachProps = {
+  maxPrice: number;
+  minPrice: number;
+  minCallories: number;
+  maxCallories: number;
+}
+
+function TrainingFilterBoxCoachTemplate({ maxPrice, minPrice, maxCallories, minCallories}: TrainingFilterBoxCoachProps): JSX.Element {
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const query = useAppSelector(getQuery)
+  const [priceRange, setPriceRange] = useState({maxPrice, minPrice});
+  const [calloriesRange, setCalloriesRange] = useState({maxCallories, minCallories});
+  const [types, setTypes] = useState<string[]>(TRAIN_TYPES);
+  const [ratingRange, setRatingRange] = useState<{minRating: number, maxRating: number}>({minRating: 1, maxRating: Setting.MaxRating});
+  const [currentSortDirection, setCurrentSortDirection] = useState<SortDirection>(Setting.DefaultSortDirection);
+  const [currentSortBy, setCurrentSortBy] = useState<SortBy>(Setting.DefaultSortBy);
+  const [freeFlag, setFreeFlag] = useState<boolean>(false);
+
+  const changePriceInputHandler = (evt: React.FormEvent) => {
+    const element = evt.target as HTMLInputElement;
+    const value = parseInt(element.value, 10)
+    if (value > 0) {
+      setPriceRange({...priceRange, [element.name]: value});
+    }
+  }
+
+  const changePriceSliderHandler = (_evt: Event, newValue: number | number[]) => {
+    const [minPrice, maxPrice] = newValue as number[];
+    setPriceRange({minPrice, maxPrice})
+  }
+
+  const changeCalloriesInputHandler = (evt: React.FormEvent) => {
+    const element = evt.target as HTMLInputElement;
+    const value = parseInt(element.value, 10)
+    setCalloriesRange({...calloriesRange, [element.name]: value});
+  }
+
+  const changeCalloriesSliderHandler = (_evt: Event, newValue: number | number[]) => {
+    const [minCallories, maxCallories] = newValue as number[];
+    setCalloriesRange({minCallories, maxCallories})
+  }
+
+  const changeRatingSliderHandler = (_evt: Event, newValue: number | number[]) => {
+    const [minRating, maxRating] = newValue as number[];
+    setRatingRange({minRating, maxRating})
+  }
+
+  const typesChangeHandler = (value: string) => {
+    if (types.includes(value)) {
+      setTypes(types.filter(type => type !== value));
+    } else {
+      setTypes([...types, value])
+    }
+  }
+
+  useEffect(() => {
+    dispatch(changeQuery({
+      ...query,
+      sortBy: currentSortBy,
+      sortDirection: currentSortDirection,
+      free: freeFlag,
+      page: Setting.DefaultStartPage,
+      maxPrice: priceRange.maxPrice,
+      minPrice: priceRange.minPrice,
+      maxCallories: calloriesRange.maxCallories,
+      minCallories: calloriesRange.minCallories,
+      maxRating: ratingRange.maxRating,
+      minRating: ratingRange.minRating,
+      type: types
+    }))
+  }, [priceRange, calloriesRange, ratingRange, types, freeFlag, currentSortBy, currentSortDirection])
+
+  return(
+    <div className="gym-catalog-form">
+      <h2 className="visually-hidden">Мои тренировки Фильтр</h2>
+      <div className="gym-catalog-form__wrapper">
+        <button
+                    className="btn-flat btn-flat--underlined gym-catalog-form__btnback"
+                    type="button"
+                    onClick={() => navigate(AppRoute.Account)}
+        >
+          <svg width="14" height="10" aria-hidden="true">
+            <use xlinkHref="#arrow-left"></use>
+          </svg>
+          <span>Назад</span>
+        </button>
+        <h3 className="gym-catalog-form__title">Фильтры</h3>
+        <form className="gym-catalog-form__form">
+          <div className="gym-catalog-form__block gym-catalog-form__block--price">
+            <h4 className="gym-catalog-form__block-title">Цена, ₽</h4>
+              <div className="filter-price">
+                <div className="filter-price__input-text filter-price__input-text--min">
+                  <input
+                    type="number"
+                    id="text-min"
+                    name="minPrice"
+                    min={minPrice}
+                    max={maxPrice}
+                    value={priceRange.minPrice}
+                    onChange={changePriceInputHandler}
+                  />
+                  <label htmlFor="text-min">от</label>
+                </div>
+                <div className="filter-price__input-text filter-price__input-text--max">
+                  <input
+                    type="number"
+                    id="text-max"
+                    min={minPrice}
+                    max={maxPrice}
+                    name="maxPrice"
+                    value={priceRange.maxPrice}
+                    onChange={changePriceInputHandler}
+                  />
+                  <label htmlFor="text-max">до</label>
+                </div>
+              </div>
+              <div className="filter-range">
+                <Box sx={{ width: 300 }}>
+                  <Slider
+                    getAriaLabel={() => 'Price range'}
+                    color="success"
+                    max={maxPrice}
+                    min={minPrice}
+                    value={[priceRange.minPrice, priceRange.maxPrice]}
+                    onChange={changePriceSliderHandler}
+                    valueLabelDisplay="auto"
+                  />
+                </Box>
+              </div>
+          </div>
+          <div className="gym-catalog-form__block gym-catalog-form__block--calories">
+            <h4 className="gym-catalog-form__block-title">Калории</h4>
+            <div className="filter-calories">
+              <div className="filter-calories__input-text filter-calories__input-text--min">
+                <input
+                  type="number"
+                  id="text-min-cal"
+                  min={minCallories}
+                  max={maxCallories}
+                  name="minCallories"
+                  value={calloriesRange.minCallories}
+                  onChange={changeCalloriesInputHandler}
+                />
+                <label htmlFor="text-min-cal">от</label>
+              </div>
+              <div className="filter-calories__input-text filter-calories__input-text--max">
+                <input
+                  type="number"
+                  id="text-max-cal"
+                  min={minCallories}
+                  max={maxCallories}
+                  name="maxCallories"
+                  value={calloriesRange.maxCallories}
+                  onChange={changeCalloriesInputHandler}
+                />
+                <label htmlFor="text-max-cal">до</label>
+              </div>
+            </div>
+            <div className="filter-range">
+              <Box sx={{ width: 300 }}>
+                <Slider
+                  getAriaLabel={() => 'Callories range'}
+                  color="success"
+                  max={maxCallories}
+                  min={minCallories}
+                  value={[calloriesRange.minCallories, calloriesRange.maxCallories]}
+                  onChange={changeCalloriesSliderHandler}
+                  valueLabelDisplay="auto"
+                />
+              </Box>
+            </div>
+          </div>
+          <div className="gym-catalog-form__block gym-catalog-form__block--rating">
+            <h4 className="gym-catalog-form__block-title">Рейтинг</h4>
+            <div className="filter-raiting">
+              <Box sx={{ width: 300 }}>
+                  <Slider
+                    getAriaLabel={() => 'Rating range'}
+                    color="success"
+                    max={Setting.MaxRating}
+                    min={1}
+                    value={[ratingRange.minRating, ratingRange.maxRating]}
+                    onChange={changeRatingSliderHandler}
+                    valueLabelDisplay="on"
+                  />
+              </Box>
+            </div>
+          </div>
+          <div className="my-training-form__block my-training-form__block--duration">
+                      <h4 className="my-training-form__block-title">Длительность</h4>
+                      <ul className="my-training-form__check-list">
+                        <li className="my-training-form__check-list-item">
+                          <div className="custom-toggle custom-toggle--checkbox">
+                            <label>
+                              <input type="checkbox" value="duration-1" name="duration" /><span className="custom-toggle__icon">
+                                <svg width="9" height="6" aria-hidden="true">
+                                  <use xlinkHref="#arrow-check"></use>
+                                </svg></span><span className="custom-toggle__label">10 мин - 30 мин</span>
+                            </label>
+                          </div>
+                        </li>
+                        <li className="my-training-form__check-list-item">
+                          <div className="custom-toggle custom-toggle--checkbox">
+                            <label>
+                              <input type="checkbox" value="duration-1" name="duration" checked /><span className="custom-toggle__icon">
+                                <svg width="9" height="6" aria-hidden="true">
+                                  <use xlinkHref="#arrow-check"></use>
+                                </svg></span><span className="custom-toggle__label">30 мин - 50 мин</span>
+                            </label>
+                          </div>
+                        </li>
+                        <li className="my-training-form__check-list-item">
+                          <div className="custom-toggle custom-toggle--checkbox">
+                            <label>
+                              <input type="checkbox" value="duration-1" name="duration" /><span className="custom-toggle__icon">
+                                <svg width="9" height="6" aria-hidden="true">
+                                  <use xlinkHref="#arrow-check"></use>
+                                </svg></span><span className="custom-toggle__label">50 мин - 80 мин</span>
+                            </label>
+                          </div>
+                        </li>
+                        <li className="my-training-form__check-list-item">
+                          <div className="custom-toggle custom-toggle--checkbox">
+                            <label>
+                              <input type="checkbox" value="duration-1" name="duration" /><span className="custom-toggle__icon">
+                                <svg width="9" height="6" aria-hidden="true">
+                                  <use xlinkHref="#arrow-check"></use>
+                                </svg></span><span className="custom-toggle__label">80 мин - 100 мин</span>
+                            </label>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+const TrainingFilterBoxCoach = memo(TrainingFilterBoxCoachTemplate);
+
+export default TrainingFilterBoxCoach;

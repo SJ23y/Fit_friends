@@ -5,8 +5,8 @@ import { getQuery, getTrainings } from "../../store/main-process/selectors";
 import { useEffect } from "react";
 import { uploadTrainings } from "../../store/thunk-actions";
 import DetailedTrainingCard from "../../components/detailed-training-card/detailed-training-card";
-import TrainingFilterBox from "../../components/trainings-filter-box/trainings-filter-box";
 import EmptyListCard from "../../components/empty-list-card/empty-list-card";
+import TrainingFilterBoxUser from "../../components/trainings-filter-box/trainings-filter-box-user";
 
 function TrainingCatalog(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -38,7 +38,6 @@ function TrainingCatalog(): JSX.Element {
 
   return(
     <div className="wrapper">
-      <Header />
       <main>
         <section className="inner-page">
           <div className="container">
@@ -46,7 +45,7 @@ function TrainingCatalog(): JSX.Element {
               <h1 className="visually-hidden">Каталог тренировок</h1>
               {
                 paginatedTrainings &&
-                <TrainingFilterBox
+                <TrainingFilterBoxUser
                   maxPrice={paginatedTrainings.maxPrice}
                   minPrice={paginatedTrainings.minPrice}
                   minCallories={paginatedTrainings.minCallories}

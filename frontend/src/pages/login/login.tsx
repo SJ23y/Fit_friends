@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import { ApiRoute, AppRoute, Setting, ValidationSetting } from "../../consts";
+import { ApiRoute, AppRoute, Role, Setting, ValidationSetting } from "../../consts";
 import { useAppDispatch, useAppSelector } from "../../hooks/use-app-dispatch";
-import { checkAuthentication, getUserError } from "../../store/user-process/selectors";
+import { checkAuthentication, getUserError, getUserInfo } from "../../store/user-process/selectors";
 import React, { useEffect, useRef } from "react";
 import { loginUser } from "../../store/user-process/thunk-actions";
 
@@ -15,7 +15,7 @@ function Login(): JSX.Element {
 
   useEffect(() => {
       if (isAuth) {
-        navigate(AppRoute.Main);
+        navigate(AppRoute.Main)
       }
   }, [isAuth]);
 

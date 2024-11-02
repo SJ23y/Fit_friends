@@ -12,9 +12,10 @@ export class TrainingEntity extends Entity implements StorableEntity<Training> {
   public gender: Gender;
   public video: string;
   public rate: number;
-  public coach: string;
+  public coach?: string;
   public isSpecialOffer: boolean;
   public createdAt?: Date;
+  public coachId: string;
 
   constructor(training?: Training) {
     super();
@@ -36,10 +37,11 @@ export class TrainingEntity extends Entity implements StorableEntity<Training> {
     this.gender = training.gender;
     this.video = training.video;
     this.rate = training.rate ?? DEFAULT_TRAIN_RATE;
-    this.coach = training.coach;
+    this.coach = training.coach ?? undefined;
     this.isSpecialOffer = training.isSpecialOffer ?? false;
     this.createdAt = training.createdAt ?? undefined;
-    }
+    this.coachId = training.coachId;
+  }
   }
 
   public toPOJO(): Training {
@@ -58,7 +60,8 @@ export class TrainingEntity extends Entity implements StorableEntity<Training> {
       rate: this.rate,
       coach: this.coach,
       isSpecialOffer: this.isSpecialOffer,
-      createdAt: this.createdAt
+      createdAt: this.createdAt,
+      coachId: this.coachId
     }
   }
 }

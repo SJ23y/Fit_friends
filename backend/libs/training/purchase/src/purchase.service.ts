@@ -5,13 +5,11 @@ import { PurchaseEntity } from "./purchase.entity";
 import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
 import { CreatePurchaseDto } from "./dto/create-purchase.dto";
 import { ReduceTrainingsDto } from "./dto/reduce-trainings.dto";
-import { TrainingBalanceService } from "@backend/user-balance";
 
 @Injectable()
 export class PurchaseService {
   constructor(
-    private readonly purchaseRepository: PurchaseRepository,
-    private readonly trainingBalanceService: TrainingBalanceService
+    private readonly purchaseRepository: PurchaseRepository
   ) {}
 
   public async createPurchase(dto: CreatePurchaseDto, userId?: string): Promise<PurchaseEntity> {
@@ -23,14 +21,7 @@ export class PurchaseService {
     }
 
     const newPurchase = new PurchaseEntity(purchase)
-    await Promise.all([
-      this.purchaseRepository.save(newPurchase),
-      this.trainingBalanceService.addTrainingsToBalance({
-        userId: userId ?? '',
-        trainingId: dto.trainId,
-        trainingCount: dto.trainCount
-      })
-    ]);
+    await this.purchaseRepository.save(newPurchase);
 
     return newPurchase;
   }
@@ -72,14 +63,7 @@ export class PurchaseService {
 
     currentPurchase.trainCount -= dto.trainCount;
 
-    await Promise.all([
-      this.purchaseRepository.changePurchaseTrainingsCount(currentPurchase),
-      this.trainingBalanceService.reduceTrainingBalance({
-       userId: userId ?? '',
-       trainingId: dto.trainId,
-       trainingCount: dto.trainCount
-     })
-   ]);
+    await this.purchaseRepository.changePurchaseTrainingsCount(currentPurchase);
 
     return currentPurchase;
   }

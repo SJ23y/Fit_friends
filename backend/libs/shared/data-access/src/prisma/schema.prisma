@@ -24,7 +24,7 @@ model User {
   questionnaire Questionnaire?
   role String
   reviews Review[]
-  trainings Deposit[]
+  trainings Training[]
   purchases Purchase[]
 
   @@map("users")
@@ -72,7 +72,8 @@ model Training {
   gender String
   video String
   rate Float
-  coach String
+  coach User @relation(fields: [coachId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  coachId String @map("coach_id")
   isSpecialOffer Boolean @map("is_special_offer")
   reviews Review[]
   purchases Purchase[]
@@ -109,12 +110,3 @@ model Purchase {
   @@map("purchases")
 }
 
-model Deposit {
-  trainId String @map("train_id")
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  userId String @map("user_id")
-  count Int
-
-  @@id([userId, trainId])
-  @@map("deposits")
-}

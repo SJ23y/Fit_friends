@@ -1,10 +1,11 @@
 import { memo, useRef, useState } from "react";
 import { UserData } from "../../types/auth";
-import { ApiRoute, Gender, LOCATIONS, Setting, TRAIN_TYPES, UserLevel } from "../../consts";
+import { ApiRoute, Gender, LOCATIONS, Role, Setting, TRAIN_TYPES, UserLevel } from "../../consts";
 import CustomSelect from "../custom-select/custom-select";
-import classNames from "classnames";
 import { updateUser } from "../../store/user-process/thunk-actions";
 import { useAppDispatch } from "../../hooks/use-app-dispatch";
+import classNames from "classnames";
+import { isUserQuestionnaire } from "../../utils";
 
 type UserInfoSectionProps = {
   user: UserData
@@ -12,7 +13,7 @@ type UserInfoSectionProps = {
 
 function UserInfoSectionTemplate({user}: UserInfoSectionProps): JSX.Element {
   const [editStatus, setEditStatus] = useState(false);
-  const [formData, setFormData] = useState<UserData>(user);
+  const [formData, setFormData] = useState(user);
   const [avatar, setAvatar] = useState<string>(`${Setting.BaseUrl}/${user.avatar}`);
   const avatarRef = useRef<HTMLInputElement | null>(null);
   const dispatch = useAppDispatch();
@@ -33,14 +34,14 @@ function UserInfoSectionTemplate({user}: UserInfoSectionProps): JSX.Element {
 
   const changeSpecializationHandler = (evt: React.FormEvent) => {
     const {value} = evt.target as HTMLInputElement;
-    let newTypes = [];
+    let newTypes: string[] = [];
     if (formData.questionnaire.trainType.includes(value)) {
       newTypes = formData.questionnaire.trainType.filter((type) => type !== value);
     }
     else {
       newTypes = [...formData.questionnaire.trainType, value];
     }
-      setFormData({...formData, questionnaire: {...formData.questionnaire, trainType: newTypes}})
+    setFormData({...formData, questionnaire: {...formData.questionnaire, trainType: newTypes}})
   }
 
   const formSubmitHandler = (evt: React.MouseEvent<HTMLButtonElement>) => {
@@ -49,24 +50,42 @@ function UserInfoSectionTemplate({user}: UserInfoSectionProps): JSX.Element {
     } else {
       evt.preventDefault();
       setEditStatus(false);
-      const data = new FormData();
-      const file = avatarRef.current?.files?.[0];
-      data.set("name", formData.name);
-      data.set("description", formData.description);
-      data.set("gender", formData.gender);
-      data.set("location", formData.location);
-      file && data.set("avatar", file);
-      dispatch(updateUser(data));
+      console.log(avatarRef.current?.files)
+      const newUser = {
+        name: formData.name,
+        description: formData.description,
+        location: formData.location,
+        gender: formData.gender,
+        avatar: avatarRef.current?.files?.[0] ?? undefined,
+        questionnaire: formData.questionnaire
+      }
+      if (isUserQuestionnaire(formData.questionnaire) && isUserQuestionnaire(newUser.questionnaire)) {
+         newUser.questionnaire.isReadyForTrain = formData.questionnaire.isReadyForTrain
+        }
+      if (isUserQuestionnaire(formData.questionnaire) && !isUserQuestionnaire(newUser.questionnaire)) {
+        newUser.questionnaire.individualTraining = formData.questionnaire.isReadyForTrain;
+      }
+      dispatch(updateUser(newUser));
     }
   }
 
   return(
-    <section className="user-info">
-      <div className="user-info__header">
+    <section className={
+      classNames({
+        "user-info-edit": editStatus,
+        "user-info": !editStatus
+      })
+    }>
+      <div className={
+      classNames({
+        "user-info-edit__header": editStatus,
+        "user-info__header": !editStatus
+      })
+    }>
         <div className="input-load-avatar">
           <label>
             <input
-            ref={avatarRef}
+              ref={avatarRef}
               className="visually-hidden"
               type="file"
               name="user-photo-1"
@@ -87,6 +106,30 @@ function UserInfoSectionTemplate({user}: UserInfoSectionProps): JSX.Element {
             </span>
           </label>
         </div>
+        {
+          editStatus &&
+          <div className="user-info-edit__controls">
+            <button
+              className="user-info-edit__control-btn"
+              aria-label="обновить"
+              onClick={() => avatarRef.current?.click()}
+            >
+              <svg width="16" height="16" aria-hidden="true">
+                <use xlinkHref="#icon-change"></use>
+              </svg>
+            </button>
+            <button
+              className="user-info-edit__control-btn"
+              aria-label="удалить"
+              onClick={() => setAvatar('')}
+            >
+              <svg width="14" height="16" aria-hidden="true">
+                <use xlinkHref="#icon-trash"></use>
+              </svg>
+            </button>
+          </div>
+        }
+
       </div>
       <form
         className="user-info__form"
@@ -137,21 +180,38 @@ function UserInfoSectionTemplate({user}: UserInfoSectionProps): JSX.Element {
         <div className="user-info__section user-info__section--status">
           <h2 className="user-info__title user-info__title--status">Статус</h2>
           <div className="custom-toggle custom-toggle--switch user-info__toggle">
-            <label>
-              <input
-                type="checkbox"
-                name="ready-for-training"
-                disabled={!editStatus}
-                checked={formData.questionnaire.isReadyForTrain}
-                onChange={() => setFormData({...formData, questionnaire: {...formData.questionnaire, isReadyForTrain: !formData.questionnaire.isReadyForTrain}})}
-              />
-              <span className="custom-toggle__icon">
-                <svg width="9" height="6" aria-hidden="true">
-                  <use xlinkHref="#arrow-check"></use>
-                </svg>
-              </span>
-              <span className="custom-toggle__label">Готов тренироваться</span>
-            </label>
+            {
+              <label>
+                {
+                  isUserQuestionnaire(formData.questionnaire) &&
+                  <input
+                    type="checkbox"
+                    name="ready-for-training"
+                    disabled={!editStatus}
+                    checked={formData.questionnaire.isReadyForTrain }
+                    onChange={() => isUserQuestionnaire(formData.questionnaire) && setFormData({...formData, questionnaire: {...formData.questionnaire, isReadyForTrain: !formData.questionnaire.isReadyForTrain}})}
+                  />
+                }
+                {
+                  !isUserQuestionnaire(formData.questionnaire) &&
+                  <input
+                    type="checkbox"
+                    name="ready-for-training"
+                    disabled={!editStatus}
+                    checked={ formData.questionnaire.individualTraining }
+                    onChange={() => !isUserQuestionnaire(formData.questionnaire) && setFormData({...formData, questionnaire: {...formData.questionnaire, individualTraining: !formData.questionnaire.individualTraining}})}
+                  />
+                }
+                <span className="custom-toggle__icon">
+                  <svg width="9" height="6" aria-hidden="true">
+                    <use xlinkHref="#arrow-check"></use>
+                  </svg>
+                </span>
+                <span className="custom-toggle__label">
+                  {user.role === Role.USER ? 'Готов тренироваться' : 'Готов тренировать'}
+                </span>
+              </label>
+            }
           </div>
         </div>
         <div className="user-info__section">

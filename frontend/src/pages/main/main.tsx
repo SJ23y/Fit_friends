@@ -3,13 +3,20 @@ import FeaturedTrainingsBox from "../../components/featured-trainings-box/featur
 import PopularTrainingsBox from "../../components/popular-trainings-box/popular-trainings-box";
 import SpecialTrainingsBox from "../../components/special-trainings-box/special-trainings-box";
 import { uploadFeaturedTrainings, uploadPopularTrainings, uploadSpecialTrainings } from "../../store/main-process/thunk-actions";
-import { FilterBy, Setting, SortBy, SortDirection } from "../../consts";
-import { useAppDispatch } from "../../hooks/use-app-dispatch";
+import { AppRoute, FilterBy, Role, Setting, SortBy, SortDirection } from "../../consts";
+import { useAppDispatch, useAppSelector } from "../../hooks/use-app-dispatch";
+import { getUserInfo } from "../../store/user-process/selectors";
+import { useNavigate } from "react-router-dom";
 
 function Main(): JSX.Element {
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const user = useAppSelector(getUserInfo);
 
   useEffect(() => {
+    if (user?.role === Role.COACH) {
+      navigate(AppRoute.Account)
+    } else {
     dispatch(
       uploadPopularTrainings({
         page: Setting.DefaultStartPage,
@@ -29,6 +36,7 @@ function Main(): JSX.Element {
         count: Setting.MaxSpecialTrainingCount,
         filterBy: FilterBy.SPECIAL
     }));
+  }
   }, [])
 
   return(

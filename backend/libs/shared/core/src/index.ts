@@ -4,14 +4,17 @@ export {
   UserLevel,
   Role,
   DefaultQuestionnaireWoman,
-  DefaultQuestionnaireMan } from './settings/user.setting'
+  DefaultQuestionnaireMan,
+  MAX_CALLORIES_COUNT,
+  MIN_CALLORIES_COUNT } from './settings/user.setting'
 export {
   TRAIN_TYPES,
   TrainDuration,
   DEFAULT_TRAIN_RATE,
   MAX_TRAINING_COUNT_LIMIT,
   MAX_REVIEW_COUNT_LIMIT,
-  MAX_FEATURED_COUNT_LIMIT } from './settings/train.setting';
+  MAX_FEATURED_COUNT_LIMIT,
+  TrainingValidationSetting } from './settings/train.setting';
 export { Entity } from './base/entity';
 export { StorableEntity } from './interfaces/storable-entity.interface';
 export { AuthUser } from './interfaces/auth-user.interface'

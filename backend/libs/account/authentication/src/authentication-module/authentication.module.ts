@@ -9,13 +9,11 @@ import { LocalStartegy } from '../strategies/local.strategy';
 import { JwtRefreshStrategy } from '../strategies/jwt-refresh.strategy';
 import { RefreshTokenModule } from '../refresh-token-module/refresh-token.module';
 import { UserModule, UserRepository } from '@backend/user';
-import { TrainingBalanceModule } from '@backend/user-balance';
 import { FileManagerModule } from '@backend/file-manager'
 @Module({
   imports: [
     UserModule,
     FileManagerModule,
-    TrainingBalanceModule,
     JwtModule.registerAsync({
       inject: [ConfigService],
       useFactory: getJwtOptions

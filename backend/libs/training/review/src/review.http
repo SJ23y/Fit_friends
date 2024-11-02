@@ -2,12 +2,12 @@
 
 POST http://localhost:3000/reviews HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmOWVmY2JhMC0zYmMyLTQ5YTAtYmFiMi0xYzAyYmYyNWFlMzMiLCJuYW1lIjoiUm9uYWxkIiwiaWF0IjoxNzI4NDQzNTc4LCJleHAiOjE3Mjg0NDQ0Nzh9.2uM0B2RXHcaL0ylMrY1Myk3kH-WNWkX89uH5pvfe9tI
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjJmYmFmYS02MGRlLTRkMzgtOWRlYi01OWIzNTRjYWJjZjgiLCJuYW1lIjoiRG91Z2xhcyBLb2NoIiwicm9sZSI6InVzZXIiLCJpYXQiOjE3MzA1NjIzNTMsImV4cCI6MTczMDU2MzI1M30.AOycKxf_glmGNFWb6pJIxtreybE8aKTichi51kG-NW8
 
 {
-  "trainId": "8e3504b2-0102-4c95-8c43-d7bb39d37f32",
+  "trainId": "95b84a04-25eb-4210-96fc-0fd8b6c2b98a",
   "content": "Objectively empower leveraged infomediaries after error-free experiences. Interactively re-engineer.",
-  "rate": 2
+  "rate": 5
 }
 ###
 

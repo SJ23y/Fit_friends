@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsIn, IsOptional, IsString, Length } from 'class-validator';
 import { AuthenticationValidateMessage } from '../authentication-module/authentication.consts';
-import { Gender, LOCATIONS } from '@backend/shared-core'
+import { Gender, LOCATIONS, Role } from '@backend/shared-core'
 import { QuestionnaireDto } from './questionnaire.dto';
 import { Type } from 'class-transformer';
 
@@ -72,4 +72,13 @@ export class UpdateUserDto {
   @IsOptional()
   @Type(() => QuestionnaireDto)
   questionnaire?: QuestionnaireDto;
+
+  @ApiProperty({
+    description: 'Short characteristic user about himself',
+    example: 'I am a good boy, like my dog.'
+  })
+  @IsIn(Object.values(Role), {message: AuthenticationValidateMessage.Role})
+  @IsString()
+  @IsOptional()
+  role: Role;
 }

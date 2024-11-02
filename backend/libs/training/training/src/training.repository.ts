@@ -16,9 +16,35 @@ export class TrainigRepository extends BasePostgresRepository<TrainingEntity, Pr
     super(trainingFactory);
   }
 
+  public async save(training: TrainingEntity): Promise<void> {
+    const pojoTraining = training.toPOJO();
+    const newTraining = await this.client.training.create({
+      data: {
+          title: pojoTraining.title,
+          image: pojoTraining.image,
+          level: pojoTraining.level,
+          type: pojoTraining.type,
+          duration: pojoTraining.duration,
+          price: pojoTraining.price,
+          callorieQuantity: pojoTraining.callorieQuantity,
+          description: pojoTraining.description,
+          gender: pojoTraining.gender,
+          isSpecialOffer: pojoTraining.isSpecialOffer,
+          video: pojoTraining.video,
+          rate: pojoTraining.rate,
+          coach: {
+            connect: {id: pojoTraining.coachId}
+          }
+      }
+    });
+    training.id = newTraining.id;
+  }
+
   private async getTrainingsCount(where: Prisma.TrainingWhereInput): Promise<number> {
     return this.client.training.count({ where })
   }
+
+
 
   private async getTrainingsStats(): Promise<TrainingStats> {
     return this.client.training.aggregate({
@@ -121,7 +147,19 @@ export class TrainigRepository extends BasePostgresRepository<TrainingEntity, Pr
       {
         where: {id: training.id},
         data: {
-          ...training
+          title: training.title,
+          image: training.image,
+          level: training.level,
+          type: training.type,
+          duration: training.duration,
+          price: training.price,
+          callorieQuantity: training.callorieQuantity,
+          description: training.description,
+          gender: training.gender,
+          isSpecialOffer: training.isSpecialOffer,
+          rate: training.rate,
+          video: training.video,
+          coach: undefined
         }
       });
   }

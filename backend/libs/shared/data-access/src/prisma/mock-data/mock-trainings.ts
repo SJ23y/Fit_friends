@@ -17,7 +17,7 @@ export function generateMockTraining(): Training {
     gender: getRanndomElement(Object.values(Gender)),
     rate: 0,
     video: getRanndomElement(DEFAULT_VIDEO_NAMES),
-    coach: faker.person.fullName(),
+    coachId: faker.person.fullName(),
     isSpecialOffer: faker.datatype.boolean()
   }
 }

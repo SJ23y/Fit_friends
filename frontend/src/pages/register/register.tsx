@@ -18,7 +18,7 @@ function Register(): JSX.Element {
     if (isAuth) {
       navigate(AppRoute.Main);
     }
-}, [isAuth]);
+}, []);
 
 const loadAvatarInputClickHandler = (evt: React.FormEvent<HTMLInputElement>) => {
   evt.preventDefault();
@@ -35,6 +35,7 @@ const formSubmitHandler = (evt: React.FormEvent<HTMLFormElement>) => {
       formData.set('location', location ?? '');
       formData.delete('user-agreement');
       dispatch(registerUser(formData));
+      navigate(AppRoute.Questionnaire);
     }
   }
 

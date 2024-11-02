@@ -12,4 +12,7 @@ const getUserInfo = (state: Pick<State, NameSpace.USER>): UserData | null =>
 const getUserError = (state: Pick<State, NameSpace.USER>): SerializedError | null =>
   state[NameSpace.USER].error;
 
-export { getUserError, getAuthorizationStatus, checkAuthentication, getUserInfo };
+const getUserLoadingStatus = (state: Pick<State, NameSpace.USER>): boolean =>
+  state[NameSpace.USER].loadingStatus;
+
+export { getUserLoadingStatus, getUserError, getAuthorizationStatus, checkAuthentication, getUserInfo };

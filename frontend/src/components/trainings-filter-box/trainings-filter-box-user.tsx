@@ -6,14 +6,14 @@ import { useAppDispatch, useAppSelector } from "../../hooks/use-app-dispatch";
 import { getQuery } from "../../store/main-process/selectors";
 import { changeQuery } from "../../store/main-process/main-process";
 
-type TrainingFilterBoxProps = {
+type TrainingFilterBoxUserProps = {
   maxPrice: number;
   minPrice: number;
   minCallories: number;
   maxCallories: number;
 }
 
-function TrainingFilterBoxTemplate({ maxPrice, minPrice, maxCallories, minCallories}: TrainingFilterBoxProps): JSX.Element {
+function TrainingFilterBoxUserTemplate({ maxPrice, minPrice, maxCallories, minCallories}: TrainingFilterBoxUserProps): JSX.Element {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const query = useAppSelector(getQuery)
@@ -275,6 +275,6 @@ function TrainingFilterBoxTemplate({ maxPrice, minPrice, maxCallories, minCallor
   );
 }
 
-const TrainingFilterBox = memo(TrainingFilterBoxTemplate);
+const TrainingFilterBoxUser = memo(TrainingFilterBoxUserTemplate);
 
-export default TrainingFilterBox;
+export default TrainingFilterBoxUser;

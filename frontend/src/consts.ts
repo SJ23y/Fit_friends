@@ -13,7 +13,10 @@ export enum AppRoute {
   Orders = '/orders',
   Purchases = '/purchases',
   Trainings = '/trainings',
-  Training = '/training'
+  Training = '/training',
+  NewTraining = '/new-training',
+  CoachTrainings = '/coach-trainings',
+  User = '/user'
 }
 
 export enum AuthorizationStatus {
@@ -51,7 +54,11 @@ export const ValidationSetting = {
   ReviewContentMaxLength: 1024,
   ReviewContentMinLength: 100,
   PurchaseMaxCount: 50,
-  PurchaseMinCount: 1
+  PurchaseMinCount: 1,
+  CoachDescriptionMinLength: 10,
+  CoachDescriptionMaxLength: 140,
+  UserCalloriesMin: 1000,
+  UserCalloriesMax: 5000
 } as const;
 
 export enum ApiRoute {

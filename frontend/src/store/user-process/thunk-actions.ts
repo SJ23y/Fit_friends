@@ -3,7 +3,7 @@ import { AxiosInstance } from 'axios';
 import { Dispatch, State } from '../../types/state';
 import { ApiRoute } from '../../consts';
 import { dropToken, saveToken } from '../../services/token';
-import { AuthData, TokenData, UserData } from '../../types/auth';
+import { AuthData, CoachQuestionnaire, TokenData, UpdateUser, UserData, UserQuestionnaire } from '../../types/auth';
 
 
 const checkAuthorization = createAsyncThunk<
@@ -28,18 +28,28 @@ const registerUser = createAsyncThunk<
   FormData,
   { dispatch: Dispatch; state: State; extra: AxiosInstance }
 >('registerUser', async (newUser, { extra: api }) => {
+
   const { data } = await api.post<UserData>(ApiRoute.Register, newUser);
   const { data:{accessToken, refreshToken} } = await api.post<TokenData>(ApiRoute.Login, {email: newUser.get('email'), password: newUser.get('password')});
   saveToken(accessToken, refreshToken);
   return data;
 });
 
+const saveQuestionnaireResult = createAsyncThunk<
+  UserData,
+  CoachQuestionnaire | UserQuestionnaire,
+  { dispatch: Dispatch; state: State; extra: AxiosInstance }
+>('saveQuestionnaireResult', async (questionnaire, { extra: api }) => {
+  const { data } = await api.post<UserData>(ApiRoute.UserUpdate, {questionnaire: questionnaire});
+  return data;
+});
+
 const updateUser = createAsyncThunk<
   UserData,
-  FormData,
+  UpdateUser,
   { dispatch: Dispatch; state: State; extra: AxiosInstance }
->('updateUser', async (newUser, { extra: api }) => {
-  const { data } = await api.patch<UserData>(ApiRoute.UserUpdate, {...Object.fromEntries(newUser)});
+>('updateUser', async (user, { extra: api }) => {
+  const { data } = await api.postForm<UserData>(ApiRoute.UserUpdate, user, );
   return data;
 });
 
@@ -71,5 +81,6 @@ export {
   loginUser,
   logoutUser,
   registerUser,
-  updateUser
+  updateUser,
+  saveQuestionnaireResult
 };

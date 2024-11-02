@@ -26,13 +26,12 @@ const createAPI = (): AxiosInstance => {
   api.interceptors.response.use(
     (response) => response,
     (error: AxiosError<DetailMessageType>) => {
-      /*if (error.response) {
-        toast.warn(
-          `[${error.response.status}] ${error.response.data.error}`);}
-      */
-        if (error.response && error.response.data) {
+      if (error.response && error.response.statusText === 'Unauthorised') {
+        console.log('unauthorised')
+      }
+      if (error.response && error.response.data) {
           throw error.response.data;
-        };
+      };
       throw error;
     }
 );

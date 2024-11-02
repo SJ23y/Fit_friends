@@ -1,3 +1,23 @@
+# Create new training
+
+POST http://localhost:3000/trainings HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhY2VhYmQxZi0wNGM5LTQyZDQtOWNjOS00NGE4Y2ZiMGYwMjEiLCJuYW1lIjoiVGVkIExhc3NvIiwicm9sZSI6ImNvYWNoIiwiaWF0IjoxNzMwNTYxODI1LCJleHAiOjE3MzA1NjI3MjV9.bqRh1RyPZDoaxLOEzOnuQJxQvSLVrKKUovUO4AS4EKU
+
+{
+  "title": "Test title",
+  "level": "любитель",
+  "type": "йога",
+  "duration": "10-30 мин",
+  "price": 1000,
+  "callorieQuantity": 2000,
+  "description": "воровфыроывфолрфыв",
+  "gender": "неважно",
+  "isSpecialOffer": false
+}
+
+###
+
 # Get All trainings
 
 GET http://localhost:3000/trainings?count=2&page=2 HTTP/1.1
@@ -6,7 +26,7 @@ GET http://localhost:3000/trainings?count=2&page=2 HTTP/1.1
 
 # Get specific training
 
-GET http://localhost:3000/trainings/714761d7-2535-4edb-99f1-906b4ec71f4f HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0ZjY0YTNkYy00ZjI3LTRjY2EtYmMxOS05YTkyMWU2YjdlOTkiLCJuYW1lIjoiUm9uYWxkIiwiaWF0IjoxNzI4MzQ1ODQ1LCJleHAiOjE3MjgzNDY3NDV9.mIRhV3U4eT2Yom-v5rNhD_RBFXrzH4u3f69ysLPJ_Ys
+GET http://localhost:3000/trainings/95b84a04-25eb-4210-96fc-0fd8b6c2b98a HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhY2VhYmQxZi0wNGM5LTQyZDQtOWNjOS00NGE4Y2ZiMGYwMjEiLCJuYW1lIjoiVGVkIExhc3NvIiwicm9sZSI6ImNvYWNoIiwiaWF0IjoxNzMwNTYxODI1LCJleHAiOjE3MzA1NjI3MjV9.bqRh1RyPZDoaxLOEzOnuQJxQvSLVrKKUovUO4AS4EKU
 
 ###

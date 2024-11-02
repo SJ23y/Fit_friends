@@ -4,14 +4,10 @@ import {
   Controller,
   Delete,
   FileTypeValidator,
-  Get,
   HttpStatus,
   Logger,
   MaxFileSizeValidator,
-  Param,
   ParseFilePipe,
-  ParseUUIDPipe,
-  Patch,
   Post,
   Req,
   UploadedFile,
@@ -30,8 +26,6 @@ import { JwtRefreshGuard } from '../guards/jwt-refresh.guard';
 import { RequestWithTokenPayload } from '@backend/shared-core';
 import { UserRdo } from '../rdo/user.rdo';
 import { UpdateUserDto } from '../dto/update-user.dto';
-import { TrainingBalanceService } from '@backend/user-balance';
-import { UserBalanceRdo } from '../rdo/user-balance.rdo';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('authentication')
@@ -40,8 +34,7 @@ export class AuthenticationController {
   private logger = new Logger('Authentication controller');
 
   constructor(
-    private readonly authenticationService: AuthenticationService,
-    private readonly userBalanceservice: TrainingBalanceService
+    private readonly authenticationService: AuthenticationService
   ) {}
 
   @ApiResponse({
@@ -99,6 +92,7 @@ export class AuthenticationController {
     status: HttpStatus.UNAUTHORIZED,
     description: AuthenticationMessages.Unauthorized
   })
+  @UseGuards(JwtAuthGuard)
   @Post('user/update')
   public async update(
     @Body() dto: UpdateUserDto,
@@ -112,28 +106,10 @@ export class AuthenticationController {
       }),
     ) file: Express.Multer.File,
     @Req() { user: payload }: RequestWithTokenPayload) {
-    console.log('update dto', dto );
-    console.log('file', file)
     const user = await this.authenticationService.update(dto, file, payload?.sub);
 
 
     return fillDto(UserRdo, user.toPOJO());
-  }
-
-  @ApiResponse({
-    type: UserRdo,
-    status: HttpStatus.OK,
-    description: AuthenticationMessages.UserFound
-  })
-  @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
-    description: AuthenticationMessages.UserNotFound
-  })
-  @UseGuards(JwtAuthGuard)
-  @Get('user/balance/:id')
-  public async showUserBalance(@Param('id', ParseUUIDPipe) id: string) {
-    const totalTrainingsCount = await this.userBalanceservice.getUserTrainingsCount(id);
-    return fillDto(UserBalanceRdo, { totalTrainingsCount })
   }
 
   @ApiResponse({
@@ -154,7 +130,6 @@ export class AuthenticationController {
   @Post('auth/check')
   public async checkToken(@Req() {user: payload}: RequestWithTokenPayload) {
     const user = await this.authenticationService.getUser(payload.sub);
-    console.log(user);
 
     return  fillDto(UserRdo, user.toPOJO());;
   }

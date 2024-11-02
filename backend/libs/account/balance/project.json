@@ -1,9 +1,0 @@
-{
-  "name": "user-balance",
-  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/account/balance/src",
-  "projectType": "library",
-  "tags": [],
-  "// targets": "to see all targets run: nx show project user-balance --web",
-  "targets": {}
-}

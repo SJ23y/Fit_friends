@@ -1,3 +1,4 @@
+import { CoachQuestionnaire, UserQuestionnaire } from "./types/auth";
 import { Query } from "./types/query"
 
 export const createQueryString = ({
@@ -46,4 +47,8 @@ export const createQueryString = ({
     })
   }
   return queryString;
+}
+
+export const  isUserQuestionnaire = (questionnaire: UserQuestionnaire | CoachQuestionnaire): questionnaire is UserQuestionnaire => {
+  return (questionnaire as UserQuestionnaire).trainDuration !== null
 }

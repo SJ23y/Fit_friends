@@ -7,7 +7,6 @@ import { PurchaseRdo } from './rdo/purchase.rdo';
 import { fillDto } from '@backend/shared-helpers';
 import { JwtAuthGuard } from '@backend/authentication';
 import { CreatePurchaseDto } from './dto/create-purchase.dto';
-import { TrainingBalanceService } from '@backend/user-balance';
 import { ReduceTrainingsDto } from './dto/reduce-trainings.dto';
 import { RequestWithTokenPayload } from '@backend/shared-core';
 
@@ -17,8 +16,7 @@ import { RequestWithTokenPayload } from '@backend/shared-core';
 export class PurchaseController {
 
   constructor(
-    private readonly purchaseService: PurchaseService,
-    private readonly trainingBalanceService: TrainingBalanceService
+    private readonly purchaseService: PurchaseService
    ) {}
 
    @ApiResponse({
