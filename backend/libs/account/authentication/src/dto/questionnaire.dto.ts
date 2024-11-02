@@ -1,6 +1,6 @@
 import { TRAIN_TYPES, TrainDuration, UserLevel } from "@backend/shared-core";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsArray, IsBoolean, IsIn, IsNumber, IsOptional, IsString, Max, Min } from "class-validator";
+import { ArrayMaxSize, IsArray, IsBoolean, IsIn, IsNumber, IsOptional, IsString, Length, Max, Min } from "class-validator";
 import { AuthenticationValidateMessage } from "../authentication-module/authentication.consts";
 
 export class QuestionnaireDto {
@@ -20,6 +20,7 @@ export class QuestionnaireDto {
     @IsIn(TRAIN_TYPES, {each: true, message: AuthenticationValidateMessage.InvalidTrainType})
     @IsString({each: true})
     @IsArray()
+    @ArrayMaxSize(3, {message: AuthenticationValidateMessage.TrainTypesInvalidCount})
     @IsOptional()
     public trainType: string[];
 
@@ -30,7 +31,7 @@ export class QuestionnaireDto {
     @IsIn(Object.values(TrainDuration), {message: AuthenticationValidateMessage.InvalidTrainDuration})
     @IsString()
     @IsOptional()
-    public trainDuration: string;
+    public trainDuration?: string;
 
     @ApiProperty({
       description: 'User goal for callories loss',
@@ -40,7 +41,7 @@ export class QuestionnaireDto {
     @Max(5000, {message: AuthenticationValidateMessage.InvalidCallorieGoalQuantity})
     @IsNumber()
     @IsOptional()
-    public calorieGoal: number;
+    public calorieGoal?: number;
 
     @ApiProperty({
       description: 'Quantity of callories to lost in one day',
@@ -50,7 +51,7 @@ export class QuestionnaireDto {
     @Min(1000, {message: AuthenticationValidateMessage.InvalidCalloriePerDayQuantity})
     @Max(5000, {message: AuthenticationValidateMessage.InvalidCalloriePerDayQuantity})
     @IsOptional()
-    public caloriePerDay: number;
+    public caloriePerDay?: number;
 
     @ApiProperty({
       description: 'Flag if user is ready to get invitation to trainings',
@@ -58,6 +59,23 @@ export class QuestionnaireDto {
     })
     @IsBoolean()
     @IsOptional()
-    public isReadyForTrain: boolean;
+    public isReadyForTrain?: boolean;
+
+    @ApiProperty({
+      description: 'Flag if coach is ready to gave individual trainings',
+      example: true
+    })
+    @IsBoolean()
+    @IsOptional()
+    public individualTraining?: boolean;
+
+    @ApiProperty({
+      description: 'Description and merits of the coach',
+      example: 'I am good, good, goodie'
+    })
+    @IsString()
+    @Length(10, 140, {message: AuthenticationValidateMessage.CoachMeritsInvalid})
+    @IsOptional()
+    public description?: boolean;
 }
 

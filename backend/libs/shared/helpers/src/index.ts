@@ -1,2 +1,2 @@
-export { fillDto, parseTime, getRanndomElement, getRandomInteger } from "./common";
+export { fillDto, parseTime, getRanndomElement, getRandomInteger, isUserQuestionnaire } from "./common";
 export { createJwtPayload } from "./jwt";

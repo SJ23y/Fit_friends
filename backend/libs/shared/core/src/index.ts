@@ -47,4 +47,4 @@ export {
 
 export { CustomError } from './interfaces/custom-error.interface';
 export { TrainingStats } from './interfaces/training-stats.interface';
-export { UserQuestionnarie } from './interfaces/user-questionnarie.interface';
+export { UserQuestionnarie, CoachQuestionnarie } from './interfaces/questionnarie.interface';

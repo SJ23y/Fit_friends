@@ -8,3 +8,10 @@ export interface UserQuestionnarie {
   caloriePerDay: number;
   isReadyForTrain: boolean;
 }
+
+export interface CoachQuestionnarie {
+  userLevel: UserLevel;
+  trainType: string[];
+  description: string;
+  individualTraining: boolean;
+}

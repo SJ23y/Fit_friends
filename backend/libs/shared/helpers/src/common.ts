@@ -1,4 +1,5 @@
 //import { File } from '@project/shared-core';
+import { CoachQuestionnarie, UserQuestionnarie } from '@backend/shared-core';
 import { ClassTransformOptions, plainToInstance } from 'class-transformer';
 
 
@@ -52,7 +53,9 @@ export const getRandomInteger = (a: number, b: number) => {
   return Math.floor(result);
 };
 
-
+export const  isUserQuestionnaire = (questionnaire: UserQuestionnarie | CoachQuestionnarie): questionnaire is UserQuestionnarie => {
+  return (questionnaire as UserQuestionnarie).trainDuration !== undefined
+}
 export const getRanndomElement = <T>(arr: T[]) => arr[getRandomInteger(0, arr.length - 1)];
 
 /*

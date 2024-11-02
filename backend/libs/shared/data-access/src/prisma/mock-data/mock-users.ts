@@ -14,6 +14,6 @@ export function generateMockUser(): User {
     description: faker.person.bio(),
     location: getRanndomElement(LOCATIONS),
     backgroundImage: getRanndomElement(DEFAULT_BACKGROUND_IMAGE_NAMES),
-    role: Role.USER
+    role: getRanndomElement(Object.values(Role))
   }
 }

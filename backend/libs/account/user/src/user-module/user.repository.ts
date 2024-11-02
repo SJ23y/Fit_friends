@@ -67,24 +67,15 @@ export class UserRepository extends BasePostgresRepository<UserEntity, PrismaUse
       where: {id: userId},
       data: {
         ...user,
-        questionnaire: user.questionnaire && {
-          upsert: {
+        questionnaire: {
+          upsert: user.questionnaire && {
             where: {userId},
-            create: {
-              userLevel: user.questionnaire.userLevel,
-              trainDuration: user.questionnaire.trainDuration,
-              trainType: user.questionnaire.trainType,
-              isReadyForTrain: user.questionnaire.isReadyForTrain,
-              calorieGoal: user.questionnaire.calorieGoal,
-              caloriePerDay: user.questionnaire.caloriePerDay
+            create:   {
+              ...user.questionnaire,
+              id: undefined
             },
             update: {
-              userLevel: user.questionnaire.userLevel,
-              trainDuration: user.questionnaire.trainDuration,
-              trainType: user.questionnaire.trainType,
-              isReadyForTrain: user.questionnaire.isReadyForTrain,
-              calorieGoal: user.questionnaire.calorieGoal,
-              caloriePerDay: user.questionnaire.caloriePerDay,
+              ...user.questionnaire,
               createdAt: undefined,
               updatedAt: undefined,
               id: undefined

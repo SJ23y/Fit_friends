@@ -5,6 +5,7 @@ import { TrainingFactory } from './training.factory';
 import { TrainingQuery } from './training.query';
 import { Prisma, Training as PrismaTraining } from '@prisma/client';
 import { Injectable } from '@nestjs/common';
+import { isUserQuestionnaire } from '@backend/shared-helpers';
 
 @Injectable()
 export class TrainigRepository extends BasePostgresRepository<TrainingEntity, PrismaTraining> {
@@ -70,8 +71,10 @@ export class TrainigRepository extends BasePostgresRepository<TrainingEntity, Pr
         case FilterBy.USER:
           where.level = user?.questionnaire?.userLevel;
           where.type = {in: user?.questionnaire?.trainType};
-          where.duration = user?.questionnaire?.trainDuration;
-          where.callorieQuantity = {gte: user?.questionnaire?.caloriePerDay}
+          if (user?.questionnaire && isUserQuestionnaire(user.questionnaire)) {
+            where.duration = user?.questionnaire?.trainDuration;
+            where.callorieQuantity = {gte: user?.questionnaire?.caloriePerDay}
+          }
           break;
       }
     }

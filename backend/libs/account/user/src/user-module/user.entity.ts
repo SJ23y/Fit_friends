@@ -1,7 +1,7 @@
-import { Entity, StorableEntity, AuthUser, Gender, Role } from '@backend/shared-core';
+import { Entity, StorableEntity, AuthUser, Gender, Role, UserQuestionnarie, CoachQuestionnarie } from '@backend/shared-core';
 import { compare, genSalt, hash } from 'bcrypt';
 import { SALT_ROUNDS } from './user.consts';
-import { Review, Training, Purchase, Questionnaire} from '@prisma/client';
+import { Review, Training, Purchase } from '@prisma/client';
 
 const DEFAULT_USER_AVATAR = 'default-avatar.jpg'
 
@@ -15,7 +15,7 @@ export class UserEntity extends Entity implements StorableEntity<AuthUser> {
   public location: string;
   public backgroundImage: string;
   public createdAt?: Date;
-  public questionnaire?: Questionnaire;
+  public questionnaire?: UserQuestionnarie | CoachQuestionnarie;
   public passwordHash: string;
   public role: Role;
   public reviews?: Review[];

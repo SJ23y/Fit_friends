@@ -81,5 +81,5 @@ export class CreateUserDto {
   })
   @IsIn(Object.values(Role), {message: AuthenticationValidateMessage.Role})
   @IsString()
-  role: string;
+  role: Role;
 }

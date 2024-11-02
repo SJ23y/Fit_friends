@@ -99,11 +99,9 @@ export class AuthenticationController {
     status: HttpStatus.UNAUTHORIZED,
     description: AuthenticationMessages.Unauthorized
   })
-  @UseGuards(JwtAuthGuard)
-  @Patch('user/update')
+  @Post('user/update')
   public async update(
     @Body() dto: UpdateUserDto,
-    @Req() { user: payload }: RequestWithTokenPayload,
     @UploadedFile(
       new ParseFilePipe({
         validators: [
@@ -112,7 +110,10 @@ export class AuthenticationController {
         ],
         fileIsRequired: false
       }),
-    ) file: Express.Multer.File) {
+    ) file: Express.Multer.File,
+    @Req() { user: payload }: RequestWithTokenPayload) {
+    console.log('update dto', dto );
+    console.log('file', file)
     const user = await this.authenticationService.update(dto, file, payload?.sub);
 
 
@@ -153,6 +154,7 @@ export class AuthenticationController {
   @Post('auth/check')
   public async checkToken(@Req() {user: payload}: RequestWithTokenPayload) {
     const user = await this.authenticationService.getUser(payload.sub);
+    console.log(user);
 
     return  fillDto(UserRdo, user.toPOJO());;
   }

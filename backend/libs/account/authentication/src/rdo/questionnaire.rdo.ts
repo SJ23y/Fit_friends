@@ -43,5 +43,19 @@ export class QustionnaireRdo {
   })
   @Expose()
   public isReadyForTrain: boolean;
+
+  @ApiProperty({
+    description: 'description of coach merits',
+    example: 'I am crazy'
+  })
+  @Expose()
+  public description: string;
+
+  @ApiProperty({
+    description: 'Flag if coach is ready to give individual trainings',
+    example: true
+  })
+  @Expose()
+  public individualTraining: boolean;
 }
 

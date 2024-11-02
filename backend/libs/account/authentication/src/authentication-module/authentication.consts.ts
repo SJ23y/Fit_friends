@@ -34,4 +34,6 @@ export const AuthenticationValidateMessage = {
   InvalidTrainDuration: `Train durtion available values is: ${Object.values(TrainDuration).join(',')}`,
   InvalidCallorieGoalQuantity: 'Callorie goal should be in the range 1000-5000',
   InvalidCalloriePerDayQuantity: 'Callorie per day should be in the range 1000-5000',
+  CoachMeritsInvalid: 'Description should be string with the length within 10-140 charactres',
+  TrainTypesInvalidCount: 'TrainType. You could choose only 3 types at once'
 } as const;

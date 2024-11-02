@@ -1,5 +1,6 @@
 import { Gender, Role } from '../settings/user.setting';
-import { Review, Training, Purchase, Questionnaire} from '@prisma/client';
+import { Review, Training, Purchase } from '@prisma/client';
+import { CoachQuestionnarie, UserQuestionnarie } from './questionnarie.interface';
 export interface User {
   id?: string;
   name:  string;
@@ -11,7 +12,7 @@ export interface User {
   location: string;
   backgroundImage: string;
   createdAt?: Date;
-  questionnaire?: Questionnaire;
+  questionnaire?: UserQuestionnarie | CoachQuestionnarie;
   role: Role;
   reviews?: Review[];
   trainings?: Training[];

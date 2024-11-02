@@ -5,7 +5,7 @@ import { AUTH_USER_EXIST, AUTH_USER_NOT_FOUND, AUTH_USER_PASSWORD_WRONG, AUTH_US
 import { LoginUserDto } from '../dto/login-user.dto';
 import { ConfigType } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { DEFAULT_AVATAR_NAMES, DEFAULT_BACKGROUND_IMAGE_NAMES, DefaultQuestionnaireMan, DefaultQuestionnaireWoman, Gender, Role, Token, User } from '@backend/shared-core';
+import { CoachQuestionnarie, DEFAULT_AVATAR_NAMES, DEFAULT_BACKGROUND_IMAGE_NAMES, DefaultQuestionnaireMan, DefaultQuestionnaireWoman, Gender, Token, User, UserQuestionnarie } from '@backend/shared-core';
 import { jwtConfig } from '@backend/user-config';
 import { RefreshTokenService } from '../refresh-token-module/refresh-token.service';
 import { createJwtPayload, getRanndomElement } from '@backend/shared-helpers';
@@ -32,14 +32,13 @@ export class AuthenticationService {
     const newUser = {
       ...dto,
       description: '',
-      avatar: avatar ?? getRanndomElement(DEFAULT_AVATAR_NAMES),
+      avatar: avatar?.replace(/\\/g, '/') ?? getRanndomElement(DEFAULT_AVATAR_NAMES),
       backgroundImage: getRanndomElement(DEFAULT_BACKGROUND_IMAGE_NAMES),
       birthDate: dto.birthDate ?? '',
       passwordHash: '',
       trainigs: undefined,
       reviews: undefined,
-      purchaces: undefined,
-      role: Role.USER
+      purchaces: undefined
     }
     const existUser = await this.userRepository.findByEmail(dto.email);
 
@@ -49,7 +48,6 @@ export class AuthenticationService {
 
     const userEntity = await new UserEntity(newUser).setPassword(dto.password);
     await this.userRepository.save(userEntity);
-    userEntity.questionnaire = (userEntity.gender === Gender.FEMALE) ? DefaultQuestionnaireWoman : DefaultQuestionnaireMan;
     return userEntity;
   }
 
@@ -76,7 +74,10 @@ export class AuthenticationService {
       throw new NotFoundException(AUTH_USER_NOT_FOUND);
     }
 
-    existUser.questionnaire = (existUser.gender === Gender.FEMALE) ? DefaultQuestionnaireWoman : DefaultQuestionnaireMan;
+    if (!existUser.questionnaire) {
+      existUser.questionnaire = (existUser.gender === Gender.FEMALE) ? DefaultQuestionnaireWoman : DefaultQuestionnaireMan;
+    }
+
 
     return existUser;
   }
@@ -85,10 +86,9 @@ export class AuthenticationService {
     if (!id) {
       throw new UnauthorizedException(AUTH_USER_UNAUTHORISED)
     }
-
     const avatar = await this.fileService.writeFile(file);
 
-    dto.avatar = avatar?.replace('\\', '/') ?? undefined;
+    dto.avatar = avatar?.replace(/\\/g, '/') ?? undefined;
 
     const existUser = await this.userRepository.findById(id);
 
@@ -97,16 +97,13 @@ export class AuthenticationService {
     }
 
 
-    const questionnaire = (existUser.gender === Gender.FEMALE) ? DefaultQuestionnaireWoman : DefaultQuestionnaireMan;
-
     const updatedUser = await this.userRepository.update(
       id,
       {
         ...existUser.toPOJO(),
         ...dto,
-        questionnaire: {
-          ...questionnaire
-        } });
+        questionnaire: dto.questionnaire as UserQuestionnarie | CoachQuestionnarie
+      });
     return updatedUser;
   }
 
