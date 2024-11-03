@@ -2,6 +2,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import { IsBoolean, IsIn, IsNumber, IsOptional, IsString, Length, Max, Min } from "class-validator";
 import { TrainingValidationMsssages } from "../training.conts";
 import { Gender, TRAIN_TYPES, TrainDuration, TrainingValidationSetting, UserLevel } from "@backend/shared-core";
+import { Transform } from "class-transformer";
 
 export class CreateTrainingDto {
   @ApiProperty({
@@ -51,6 +52,7 @@ export class CreateTrainingDto {
     description: 'Training\'s price',
     example: 1500
   })
+  @Transform(({value}) => parseInt(value, 10))
   @IsNumber({}, {message: TrainingValidationMsssages.PriceInvalid})
   price: number;
 
@@ -61,6 +63,7 @@ export class CreateTrainingDto {
   @IsNumber()
   @Max(TrainingValidationSetting.CALLORIES_MAX_COUNT, {message: TrainingValidationMsssages.CalloriesInvalid})
   @Min(TrainingValidationSetting.CALLORIES_MIN_COUNT, {message: TrainingValidationMsssages.CalloriesInvalid})
+  @Transform(({value}) => parseInt(value, 10))
   callorieQuantity: number;
 
   @ApiProperty({
@@ -94,6 +97,7 @@ export class CreateTrainingDto {
     description: 'Special offer flag',
     example: true
   })
+  @Transform(({value}) => Boolean(value))
   @IsBoolean({message: TrainingValidationMsssages.SpecialInvalid})
   isSpecialOffer: boolean;
 }

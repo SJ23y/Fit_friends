@@ -46,10 +46,11 @@ const saveQuestionnaireResult = createAsyncThunk<
 
 const updateUser = createAsyncThunk<
   UserData,
-  UpdateUser,
+  {user: UpdateUser, cb: () => void},
   { dispatch: Dispatch; state: State; extra: AxiosInstance }
->('updateUser', async (user, { extra: api }) => {
-  const { data } = await api.postForm<UserData>(ApiRoute.UserUpdate, user, );
+>('updateUser', async ({user, cb}, { extra: api }) => {
+  const { data } = await api.post<UserData>(ApiRoute.UserUpdate, user);
+  cb();
   return data;
 });
 

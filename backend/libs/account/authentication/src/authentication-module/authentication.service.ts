@@ -62,7 +62,10 @@ export class AuthenticationService {
       throw new UnauthorizedException(AUTH_USER_PASSWORD_WRONG);
     }
 
-    existUser.questionnaire = (existUser.gender === Gender.FEMALE) ? DefaultQuestionnaireWoman : DefaultQuestionnaireMan;
+    if (! existUser.questionnaire) {
+      existUser.questionnaire = (existUser.gender === Gender.FEMALE) ? DefaultQuestionnaireWoman : DefaultQuestionnaireMan;
+    }
+
 
     return existUser;
   }

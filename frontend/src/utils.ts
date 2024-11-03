@@ -50,5 +50,9 @@ export const createQueryString = ({
 }
 
 export const  isUserQuestionnaire = (questionnaire: UserQuestionnaire | CoachQuestionnaire): questionnaire is UserQuestionnaire => {
-  return (questionnaire as UserQuestionnaire).trainDuration !== null
+  return (questionnaire as UserQuestionnaire).isReadyForTrain !== null
+}
+
+export const  isCoachQuestionnaire = (questionnaire: UserQuestionnaire | CoachQuestionnaire): questionnaire is CoachQuestionnaire => {
+  return (questionnaire as CoachQuestionnaire).description !== null
 }

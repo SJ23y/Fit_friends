@@ -1,11 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { NameSpace } from '../../consts';
-import { uploadTrainingById } from './thunk-actions';
+import { addNewTraining, uploadTrainingById } from './thunk-actions';
 import { TrainingProcess } from '../../types/state';
 import { Training } from '../../types/trainings';
 
 const initialState: TrainingProcess = {
-  currentTraining: null
+  currentTraining: null,
+  loadingStatus: false
 };
 
 const trainingProcess = createSlice({
@@ -19,7 +20,20 @@ const trainingProcess = createSlice({
   },
   extraReducers(builder) {
     builder
+      .addCase(uploadTrainingById.pending, (state) => {
+        state.loadingStatus = true;
+      })
       .addCase(uploadTrainingById.fulfilled, (state, action) => {
+        state.loadingStatus = false;
+        if (action.payload) {
+          state.currentTraining = action.payload;
+        }
+      })
+      .addCase(addNewTraining.pending, (state) => {
+        state.loadingStatus = true;
+      })
+      .addCase(addNewTraining.fulfilled, (state, action) => {
+        state.loadingStatus = false;
         if (action.payload) {
           state.currentTraining = action.payload;
         }

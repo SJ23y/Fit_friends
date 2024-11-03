@@ -35,6 +35,9 @@ export class TrainigRepository extends BasePostgresRepository<TrainingEntity, Pr
           coach: {
             connect: {id: pojoTraining.coachId}
           }
+      },
+      include: {
+        coach: true
       }
     });
     training.id = newTraining.id;
@@ -136,7 +139,12 @@ export class TrainigRepository extends BasePostgresRepository<TrainingEntity, Pr
   }
 
   public async getTrainingById(trainingId: string): Promise<TrainingEntity | null> {
-    const currentTraining = await this.client.training.findFirst({where: {id: trainingId}});
+    const currentTraining = await this.client.training.findFirst({
+      where: {id: trainingId},
+      include: {
+        coach: true
+      }
+    });
 
     return (currentTraining) ? this.createEntityFromDocument(currentTraining) : null;
   }

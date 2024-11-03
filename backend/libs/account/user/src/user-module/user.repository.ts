@@ -37,7 +37,10 @@ export class UserRepository extends BasePostgresRepository<UserEntity, PrismaUse
 
   public async findByEmail(email: string): Promise<UserEntity | null> {
     const foundUser = await this.client.user.findFirst({
-      where: { email }
+      where: { email },
+      include: {
+        questionnaire: true
+      }
     });
 
     if (! foundUser) {

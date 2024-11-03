@@ -125,7 +125,9 @@ const formSubmitHandler = (evt: React.FormEvent<HTMLFormElement>) => {
                           additionalClassName=""
                         />
                         <div className="custom-input">
-                          <label><span className="custom-input__label">Пароль</span><span className="custom-input__wrapper">
+                          <label>
+                            <span className="custom-input__label">Пароль</span>
+                            <span className="custom-input__wrapper">
                               <input
                                 type="password"
                                 name="password"
@@ -133,7 +135,8 @@ const formSubmitHandler = (evt: React.FormEvent<HTMLFormElement>) => {
                                 minLength={ValidationSetting.passwordMinLength}
                                 maxLength={ValidationSetting.passwordMaxLength}
                                 required
-                                 /></span>
+                                 />
+                            </span>
                           </label>
                         </div>
                         <div className="sign-up__radio"><span className="sign-up__label">Пол</span>

@@ -30,6 +30,7 @@ export type PurchaseProcess = {
 
 export type TrainingProcess = {
   currentTraining: null | Training;
+  loadingStatus: boolean
 };
 
 export type UserProcess = {

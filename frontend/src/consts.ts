@@ -58,7 +58,11 @@ export const ValidationSetting = {
   CoachDescriptionMinLength: 10,
   CoachDescriptionMaxLength: 140,
   UserCalloriesMin: 1000,
-  UserCalloriesMax: 5000
+  UserCalloriesMax: 5000,
+  TrainingTitleMaxLength: 15,
+  TrainingDescriptionMaxLength: 140,
+  TrainingDescriptionMinLength: 10
+
 } as const;
 
 export enum ApiRoute {

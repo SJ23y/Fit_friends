@@ -19,13 +19,15 @@ import UserCard from '../../pages/user-card/user-card';
 import { useAppSelector } from '../../hooks/use-app-dispatch';
 import { getUserLoadingStatus } from '../../store/user-process/selectors';
 import Questionnaire from '../../pages/questionnaire/questuinaire';
+import { getTrainingLoadingStatus } from '../../store/training-process/selectors';
 
 function App(): JSX.Element {
   const userLoadingStatus = useAppSelector(getUserLoadingStatus);
+  const trainingLoadingStatus = useAppSelector(getTrainingLoadingStatus);
 
   return (
     <HelmetProvider>
-      { userLoadingStatus && <span>Loading ...</span> }
+      { (userLoadingStatus || trainingLoadingStatus) && <span>Loading ...</span> }
       { !userLoadingStatus &&
       <BrowserRouter>
         <Routes>

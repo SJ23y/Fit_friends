@@ -3,4 +3,6 @@ import { State } from '../../types/state';
 
 const getCurrentTraining = (state: Pick<State, NameSpace.TRAINING>) => state[NameSpace.TRAINING].currentTraining;
 
-export { getCurrentTraining };
+const getTrainingLoadingStatus = (state: Pick<State, NameSpace.TRAINING>) => state[NameSpace.TRAINING].loadingStatus;
+
+export { getCurrentTraining, getTrainingLoadingStatus };

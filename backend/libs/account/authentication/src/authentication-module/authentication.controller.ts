@@ -108,7 +108,6 @@ export class AuthenticationController {
     @Req() { user: payload }: RequestWithTokenPayload) {
     const user = await this.authenticationService.update(dto, file, payload?.sub);
 
-
     return fillDto(UserRdo, user.toPOJO());
   }
 
