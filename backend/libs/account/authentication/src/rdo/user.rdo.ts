@@ -1,6 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Expose, Type } from "class-transformer";
 import { QustionnaireRdo } from "./questionnaire.rdo";
+import { TrainingRdo } from "./training.rdo";
 
 export class UserRdo {
   @ApiProperty({
@@ -87,4 +88,12 @@ export class UserRdo {
   })
   @Expose()
   public role: string;
+
+  @ApiProperty({
+    description: 'Coach\' trainings list',
+    example: '[{TrainingObject}]'
+  })
+  @Type(() => TrainingRdo)
+  @Expose()
+  public trainings: TrainingRdo;
 }

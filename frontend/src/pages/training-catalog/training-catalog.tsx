@@ -1,4 +1,3 @@
-import Header from "../../components/header/header";
 import {  Setting } from "../../consts";
 import { useAppDispatch, useAppSelector } from "../../hooks/use-app-dispatch";
 import { getQuery, getTrainings } from "../../store/main-process/selectors";
@@ -30,11 +29,11 @@ function TrainingCatalog(): JSX.Element {
       sortBy: Setting.DefaultSortBy,
       sortDirection: Setting.DefaultSortDirection
     }))
-  }, [])
+  }, []);
 
   useEffect(() => {
     dispatch(uploadTrainings(query));
-  }, [query])
+  }, [query]);
 
   return(
     <div className="wrapper">

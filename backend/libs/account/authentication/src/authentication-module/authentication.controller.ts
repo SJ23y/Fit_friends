@@ -4,9 +4,11 @@ import {
   Controller,
   Delete,
   FileTypeValidator,
+  Get,
   HttpStatus,
   Logger,
   MaxFileSizeValidator,
+  Param,
   ParseFilePipe,
   Post,
   Req,
@@ -145,5 +147,25 @@ export class AuthenticationController {
   @Delete('logout')
   public async logout() {
     this.logger.log('Refresh token was deleted');
+  }
+
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: AuthenticationMessages.UserFound
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: AuthenticationMessages.UserNotFound
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: AuthenticationMessages.Unauthorized
+  })
+  @UseGuards(JwtAuthGuard)
+  @Get('user/:userId')
+  public async getUserIbfo(@Param('userId') userId: string) {
+    const user = await this.authenticationService.getUser(userId);
+    console.log('User', user);
+    return fillDto(UserRdo, user.toPOJO());
   }
 }

@@ -17,7 +17,8 @@ export class PurchaseService {
       ...dto,
       userId: userId ?? '',
       totalPrice: dto.trainCount * dto.price,
-      paymentType: dto.paymentType as PaymentType
+      paymentType: dto.paymentType as PaymentType,
+      remainingTrainings: dto.trainCount
     }
 
     const newPurchase = new PurchaseEntity(purchase)
@@ -57,16 +58,20 @@ export class PurchaseService {
       throw new BadRequestException(`Wrong training ID`);
     }
 
-    if (currentPurchase.trainCount < dto.trainCount) {
+    if (currentPurchase.remainingTrainings < dto.trainCount) {
       throw new BadRequestException(`You don't have enough trainings to withdraw`);
     }
 
-    currentPurchase.trainCount -= dto.trainCount;
+    currentPurchase.remainingTrainings -= dto.trainCount;
 
     await this.purchaseRepository.changePurchaseTrainingsCount(currentPurchase);
 
     return currentPurchase;
   }
 
+
+  public async getCoachTrainingsPurchases(userId?: string, query?: PurchaseQuery): Promise<void> {
+    await this.purchaseRepository.getCoachTrainingsPurchases(userId, query);
+  }
 
 }

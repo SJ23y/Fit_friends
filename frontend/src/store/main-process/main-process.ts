@@ -27,7 +27,8 @@ const initialState: MainProcess = {
     maxRating: null,
     minRating: null,
     type: null,
-    free: null
+    free: null,
+    durations: null
   }
 
 };

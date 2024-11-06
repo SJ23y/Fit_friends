@@ -1,13 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { AuthorizationStatus, NameSpace } from '../../consts';
 import { UserProcess } from '../../types/state';
-import { checkAuthorization, loginUser, logoutUser, registerUser, updateUser } from './thunk-actions';
+import { checkAuthorization, getUserById, loginUser, logoutUser, registerUser, updateUser } from './thunk-actions';
 
 const initialState: UserProcess = {
   authorizationStatus: AuthorizationStatus.Unknown,
   user: null,
   error: null,
-  loadingStatus: false
+  loadingStatus: false,
+  currentlyViewedUser: null
 };
 
 const userProcess = createSlice({
@@ -69,6 +70,17 @@ const userProcess = createSlice({
         state.error = null;
       })
       .addCase(updateUser.rejected, (state) => {
+        state.loadingStatus = false;
+      })
+      .addCase(getUserById.pending, (state) => {
+        state.loadingStatus = true;
+      })
+      .addCase(getUserById.fulfilled, (state, action) => {
+        state.loadingStatus = false;
+        state.currentlyViewedUser = action.payload;
+        state.error = null;
+      })
+      .addCase(getUserById.rejected, (state) => {
         state.loadingStatus = false;
       })
   },

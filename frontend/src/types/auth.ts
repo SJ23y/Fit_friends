@@ -1,4 +1,5 @@
 import { Gender, Role, UserLevel } from "../consts";
+import { Trainings } from "./trainings";
 
 export type Token = string;
 
@@ -8,6 +9,7 @@ export type TokenData = {
 }
 
 export type UserData = {
+  "id"?: string;
   "email": string,
   "name": string,
   "password": string,
@@ -17,7 +19,9 @@ export type UserData = {
   "description": string,
   "location": string,
   "questionnaire": UserQuestionnaire | CoachQuestionnaire,
-  "role": Role
+  "role": Role,
+  "backgroundImage": string;
+  "trainings"?: Trainings;
 };
 
 export type NewUser = {

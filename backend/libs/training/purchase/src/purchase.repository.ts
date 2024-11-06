@@ -24,6 +24,7 @@ export class PurchaseRepository extends BasePostgresRepository<PurchaseEntity, P
         trainCount: purchaseObj.trainCount,
         totalPrice: purchaseObj.totalPrice,
         paymentType: purchaseObj.paymentType,
+        remainingTrainings: purchaseObj.remainingTrainings,
         train: {
           connect: {
               id: purchase.trainId
@@ -64,6 +65,46 @@ export class PurchaseRepository extends BasePostgresRepository<PurchaseEntity, P
     return this.createEntityFromDocument(purchases[0]);
   }
 
+  public async getCoachTrainingsPurchases(userId?: string, query?: PurchaseQuery): Promise<void> {
+    //const take = (query?.count && query.count < MAX_PURCHASE_COUNT_LIMIT) ? query.count : MAX_PURCHASE_COUNT_LIMIT;
+    //const skip = (query?.page && query?.count) ? (query.page - 1) * query.count : undefined;
+    const where: Prisma.PurchaseWhereInput = { train: { coachId: userId }};
+    /*const orderBy: Prisma.PurchaseOrderByWithRelationInput = {};
+
+    console.log('purchase sortBy', query?.sortBy);
+    if (query?.sortBy) {
+      switch (query.sortBy) {
+        case SortBy.DATE:
+          orderBy.createdAt = query.sortDirection;
+          break;
+        case SortBy.TRAININGS_COUNT:
+          orderBy.trainCount = query.sortDirection;
+          break;
+        case SortBy.TOTAL_PRICE:
+          orderBy.totalPrice = query.sortDirection;
+          break;
+      }
+      if (query?.filterBy) {
+        where.remainingTrainings = {gt: 0}
+      }
+    }*/
+
+    const [purchasesCount, userPurchaces] = await Promise.all([
+      this.client.purchase.count({where}),
+      this.client.purchase.groupBy({
+        by: ['trainId'],
+
+        where,
+        _sum: {
+          totalPrice: true,
+          trainCount: true
+        }
+      })
+    ]);
+    console.log(userPurchaces);
+
+  }
+
   public async changePurchaseTrainingsCount(purchase: PurchaseEntity): Promise<void> {
     const purchaseObj = purchase.toPOJO();
     const updatedPurchase = await this.client.purchase.update({
@@ -73,7 +114,8 @@ export class PurchaseRepository extends BasePostgresRepository<PurchaseEntity, P
         price: purchaseObj.price,
         trainCount: purchaseObj.trainCount,
         totalPrice: purchaseObj.totalPrice,
-        paymentType: purchaseObj.paymentType
+        paymentType: purchaseObj.paymentType,
+        remainingTrainings: purchaseObj.remainingTrainings
       }
     });
 
@@ -102,15 +144,13 @@ export class PurchaseRepository extends BasePostgresRepository<PurchaseEntity, P
           break;
       }
       if (query?.filterBy) {
-        where.trainCount = {gt: 0}
+        where.remainingTrainings = {gt: 0}
       }
     }
-    console.log('orderBy', orderBy)
 
     const [purchasesCount, userPurchaces] = await Promise.all([
       this.client.purchase.count({where}),
-      this.client.purchase.findMany({where, take, skip, orderBy, include: {train: true}})
-    ]);
+      this.client.purchase.findMany({where, take, skip, orderBy, include: {train: true}})]);
 
 
     return {

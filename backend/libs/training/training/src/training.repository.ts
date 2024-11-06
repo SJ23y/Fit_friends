@@ -1,6 +1,6 @@
 import { BasePostgresRepository, PrismaClientService } from '@backend/data-access';
 import { TrainingEntity } from './training.entity';
-import { AuthUser, DEFAULT_PAGE_NUMBER, DefaultQuestionnaireMan, DefaultQuestionnaireWoman, FilterBy, Gender, MAX_TRAINING_COUNT_LIMIT, SortBy, TrainingPaginationResult, TrainingStats } from '@backend/shared-core';
+import { AuthUser, DEFAULT_PAGE_NUMBER, DefaultQuestionnaireMan, DefaultQuestionnaireWoman, FilterBy, Gender, MAX_TRAINING_COUNT_LIMIT, PaginationResult, Role, SortBy, TrainingPaginationResult, TrainingStats } from '@backend/shared-core';
 import { TrainingFactory } from './training.factory';
 import { TrainingQuery } from './training.query';
 import { Prisma, Training as PrismaTraining } from '@prisma/client';
@@ -48,9 +48,10 @@ export class TrainigRepository extends BasePostgresRepository<TrainingEntity, Pr
   }
 
 
-
-  private async getTrainingsStats(): Promise<TrainingStats> {
+  private async getTrainingsStats(where: Prisma.TrainingWhereInput): Promise<TrainingStats> {
+    where = (where?.coachId) ? {coachId: where.coachId} : {};
     return this.client.training.aggregate({
+      where,
       _max: {
         price: true,
         callorieQuantity: true
@@ -88,6 +89,10 @@ export class TrainigRepository extends BasePostgresRepository<TrainingEntity, Pr
       where.type = {in: query.type}
     }
 
+    if (query?.durations) {
+      where.duration = {in: query.durations}
+    }
+
     if (query?.free) {
       where.price = 0
     }
@@ -103,6 +108,11 @@ export class TrainigRepository extends BasePostgresRepository<TrainingEntity, Pr
           if (user?.questionnaire && isUserQuestionnaire(user.questionnaire)) {
             where.duration = user?.questionnaire?.trainDuration;
             where.callorieQuantity = {gte: user?.questionnaire?.caloriePerDay}
+          }
+          break;
+        case FilterBy.COACH:
+          if (user?.role === Role.COACH) {
+            where.coachId = user?.id
           }
           break;
       }
@@ -122,7 +132,7 @@ export class TrainigRepository extends BasePostgresRepository<TrainingEntity, Pr
     const [trainings, trainingsCount, trainingStats] = await Promise.all([
       this.client.training.findMany({take, skip, where, orderBy}),
       this.getTrainingsCount(where),
-      this.getTrainingsStats()
+      this.getTrainingsStats(where)
     ])
 
     return {
@@ -142,12 +152,39 @@ export class TrainigRepository extends BasePostgresRepository<TrainingEntity, Pr
     const currentTraining = await this.client.training.findFirst({
       where: {id: trainingId},
       include: {
-        coach: true
+        coach: true,
       }
     });
 
     return (currentTraining) ? this.createEntityFromDocument(currentTraining) : null;
   }
+
+  /*
+  public async getTrainingsWithPurchasesStats(query?: TrainingQuery, user?: AuthUser):
+  Promise<PaginationResult<TrainingEntity>> {
+    const take = (query?.count && query.count < MAX_TRAINING_COUNT_LIMIT) ? query.count : MAX_TRAINING_COUNT_LIMIT;
+    const skip = (query?.page && query?.count) ? (query.page - 1) * query.count : undefined;
+    const where: Prisma.TrainingWhereInput = {coachId: user?.id};
+    const orderBy: Prisma.TrainingOrderByWithRelationInput = {};
+
+    const [trainings, trainingsCount] = await Promise.all([
+      this.client.training.findMany({
+        where,
+        take,
+        skip,
+        orderBy
+      }),
+      this.getTrainingsCount(where)
+    ])
+
+    return {
+      entities: trainings.map((training) => this.createEntityFromDocument(training)),
+      totalItems: trainingsCount,
+      currentPage: query?.page ?? DEFAULT_PAGE_NUMBER,
+      totalPages: Math.ceil(trainingsCount/take),
+      itemsPerPage: take
+    }
+  }*/
 
   public async update(trainingEntity: TrainingEntity): Promise<void> {
     const training = trainingEntity.toPOJO();

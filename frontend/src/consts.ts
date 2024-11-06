@@ -75,7 +75,8 @@ export enum ApiRoute {
   Featured = '/trainings/featured',
   Reviews = '/reviews',
   Purchases = '/purchase',
-  UserUpdate = '/user/update'
+  UserUpdate = '/user/update',
+  User = '/user'
 }
 
 export enum UserLevel {
@@ -98,6 +99,7 @@ export enum Role {
 export enum FilterBy {
   SPECIAL = 'isSpecialOffer',
   USER = 'user',
+  COACH = 'coach',
   ACTIVE_PURCHASE = 'active'
 }
 

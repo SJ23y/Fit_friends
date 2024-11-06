@@ -15,8 +15,15 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmOWVmY2JhM
 
 # Get all user purchases
 
-GET http://localhost:3000/purchase HTTP/1.1
+GET http://localhost:3000/purchase/user HTTP/1.1
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmOWVmY2JhMC0zYmMyLTQ5YTAtYmFiMi0xYzAyYmYyNWFlMzMiLCJuYW1lIjoiUm9uYWxkIiwiaWF0IjoxNzI4NDQ2ODg4LCJleHAiOjE3Mjg0NDc3ODh9.DkbskZ1iUCANA5yYhsfhuevJqQclWnExuGOLXqr3ng0
+
+###
+
+# Get all coach trainings with purchases stats
+
+GET http://localhost:3000/purchase/coach HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhY2VhYmQxZi0wNGM5LTQyZDQtOWNjOS00NGE4Y2ZiMGYwMjEiLCJuYW1lIjoiVGVkIExhc3NvIiwicm9sZSI6ImNvYWNoIiwiaWF0IjoxNzMwNzI2MjI4LCJleHAiOjE3MzA3MjcxMjh9.56uM_XNT8ohxlbubf_o5MDPGVSdGAJjPLBNcEoDsRVU
 
 ###
 

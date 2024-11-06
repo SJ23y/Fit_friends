@@ -77,11 +77,21 @@ const logoutUser = createAsyncThunk<
   dropToken();
 });
 
+const getUserById = createAsyncThunk<
+  UserData,
+  string,
+  { dispatch: Dispatch; state: State; extra: AxiosInstance }
+>('getUserById', async (userId, { extra: api }) => {
+  const { data } = await api.get<UserData>(`${ApiRoute.User}/${userId}`);
+  return data;
+});
+
 export {
   checkAuthorization,
   loginUser,
   logoutUser,
   registerUser,
   updateUser,
-  saveQuestionnaireResult
+  saveQuestionnaireResult,
+  getUserById
 };

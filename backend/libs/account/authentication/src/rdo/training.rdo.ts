@@ -1,6 +1,5 @@
-import { UserRdo } from '@backend/authentication';
 import { ApiProperty } from '@nestjs/swagger';
-import { Expose, Type } from 'class-transformer';
+import { Expose } from 'class-transformer';
 
 export class TrainingRdo {
   @ApiProperty({
@@ -107,13 +106,5 @@ export class TrainingRdo {
   })
   @Expose()
   createdAt: Date;
-
-  @ApiProperty({
-    description: 'Coach info',
-    example: '{CoachObject}'
-  })
-  @Type(() => UserRdo)
-  @Expose()
-  coach: UserRdo;
 }
 

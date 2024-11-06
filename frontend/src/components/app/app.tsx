@@ -25,10 +25,15 @@ function App(): JSX.Element {
   const userLoadingStatus = useAppSelector(getUserLoadingStatus);
   const trainingLoadingStatus = useAppSelector(getTrainingLoadingStatus);
 
+  if ((userLoadingStatus || trainingLoadingStatus)) {
+    return <span>Loading ...</span>
+  }
+
   return (
     <HelmetProvider>
-      { (userLoadingStatus || trainingLoadingStatus) && <span>Loading ...</span> }
-      { !userLoadingStatus &&
+      {
+      !userLoadingStatus &&
+      !trainingLoadingStatus &&
       <BrowserRouter>
         <Routes>
           <Route path="" element={<IntroPage />} />
@@ -82,15 +87,6 @@ function App(): JSX.Element {
                 element={
                   <PrivateRoute>
                     <MyOrders />
-                  </PrivateRoute>
-                }
-              />
-
-              <Route
-                path={AppRoute.Purchases}
-                element={
-                  <PrivateRoute>
-                    <MyPurchases />
                   </PrivateRoute>
                 }
               />

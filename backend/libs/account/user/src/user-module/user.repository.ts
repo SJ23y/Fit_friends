@@ -54,7 +54,8 @@ export class UserRepository extends BasePostgresRepository<UserEntity, PrismaUse
     const foundUser = await this.client.user.findFirst({
       where: { id: userId },
       include: {
-        questionnaire: true
+        questionnaire: true,
+        trainings: true
       }
     });
 

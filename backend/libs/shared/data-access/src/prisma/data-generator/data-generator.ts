@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, User } from "@prisma/client";
 import { generateMockTraining } from "../mock-data/mock-trainings";
 import { generateMockUser } from "../mock-data/mock-users";
 import { genSalt, hash } from 'bcrypt';
@@ -12,7 +12,7 @@ import { generateMockCoachQuestionnaire, generateMockUserQuestionnaire } from ".
 
 export class DataGenerator {
   private trainingIds: string[] = [];
-  private userIds: string[] = [];
+  private createdUsers: User[] = [];
 
   constructor(
     private readonly users: number,
@@ -22,14 +22,16 @@ export class DataGenerator {
   ) {}
 
   private async generateTrainings(client: PrismaClient) {
+    const coachUsers = this.createdUsers.filter((user) => user.role === Role.COACH);
     for (let i=0; i < this.trainings; i++) {
-      const userId = getRanndomElement(this.userIds);
+      const coach = (coachUsers.length > 0) ? getRanndomElement(coachUsers) : getRanndomElement(this.createdUsers);
       const training = await client.training.create({
         data: {
           ...generateMockTraining(),
+          coachId: undefined,
           coach: {
             connect: {
-              id: userId
+              id: coach.id
             }
           }
         }
@@ -45,9 +47,11 @@ export class DataGenerator {
     for (let i=0; i < this.users; i++) {
       const mockUser = generateMockUser();
       const mockQuestionnaire = (mockUser.role === Role.USER) ? generateMockUserQuestionnaire() : generateMockCoachQuestionnaire();
+      const coachUsers = this.createdUsers.filter((user) => user.role === Role.COACH);
       const user = await client.user.create({
         data: {
           ...mockUser,
+          role: (coachUsers.length === 0) ? Role.COACH : mockUser.role,
           purchases: undefined,
           trainings: undefined,
           questionnaire: {
@@ -60,14 +64,14 @@ export class DataGenerator {
           passwordHash
         }
       });
-      this.userIds.push(user.id);
+      this.createdUsers.push(user);
     };
     console.log(`${this.users} users was created`);
   }
 
   private async generatePurchases(client: PrismaClient) {
     for (let i=0; i < this.purchaces; i++) {
-      const userId = getRanndomElement(this.userIds);
+      const user = getRanndomElement(this.createdUsers);
       const trainingId = getRanndomElement(this.trainingIds);
       const purchase = generateMockPurchase();
       await client.purchase.create({
@@ -78,7 +82,7 @@ export class DataGenerator {
             paymentType: purchase.paymentType,
             type: purchase.type,
             user: {
-              connect: {id: userId}
+              connect: {id: user.id}
             },
             train: {
               connect: {id: trainingId}
@@ -100,7 +104,7 @@ export class DataGenerator {
           rate: review.rate,
           content: review.content,
           author: {
-            connect: {id: getRanndomElement(this.userIds)}
+            connect: {id: getRanndomElement(this.createdUsers).id}
           },
           train: {
             connect: {id: trainingId}

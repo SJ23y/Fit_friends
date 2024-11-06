@@ -1,10 +1,10 @@
 import { memo, useEffect, useState } from "react";
 import { AppRoute, Setting, SortBy, SortDirection, TRAIN_TYPES } from "../../consts";
 import { useNavigate } from "react-router-dom";
-import { Box, Slider } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../hooks/use-app-dispatch";
 import { getQuery } from "../../store/main-process/selectors";
 import { changeQuery } from "../../store/main-process/main-process";
+import CustomSlider from "../custom-slider/custom-slider";
 
 type TrainingFilterBoxUserProps = {
   maxPrice: number;
@@ -20,10 +20,24 @@ function TrainingFilterBoxUserTemplate({ maxPrice, minPrice, maxCallories, minCa
   const [priceRange, setPriceRange] = useState({maxPrice, minPrice});
   const [calloriesRange, setCalloriesRange] = useState({maxCallories, minCallories});
   const [types, setTypes] = useState<string[]>(TRAIN_TYPES);
-  const [ratingRange, setRatingRange] = useState<{minRating: number, maxRating: number}>({minRating: 1, maxRating: Setting.MaxRating});
+  const [ratingRange, setRatingRange] = useState<{minRating: number, maxRating: number}>({minRating: 0, maxRating: Setting.MaxRating});
   const [currentSortDirection, setCurrentSortDirection] = useState<SortDirection>(Setting.DefaultSortDirection);
   const [currentSortBy, setCurrentSortBy] = useState<SortBy>(Setting.DefaultSortBy);
   const [freeFlag, setFreeFlag] = useState<boolean>(false);
+
+
+  const lostFocusPriceInputHandler = (evt: React.FormEvent) => {
+    const {name, value} = evt.target as HTMLInputElement;
+    const calloriesValue = parseInt(value, 10);
+    let newValue = calloriesValue;
+    if (name === 'minPrice') {
+      newValue = (calloriesValue < minPrice) ? minPrice : (calloriesValue > priceRange.maxPrice) ? priceRange.maxPrice : calloriesValue;
+    }
+    if (name === 'maxPrice') {
+      newValue = (calloriesValue > maxPrice) ? maxPrice : (calloriesValue < priceRange.minPrice) ? priceRange.minPrice : calloriesValue;
+    }
+    setPriceRange({...priceRange, [name]: newValue});
+  }
 
   const changePriceInputHandler = (evt: React.FormEvent) => {
     const element = evt.target as HTMLInputElement;
@@ -36,6 +50,19 @@ function TrainingFilterBoxUserTemplate({ maxPrice, minPrice, maxCallories, minCa
   const changePriceSliderHandler = (_evt: Event, newValue: number | number[]) => {
     const [minPrice, maxPrice] = newValue as number[];
     setPriceRange({minPrice, maxPrice})
+  }
+
+  const lostFocusCalloriesInputHandler = (evt: React.FormEvent) => {
+    const {name, value} = evt.target as HTMLInputElement;
+    const calloriesValue = parseInt(value, 10);
+    let newValue = calloriesValue;
+    if (name === 'minCallories') {
+      newValue = (calloriesValue < minCallories) ? minCallories : (calloriesValue > calloriesRange.maxCallories) ? calloriesRange.maxCallories : calloriesValue;
+    }
+    if (name === 'maxCallories') {
+      newValue = (calloriesValue > maxCallories) ? maxCallories : (calloriesValue < calloriesRange.minCallories) ? calloriesRange.minCallories : calloriesValue;
+    }
+    setCalloriesRange({...calloriesRange, [name]: newValue});
   }
 
   const changeCalloriesInputHandler = (evt: React.FormEvent) => {
@@ -96,9 +123,9 @@ function TrainingFilterBoxUserTemplate({ maxPrice, minPrice, maxCallories, minCa
       <h2 className="visually-hidden">Мои тренировки Фильтр</h2>
       <div className="gym-catalog-form__wrapper">
         <button
-                    className="btn-flat btn-flat--underlined gym-catalog-form__btnback"
-                    type="button"
-                    onClick={() => navigate(AppRoute.Main)}
+          className="btn-flat btn-flat--underlined gym-catalog-form__btnback"
+          type="button"
+          onClick={() => navigate(AppRoute.Main)}
         >
           <svg width="14" height="10" aria-hidden="true">
             <use xlinkHref="#arrow-left"></use>
@@ -119,6 +146,7 @@ function TrainingFilterBoxUserTemplate({ maxPrice, minPrice, maxCallories, minCa
                     max={maxPrice}
                     value={priceRange.minPrice}
                     onChange={changePriceInputHandler}
+                    onBlur={lostFocusPriceInputHandler}
                   />
                   <label htmlFor="text-min">от</label>
                 </div>
@@ -131,22 +159,20 @@ function TrainingFilterBoxUserTemplate({ maxPrice, minPrice, maxCallories, minCa
                     name="maxPrice"
                     value={priceRange.maxPrice}
                     onChange={changePriceInputHandler}
+                    onBlur={lostFocusPriceInputHandler}
                   />
                   <label htmlFor="text-max">до</label>
                 </div>
               </div>
               <div className="filter-range">
-                <Box sx={{ width: 300 }}>
-                  <Slider
-                    getAriaLabel={() => 'Price range'}
-                    color="success"
-                    max={maxPrice}
-                    min={minPrice}
-                    value={[priceRange.minPrice, priceRange.maxPrice]}
-                    onChange={changePriceSliderHandler}
-                    valueLabelDisplay="auto"
+                <CustomSlider
+                      ariaLabel='Price range'
+                      max={maxPrice}
+                      min={minPrice}
+                      value={[priceRange.minPrice, priceRange.maxPrice]}
+                      onChange={changePriceSliderHandler}
+                      valueLabelDisplay="auto"
                   />
-                </Box>
               </div>
           </div>
           <div className="gym-catalog-form__block gym-catalog-form__block--calories">
@@ -161,6 +187,7 @@ function TrainingFilterBoxUserTemplate({ maxPrice, minPrice, maxCallories, minCa
                   name="minCallories"
                   value={calloriesRange.minCallories}
                   onChange={changeCalloriesInputHandler}
+                  onBlur={lostFocusCalloriesInputHandler}
                 />
                 <label htmlFor="text-min-cal">от</label>
               </div>
@@ -173,38 +200,33 @@ function TrainingFilterBoxUserTemplate({ maxPrice, minPrice, maxCallories, minCa
                   name="maxCallories"
                   value={calloriesRange.maxCallories}
                   onChange={changeCalloriesInputHandler}
+                  onBlur={lostFocusCalloriesInputHandler}
                 />
                 <label htmlFor="text-max-cal">до</label>
               </div>
             </div>
             <div className="filter-range">
-              <Box sx={{ width: 300 }}>
-                <Slider
-                  getAriaLabel={() => 'Callories range'}
-                  color="success"
+                <CustomSlider
+                  ariaLabel='Callories range'
                   max={maxCallories}
                   min={minCallories}
                   value={[calloriesRange.minCallories, calloriesRange.maxCallories]}
                   onChange={changeCalloriesSliderHandler}
                   valueLabelDisplay="auto"
                 />
-              </Box>
             </div>
           </div>
           <div className="gym-catalog-form__block gym-catalog-form__block--rating">
             <h4 className="gym-catalog-form__block-title">Рейтинг</h4>
             <div className="filter-raiting">
-              <Box sx={{ width: 300 }}>
-                  <Slider
-                    getAriaLabel={() => 'Rating range'}
-                    color="success"
-                    max={Setting.MaxRating}
-                    min={1}
-                    value={[ratingRange.minRating, ratingRange.maxRating]}
-                    onChange={changeRatingSliderHandler}
-                    valueLabelDisplay="on"
-                  />
-                </Box>
+              <CustomSlider
+                ariaLabel='Rating range'
+                max={Setting.MaxRating}
+                min={0}
+                value={[ratingRange.minRating, ratingRange.maxRating]}
+                onChange={changeRatingSliderHandler}
+                valueLabelDisplay="on"
+              />
             </div>
           </div>
           <div className="gym-catalog-form__block gym-catalog-form__block--type">

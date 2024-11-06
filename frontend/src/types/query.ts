@@ -1,4 +1,4 @@
-import { FilterBy, SortBy, SortDirection } from "../consts";
+import { FilterBy, SortBy, SortDirection, TrainDuration } from "../consts";
 
 export type Query = {
   count: number;
@@ -13,5 +13,6 @@ export type Query = {
   maxRating?: number | null,
   minRating?: number | null,
   type?: string[] | null,
-  free?: boolean | null
+  free?: boolean | null,
+  durations?: TrainDuration[] | null
 }

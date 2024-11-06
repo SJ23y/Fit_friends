@@ -38,6 +38,7 @@ export type UserProcess = {
   user: UserData | null;
   error: SerializedError | null;
   loadingStatus: boolean;
+  currentlyViewedUser: UserData | null;
 };
 
 export type State = ReturnType<typeof store.getState>;

@@ -1,3 +1,4 @@
+import { duration } from "@mui/material";
 import { CoachQuestionnaire, UserQuestionnaire } from "./types/auth";
 import { Query } from "./types/query"
 
@@ -14,7 +15,8 @@ export const createQueryString = ({
   maxRating,
   minRating,
   type,
-  free
+  free,
+  durations
 }: Query) => {
   let queryString = `count=${count}&page=${page}&sortBy=${sortBy}&sortDirection=${sortDirection}`;
   if (filterBy) {
@@ -44,6 +46,11 @@ export const createQueryString = ({
   if (type) {
     type.forEach((type) => {
       queryString += `&type[]=${type}`;
+    })
+  }
+  if (durations) {
+    durations.forEach((duration) => {
+      queryString += `&durations[]=${duration}`;
     })
   }
   return queryString;

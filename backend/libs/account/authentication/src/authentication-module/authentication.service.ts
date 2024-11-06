@@ -81,7 +81,6 @@ export class AuthenticationService {
       existUser.questionnaire = (existUser.gender === Gender.FEMALE) ? DefaultQuestionnaireWoman : DefaultQuestionnaireMan;
     }
 
-
     return existUser;
   }
 

@@ -8,6 +8,7 @@ export interface Purchase {
   userId: string;
   price: number;
   trainCount: number;
+  remainingTrainings: number;
   totalPrice: number;
   paymentType: PaymentType;
   createdAt?: Date;

@@ -20,7 +20,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhY2VhYmQxZ
 
 # Get All trainings
 
-GET http://localhost:3000/trainings?count=2&page=2 HTTP/1.1
+GET http://localhost:3000/trainings?count=50&page=1&filterBy=coach HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhY2VhYmQxZi0wNGM5LTQyZDQtOWNjOS00NGE4Y2ZiMGYwMjEiLCJuYW1lIjoiVGVkIExhc3NvIiwicm9sZSI6ImNvYWNoIiwiaWF0IjoxNzMwNzI2MjI4LCJleHAiOjE3MzA3MjcxMjh9.56uM_XNT8ohxlbubf_o5MDPGVSdGAJjPLBNcEoDsRVU
 
 ###
 

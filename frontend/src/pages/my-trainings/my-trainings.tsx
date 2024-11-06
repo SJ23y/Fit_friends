@@ -1,4 +1,4 @@
-import {  Setting } from "../../consts";
+import {  AppRoute, FilterBy, Role, Setting } from "../../consts";
 import { useAppDispatch, useAppSelector } from "../../hooks/use-app-dispatch";
 import { getQuery, getTrainings } from "../../store/main-process/selectors";
 import { useEffect } from "react";
@@ -6,10 +6,15 @@ import { uploadTrainings } from "../../store/thunk-actions";
 import DetailedTrainingCard from "../../components/detailed-training-card/detailed-training-card";
 import EmptyListCard from "../../components/empty-list-card/empty-list-card";
 import TrainingFilterBoxCoach from "../../components/trainings-filter-box/trainings-filter-box-coach";
+import { changeQuery } from "../../store/main-process/main-process";
+import { getUserInfo } from "../../store/user-process/selectors";
+import { useNavigate } from "react-router-dom";
 
 
 function MyTrainings(): JSX.Element {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const user = useAppSelector(getUserInfo);
   const paginatedTrainings = useAppSelector(getTrainings);
   const query = useAppSelector(getQuery);
 
@@ -24,12 +29,18 @@ function MyTrainings(): JSX.Element {
   }
 
   useEffect(() => {
-    dispatch(uploadTrainings({
-      page: Setting.DefaultStartPage,
-      count: Setting.TrainingsCatalogItemsPerPage,
-      sortBy: Setting.DefaultSortBy,
-      sortDirection: Setting.DefaultSortDirection
-    }))
+    if (user?.role !== Role.COACH) {
+      navigate(AppRoute.Main);
+    } else {
+      dispatch(changeQuery({...query, filterBy: FilterBy.COACH}));
+      dispatch(uploadTrainings({
+        page: Setting.DefaultStartPage,
+        count: Setting.TrainingsCatalogItemsPerPage,
+        sortBy: Setting.DefaultSortBy,
+        sortDirection: Setting.DefaultSortDirection,
+        filterBy: FilterBy.COACH
+      }));
+    }
   }, [])
 
   useEffect(() => {
@@ -69,19 +80,25 @@ function MyTrainings(): JSX.Element {
                   {
                     paginatedTrainings?.currentPage !== paginatedTrainings?.totalPages &&
                     <div className="show-more training-catalog__show-more">
-                      <button
-                        className="btn show-more__button show-more__button--more"
-                        type="button"
-                        onClick={showMoreButtonClickHandler}
-                      >
-                        Показать еще
-                      </button>
-                      <button
-                        className="btn show-more__button show-more__button--to-top"
-                        type="button"
-                      >
-                        Вернуться в начало
-                      </button>
+                      {
+                        paginatedTrainings?.currentPage !== paginatedTrainings?.totalPages &&
+                        <button
+                          className="btn show-more__button show-more__button--more"
+                          type="button"
+                          onClick={showMoreButtonClickHandler}
+                        >
+                          Показать еще
+                        </button>
+                      }
+                      {
+                        paginatedTrainings?.currentPage == paginatedTrainings?.totalPages &&
+                        <button
+                          className="btn show-more__button show-more__button--to-top"
+                          type="button"
+                        >
+                          Вернуться в начало
+                        </button>
+                      }
                     </div>
                   }
                 </div>

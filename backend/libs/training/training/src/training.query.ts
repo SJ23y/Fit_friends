@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNumber, IsOptional } from 'class-validator';
 import { Transform } from 'class-transformer';
-import { DEFAULT_PAGE_NUMBER, MAX_TRAINING_COUNT_LIMIT, FilterBy, SortBy, SortDirection } from '@backend/shared-core';
+import { DEFAULT_PAGE_NUMBER, MAX_TRAINING_COUNT_LIMIT, FilterBy, SortBy, SortDirection, TrainDuration } from '@backend/shared-core';
 
 export class TrainingQuery {
   @ApiProperty({
@@ -96,6 +96,13 @@ export class TrainingQuery {
   })
   @IsOptional()
   public type?: string[]
+
+  @ApiProperty({
+    description: 'Trainings duration filter',
+    example: ['15-30мин']
+  })
+  @IsOptional()
+  public durations?: TrainDuration[]
 
   @ApiProperty({
     description: 'Free trainings filter',

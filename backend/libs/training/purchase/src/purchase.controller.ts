@@ -42,9 +42,22 @@ export class PurchaseController {
     description: 'Предоставляет список тренировок'
   })
   @UseGuards(JwtAuthGuard)
-  @Get('')
+  @Get('/user')
   public async getUserPurchases(@Req() { user }: RequestWithTokenPayload, @Query() query?: PurchaseQuery) {
     const paginationResult = await this.purchaseService.getUserPurchases(user?.sub, query);
+
+    return fillDto(PurchasesWithPaginationRdo, paginationResult);
+  }
+
+  @ApiResponse({
+    type: PurchasesWithPaginationRdo,
+    status: HttpStatus.OK,
+    description: 'Предоставляет список тренировок'
+  })
+  @UseGuards(JwtAuthGuard)
+  @Get('/coach')
+  public async getCoachTrainingsPurchases(@Req() { user }: RequestWithTokenPayload, @Query() query?: PurchaseQuery) {
+    const paginationResult = await this.purchaseService.getCoachTrainingsPurchases(user?.sub, query);
 
     return fillDto(PurchasesWithPaginationRdo, paginationResult);
   }

@@ -11,6 +11,7 @@ export class PurchaseEntity extends Entity implements StorableEntity<Purchase> {
   public paymentType: PaymentType;
   public createdAt?: Date;
   public train?: Training;
+  public remainingTrainings: number;
 
   constructor(purchase?: Purchase) {
     super();
@@ -20,16 +21,17 @@ export class PurchaseEntity extends Entity implements StorableEntity<Purchase> {
 
   private populate(purchase?: Purchase) {
     if (purchase) {
-    this.id = purchase.id ?? '';
-    this.type = purchase.type;
-    this.trainId = purchase.trainId;
-    this.trainCount = purchase.trainCount;
-    this.price =  purchase.price;
-    this.totalPrice =  purchase.totalPrice;
-    this.paymentType =  purchase.paymentType;
-    this.createdAt = purchase.createdAt;
-    this.userId = purchase.userId
-    this.train = purchase.train
+      this.id = purchase.id ?? '';
+      this.type = purchase.type;
+      this.trainId = purchase.trainId;
+      this.trainCount = purchase.trainCount;
+      this.price =  purchase.price;
+      this.totalPrice =  purchase.totalPrice;
+      this.paymentType =  purchase.paymentType;
+      this.createdAt = purchase.createdAt;
+      this.userId = purchase.userId
+      this.train = purchase.train
+      this.remainingTrainings = purchase.remainingTrainings
     }
   }
 
@@ -44,7 +46,8 @@ export class PurchaseEntity extends Entity implements StorableEntity<Purchase> {
       paymentType:  this.paymentType,
       createdAt: this.createdAt,
       userId: this.userId,
-      train: this.train
+      train: this.train,
+      remainingTrainings: this.remainingTrainings
     }
   }
 }

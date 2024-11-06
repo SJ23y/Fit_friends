@@ -104,6 +104,7 @@ model Purchase {
   userId String @map("user_id")
   price Int
   trainCount Int @map("train_count")
+  remainingTrainings Int @map("remaining_trainings") @default(0)
   totalPrice Int @map("total_price")
   paymentType String @map("payment_type")
 

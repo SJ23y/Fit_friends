@@ -1,10 +1,10 @@
 import { memo, useEffect, useState } from "react";
-import { AppRoute, Setting, SortBy, SortDirection, TRAIN_TYPES } from "../../consts";
+import { AppRoute, Setting, TrainDuration } from "../../consts";
 import { useNavigate } from "react-router-dom";
-import { Box, Slider } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../hooks/use-app-dispatch";
 import { getQuery } from "../../store/main-process/selectors";
 import { changeQuery } from "../../store/main-process/main-process";
+import CustomSlider from "../custom-slider/custom-slider";
 
 type TrainingFilterBoxCoachProps = {
   maxPrice: number;
@@ -19,23 +19,46 @@ function TrainingFilterBoxCoachTemplate({ maxPrice, minPrice, maxCallories, minC
   const query = useAppSelector(getQuery)
   const [priceRange, setPriceRange] = useState({maxPrice, minPrice});
   const [calloriesRange, setCalloriesRange] = useState({maxCallories, minCallories});
-  const [types, setTypes] = useState<string[]>(TRAIN_TYPES);
-  const [ratingRange, setRatingRange] = useState<{minRating: number, maxRating: number}>({minRating: 1, maxRating: Setting.MaxRating});
-  const [currentSortDirection, setCurrentSortDirection] = useState<SortDirection>(Setting.DefaultSortDirection);
-  const [currentSortBy, setCurrentSortBy] = useState<SortBy>(Setting.DefaultSortBy);
-  const [freeFlag, setFreeFlag] = useState<boolean>(false);
+  const [durations, setDuration] = useState<TrainDuration[]>(Object.values(TrainDuration));
+  const [ratingRange, setRatingRange] = useState<{minRating: number, maxRating: number}>({minRating: 0, maxRating: Setting.MaxRating});
+
+
+  const lostFocusPriceInputHandler = (evt: React.FormEvent) => {
+    const {name, value} = evt.target as HTMLInputElement;
+    const calloriesValue = parseInt(value, 10);
+    let newValue = calloriesValue;
+    if (name === 'minPrice') {
+      newValue = (calloriesValue < minPrice) ? minPrice : (calloriesValue > priceRange.maxPrice) ? priceRange.maxPrice : calloriesValue;
+    }
+    if (name === 'maxPrice') {
+      newValue = (calloriesValue > maxPrice) ? maxPrice : (calloriesValue < priceRange.minPrice) ? priceRange.minPrice : calloriesValue;
+    }
+    setPriceRange({...priceRange, [name]: newValue});
+  }
 
   const changePriceInputHandler = (evt: React.FormEvent) => {
     const element = evt.target as HTMLInputElement;
-    const value = parseInt(element.value, 10)
-    if (value > 0) {
-      setPriceRange({...priceRange, [element.name]: value});
-    }
+    const value = parseInt(element.value, 10);
+
+    setPriceRange({...priceRange, [element.name]: value});
   }
 
   const changePriceSliderHandler = (_evt: Event, newValue: number | number[]) => {
     const [minPrice, maxPrice] = newValue as number[];
-    setPriceRange({minPrice, maxPrice})
+    setPriceRange({...priceRange, minPrice, maxPrice})
+  }
+
+  const lostFocusCalloriesInputHandler = (evt: React.FormEvent) => {
+    const {name, value} = evt.target as HTMLInputElement;
+    const calloriesValue = parseInt(value, 10);
+    let newValue = calloriesValue;
+    if (name === 'minCallories') {
+      newValue = (calloriesValue < minCallories) ? minCallories : (calloriesValue > calloriesRange.maxCallories) ? calloriesRange.maxCallories : calloriesValue;
+    }
+    if (name === 'maxCallories') {
+      newValue = (calloriesValue > maxCallories) ? maxCallories : (calloriesValue < calloriesRange.minCallories) ? calloriesRange.minCallories : calloriesValue;
+    }
+    setCalloriesRange({...calloriesRange, [name]: newValue});
   }
 
   const changeCalloriesInputHandler = (evt: React.FormEvent) => {
@@ -54,20 +77,17 @@ function TrainingFilterBoxCoachTemplate({ maxPrice, minPrice, maxCallories, minC
     setRatingRange({minRating, maxRating})
   }
 
-  const typesChangeHandler = (value: string) => {
-    if (types.includes(value)) {
-      setTypes(types.filter(type => type !== value));
+  const durationChangeHandler = (value: TrainDuration) => {
+    if (durations.includes(value)) {
+      setDuration(durations.filter(duration => duration !== value));
     } else {
-      setTypes([...types, value])
+      setDuration([...durations, value])
     }
   }
 
   useEffect(() => {
     dispatch(changeQuery({
       ...query,
-      sortBy: currentSortBy,
-      sortDirection: currentSortDirection,
-      free: freeFlag,
       page: Setting.DefaultStartPage,
       maxPrice: priceRange.maxPrice,
       minPrice: priceRange.minPrice,
@@ -75,9 +95,9 @@ function TrainingFilterBoxCoachTemplate({ maxPrice, minPrice, maxCallories, minC
       minCallories: calloriesRange.minCallories,
       maxRating: ratingRange.maxRating,
       minRating: ratingRange.minRating,
-      type: types
+      durations: durations
     }))
-  }, [priceRange, calloriesRange, ratingRange, types, freeFlag, currentSortBy, currentSortDirection])
+  }, [priceRange, calloriesRange, ratingRange, durations])
 
   return(
     <div className="gym-catalog-form">
@@ -107,6 +127,7 @@ function TrainingFilterBoxCoachTemplate({ maxPrice, minPrice, maxCallories, minC
                     max={maxPrice}
                     value={priceRange.minPrice}
                     onChange={changePriceInputHandler}
+                    onBlur={lostFocusPriceInputHandler}
                   />
                   <label htmlFor="text-min">от</label>
                 </div>
@@ -119,22 +140,20 @@ function TrainingFilterBoxCoachTemplate({ maxPrice, minPrice, maxCallories, minC
                     name="maxPrice"
                     value={priceRange.maxPrice}
                     onChange={changePriceInputHandler}
+                    onBlur={lostFocusPriceInputHandler}
                   />
                   <label htmlFor="text-max">до</label>
                 </div>
               </div>
               <div className="filter-range">
-                <Box sx={{ width: 300 }}>
-                  <Slider
-                    getAriaLabel={() => 'Price range'}
-                    color="success"
+                  <CustomSlider
+                    ariaLabel='Price range'
                     max={maxPrice}
                     min={minPrice}
                     value={[priceRange.minPrice, priceRange.maxPrice]}
                     onChange={changePriceSliderHandler}
                     valueLabelDisplay="auto"
                   />
-                </Box>
               </div>
           </div>
           <div className="gym-catalog-form__block gym-catalog-form__block--calories">
@@ -149,6 +168,7 @@ function TrainingFilterBoxCoachTemplate({ maxPrice, minPrice, maxCallories, minC
                   name="minCallories"
                   value={calloriesRange.minCallories}
                   onChange={changeCalloriesInputHandler}
+                  onBlur={lostFocusCalloriesInputHandler}
                 />
                 <label htmlFor="text-min-cal">от</label>
               </div>
@@ -161,85 +181,64 @@ function TrainingFilterBoxCoachTemplate({ maxPrice, minPrice, maxCallories, minC
                   name="maxCallories"
                   value={calloriesRange.maxCallories}
                   onChange={changeCalloriesInputHandler}
+                  onBlur={lostFocusCalloriesInputHandler}
                 />
                 <label htmlFor="text-max-cal">до</label>
               </div>
             </div>
             <div className="filter-range">
-              <Box sx={{ width: 300 }}>
-                <Slider
-                  getAriaLabel={() => 'Callories range'}
-                  color="success"
+                <CustomSlider
+                  ariaLabel='Callories range'
                   max={maxCallories}
                   min={minCallories}
                   value={[calloriesRange.minCallories, calloriesRange.maxCallories]}
                   onChange={changeCalloriesSliderHandler}
                   valueLabelDisplay="auto"
                 />
-              </Box>
             </div>
           </div>
           <div className="gym-catalog-form__block gym-catalog-form__block--rating">
             <h4 className="gym-catalog-form__block-title">Рейтинг</h4>
             <div className="filter-raiting">
-              <Box sx={{ width: 300 }}>
-                  <Slider
-                    getAriaLabel={() => 'Rating range'}
-                    color="success"
+                  <CustomSlider
+                    ariaLabel='Rating range'
                     max={Setting.MaxRating}
-                    min={1}
+                    min={0}
                     value={[ratingRange.minRating, ratingRange.maxRating]}
                     onChange={changeRatingSliderHandler}
                     valueLabelDisplay="on"
                   />
-              </Box>
             </div>
           </div>
           <div className="my-training-form__block my-training-form__block--duration">
-                      <h4 className="my-training-form__block-title">Длительность</h4>
-                      <ul className="my-training-form__check-list">
-                        <li className="my-training-form__check-list-item">
-                          <div className="custom-toggle custom-toggle--checkbox">
-                            <label>
-                              <input type="checkbox" value="duration-1" name="duration" /><span className="custom-toggle__icon">
-                                <svg width="9" height="6" aria-hidden="true">
-                                  <use xlinkHref="#arrow-check"></use>
-                                </svg></span><span className="custom-toggle__label">10 мин - 30 мин</span>
-                            </label>
-                          </div>
-                        </li>
-                        <li className="my-training-form__check-list-item">
-                          <div className="custom-toggle custom-toggle--checkbox">
-                            <label>
-                              <input type="checkbox" value="duration-1" name="duration" checked /><span className="custom-toggle__icon">
-                                <svg width="9" height="6" aria-hidden="true">
-                                  <use xlinkHref="#arrow-check"></use>
-                                </svg></span><span className="custom-toggle__label">30 мин - 50 мин</span>
-                            </label>
-                          </div>
-                        </li>
-                        <li className="my-training-form__check-list-item">
-                          <div className="custom-toggle custom-toggle--checkbox">
-                            <label>
-                              <input type="checkbox" value="duration-1" name="duration" /><span className="custom-toggle__icon">
-                                <svg width="9" height="6" aria-hidden="true">
-                                  <use xlinkHref="#arrow-check"></use>
-                                </svg></span><span className="custom-toggle__label">50 мин - 80 мин</span>
-                            </label>
-                          </div>
-                        </li>
-                        <li className="my-training-form__check-list-item">
-                          <div className="custom-toggle custom-toggle--checkbox">
-                            <label>
-                              <input type="checkbox" value="duration-1" name="duration" /><span className="custom-toggle__icon">
-                                <svg width="9" height="6" aria-hidden="true">
-                                  <use xlinkHref="#arrow-check"></use>
-                                </svg></span><span className="custom-toggle__label">80 мин - 100 мин</span>
-                            </label>
-                          </div>
-                        </li>
-                      </ul>
+            <h4 className="my-training-form__block-title">Длительность</h4>
+            <ul className="my-training-form__check-list">
+              {
+                Object.values(TrainDuration).map((trainDuration, index) => (
+                  <li className="my-training-form__check-list-item" key={`duration-${trainDuration}-${index}`}>
+                    <div className="custom-toggle custom-toggle--checkbox">
+                      <label>
+                        <input
+                          type="checkbox"
+                          value={trainDuration}
+                          name="duration"
+                          checked={durations.includes(trainDuration)}
+                          onChange={() => durationChangeHandler(trainDuration)}
+                          disabled={durations.length === 1 && durations.includes(trainDuration)}
+                        />
+                          <span className="custom-toggle__icon">
+                            <svg width="9" height="6" aria-hidden="true">
+                              <use xlinkHref="#arrow-check"></use>
+                            </svg>
+                          </span>
+                          <span className="custom-toggle__label">{trainDuration}</span>
+                      </label>
                     </div>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
         </form>
       </div>
     </div>

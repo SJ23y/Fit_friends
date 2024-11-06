@@ -7,7 +7,8 @@ export enum PaymentType {
 export enum FilterBy {
   SPECIAL = 'isSpecialOffer',
   USER = 'user',
-  ACTIVE_PURCHASE = 'active'
+  ACTIVE_PURCHASE = 'active',
+  COACH = 'coach'
 }
 
 export enum SortBy {

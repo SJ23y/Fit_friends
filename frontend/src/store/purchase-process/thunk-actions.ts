@@ -12,9 +12,18 @@ const uploadPurchases = createAsyncThunk<
   Query,
   { dispatch: Dispatch; state: State; extra: AxiosInstance }
 >('uploadPurchases', async (query, { extra: api }) => {
-  const { data } = await api.get<PaginatedResult<Purchase>>(`${ApiRoute.Purchases}?${createQueryString(query)}`);
+  const { data } = await api.get<PaginatedResult<Purchase>>(`${ApiRoute.Purchases}/user?${createQueryString(query)}`);
   console.log('Purchases data: ', data);
   return data;
+});
+
+const uploadCoachPurchases = createAsyncThunk<
+  unknown,
+  Query,
+  { dispatch: Dispatch; state: State; extra: AxiosInstance }
+>('uploadCoachPurchases', async (query, { extra: api }) => {
+  await api.get<unknown>(`${ApiRoute.Purchases}/coach?${createQueryString(query)}`);
+
 });
 
 const uploadPurchaseByTrainingId = createAsyncThunk<
@@ -57,5 +66,6 @@ export {
   uploadPurchases,
   addNewPurchase,
   uploadPurchaseByTrainingId,
-  reducePurchaseTrainings
+  reducePurchaseTrainings,
+  uploadCoachPurchases
 };
