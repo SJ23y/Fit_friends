@@ -16,6 +16,7 @@ export enum AppRoute {
   Training = '/training',
   NewTraining = '/new-training',
   CoachTrainings = '/coach-trainings',
+  Edit = '/edit-training',
   User = '/user'
 }
 

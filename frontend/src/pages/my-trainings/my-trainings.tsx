@@ -72,7 +72,7 @@ function MyTrainings(): JSX.Element {
                     {
                       paginatedTrainings.entities.map((training) => (
                         <li className="training-catalog__item">
-                          <DetailedTrainingCard training={training} key={training.id} />
+                          <DetailedTrainingCard training={training} key={training.id} isCoachCard={true} />
                         </li>
                       ))
                     }

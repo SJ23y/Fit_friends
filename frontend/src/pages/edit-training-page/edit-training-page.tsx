@@ -1,33 +1,58 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Header from "../../components/header/header";
 import ReviewSidebar from "../../components/reviews-sidebar/reviews-sidebar";
 import { useAppDispatch, useAppSelector } from "../../hooks/use-app-dispatch";
 import { getCurrentTraining } from "../../store/training-process/selectors";
-import { useEffect, useRef, useState } from "react";
-import { uploadTrainingById } from "../../store/training-process/thunk-actions";
-import { AppRoute, Gender, Setting } from "../../consts";
-import NewReviewPopup from "../../components/new-review-popup/new-review-popup";
-import NewPurchasePopup from "../../components/new-purchase-popup/new-purchase-popup";
+import React, { useEffect, useRef, useState } from "react";
+import { updateTraining, uploadTrainingById } from "../../store/training-process/thunk-actions";
+import { AppRoute, Gender, Setting, ValidationSetting } from "../../consts";
 import classNames from "classnames";
-import { uploadPurchaseByTrainingId } from "../../store/purchase-process/thunk-actions";
-import { getTrainingPurchase } from "../../store/purchase-process/selectors";
+import { getUserInfo } from "../../store/user-process/selectors";
+import { UpdateTraining } from "../../types/trainings";
 
 function EditTrainingPage(): JSX.Element {
-  const [reviewPopupStatus, setReviewPopupStatus] = useState(false);
-  const [purchasePopupStatus, setPurchasePopupStatus] = useState(false);
-  const [trainingStatus, setTrainingStatus] = useState(false);
-  const [isVideoPaused, setIsVideoPaused] = useState(true);
-  const videoRef = useRef<HTMLVideoElement | null>(null)
-  const {trainingId} = useParams();
-  const dispatch = useAppDispatch();
   const training = useAppSelector(getCurrentTraining);
-  const purchase = useAppSelector(getTrainingPurchase);
+  const user = useAppSelector(getUserInfo);
+  const {trainingId} = useParams();
 
-  const keyDownClickHandler = (evt: React.KeyboardEvent) => {
-    if (evt.key === 'Escape') {
-      evt.stopPropagation();
-      setPurchasePopupStatus(false);
-      setReviewPopupStatus(false);
+  const [editStatus, setEditStatus] = useState(false);
+  const [formData, setFormData] = useState<UpdateTraining>({
+    title: training?.title,
+    description: training?.description,
+    video: `${Setting.BaseUrl}/${training?.video}`,
+    isSpecialOffer: training?.isSpecialOffer,
+    price: training?.price
+  });
+  const [formErrors, setFormErrors] = useState({
+    title: false,
+    description: false,
+    video: false
+  })
+  const [isVideoPaused, setIsVideoPaused] = useState(true);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const formRef = useRef<HTMLFormElement | null>(null)
+
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const formDataChangeHandler = (evt: React.FormEvent)  => {
+    evt.preventDefault();
+    const {name, value} = evt.target as HTMLInputElement;
+    if (name === 'price') {
+      const newPrice = parseInt(value.split(' ')[0], 10);
+      setFormData({...formData, price: (isNaN(newPrice)) ? 0: newPrice});
+    } else {
+      setFormData({...formData, [name]: value});
+    }
+  }
+
+  const specialOfferButtonClickHandler = () => {
+    if (formData.isSpecialOffer && formData.price) {
+      setFormData({...formData, price: formData.price/0.9, isSpecialOffer: false})
+    }
+    if (!formData.isSpecialOffer && formData.price) {
+      setFormData({...formData, price: formData.price*0.9, isSpecialOffer: true })
     }
   }
 
@@ -43,21 +68,56 @@ function EditTrainingPage(): JSX.Element {
     setIsVideoPaused(false);
   }
 
+  const saveVideoBtnCLickHandler = () => {
+    if (fileInputRef.current) {
+      const file = fileInputRef.current.files?.[0];
+      if (file) {
+        setFormData({...formData, video: URL.createObjectURL(file)})
+      }
+    }
+  }
+
+  const formSubmitHandler = (evt: React.MouseEvent) => {
+    evt.preventDefault();
+    setFormErrors({
+      title: (!formData.title) ? true : !(formData.title?.length >= 1 && formData.title?.length <= ValidationSetting.TrainingTitleMaxLength),
+      description: (!formData.description) ? true : !(formData.description?.length <= ValidationSetting.TrainingDescriptionMaxLength && formData.description?.length >= ValidationSetting.TrainingDescriptionMinLength),
+      video: !formData.video
+    });
+    if (formRef.current && !Object.values(formErrors).some(value => value)) {
+      const data = new FormData(formRef.current);
+      formData.price && data.append('price', formData.price.toString());
+      const file = fileInputRef.current?.files?.[0];
+      console.log('file_type', file?.type);
+      file && data.append('video', file);
+      console.log('Form data', Object.fromEntries(data));
+      dispatch(updateTraining({
+        trainingId: training?.id ?? '',
+        newTraining: data
+      })).then(() => {
+        setEditStatus(false);
+      })
+    }
+  }
 
   useEffect(() => {
-    if (trainingId && trainingId !== training?.id) {
+    if (training && training.coachId !== user?.id) {
+      navigate(AppRoute.Account);
+    }
+    else if (trainingId && trainingId !== training?.id) {
       dispatch(uploadTrainingById(trainingId));
     }
-    if (trainingId && trainingId !== purchase?.trainId) {
-      dispatch(uploadPurchaseByTrainingId(trainingId));
-    }
-  }, [])
+  }, []);
+
+
 
   return(
-
-          <main>
+      <>
+        <Header />
         {
           training &&
+          training.coach &&
+          <main>
             <section className="inner-page">
               <div className="container">
                 <div className="inner-page__wrapper">
@@ -65,59 +125,114 @@ function EditTrainingPage(): JSX.Element {
 
                   <ReviewSidebar
                     trainingId={training.id}
-                    onAddReviewBtnClick={(status: boolean) => setReviewPopupStatus(status)}
-                    addReviewStatus={purchase !== null && purchase.trainCount > 0}
+                    addReviewStatus={false}
                     addReviewDisable={true}
                   />
 
-                  <div className="training-card training-card--edit">
+                  <div className={
+                    classNames({
+                      "training-card": true,
+                      "training-card--edit": editStatus
+                    })
+                  }
+                  >
                     <div className="training-info">
                       <h2 className="visually-hidden">Информация о тренировке</h2>
                       <div className="training-info__header">
                         <div className="training-info__coach">
                           <div className="training-info__photo">
                             <picture>
-                              <source
-                                type="image/webp"
-                                srcSet={`${Setting.StaticUrl}/img/content/avatars/coaches/photo-1.webp, ${Setting.StaticUrl}/img/content/avatars/coaches/photo-1@2x.webp 2x`} />
                               <img
-                                src={`${Setting.StaticUrl}/img/content/avatars/coaches/photo-1.png`}
-                                srcSet={`${Setting.StaticUrl}/img/content/avatars/coaches/photo-1@2x.png 2x`}
+                                src={`${Setting.BaseUrl}/${training.coach.avatar}`}
                                 width="64" height="64"
                                 alt="Изображение тренера" />
                             </picture>
                           </div>
                           <div className="training-info__coach-info">
                             <span className="training-info__label">Тренер</span>
-                            <Link className="training-info__name" to={`${AppRoute.User}/sdshdhskd`}>Валерия</Link>
+                            <Link
+                              className="training-info__name"
+                              to={`${AppRoute.User}/${training.coach.id}`}
+                            >
+                              {training.coach.name}
+                            </Link>
                           </div>
-                          <button className="btn-flat btn-flat--light training-info__edit training-info__edit--edit" type="button">
-                            <svg width="12" height="12" aria-hidden="true">
-                              <use xlinkHref="#icon-edit"></use>
-                            </svg><span>Редактировать</span>
-                          </button>
-                          <button className="btn-flat btn-flat--light btn-flat--underlined training-info__edit training-info__edit--save" type="button">
-                            <svg width="12" height="12" aria-hidden="true">
-                              <use xlinkHref="#icon-edit"></use>
-                            </svg><span>Сохранить</span>
-                          </button>
+
                         </div>
+                        <button
+                          className="btn-flat btn-flat--light training-info__edi training-info__edit--edit"
+                          type="button"
+                          onClick={() => setEditStatus(true)}
+                        >
+                          <svg width="12" height="12" aria-hidden="true">
+                            <use xlinkHref="#icon-edit"></use>
+                          </svg>
+                          <span>Редактировать</span>
+                        </button>
+                        <button
+                          className="btn-flat btn-flat--light btn-flat--underlined training-info__edi training-info__edit--save"
+                          type="button"
+                          disabled={!formData.video}
+                          onClick={formSubmitHandler}
+                        >
+                          <svg width="12" height="12" aria-hidden="true">
+                            <use xlinkHref="#icon-edit"></use>
+                          </svg>
+                          <span>Сохранить</span>
+                        </button>
                       </div>
                       <div className="training-info__main-content">
-                        <form action="#" method="get">
+                        <form
+                          ref={formRef}
+                          action={`${Setting.BaseUrl}/update`}
+                          method="post"
+                        >
                           <div className="training-info__form-wrapper">
                             <div className="training-info__info-wrapper">
-                              <div className="training-info__input training-info__input--training">
-                                <label><span className="training-info__label">Название тренировки</span>
-                                  <input type="text" name="training" value={training.title} disabled />
+                              <div className={
+                                      classNames({
+                                        "training-info__input training-info__input--training": true,
+                                        "is-invalid": formErrors.title
+                                      })
+                                    }>
+                                <label>
+                                  <span className="training-info__label">Название тренировки</span>
+                                  <input
+                                    type="text"
+                                    name="title"
+                                    maxLength={ValidationSetting.TrainingTitleMaxLength}
+                                    value={formData.title}
+                                    disabled={!editStatus}
+                                    onChange={formDataChangeHandler}
+                                  />
                                 </label>
-                                <div className="training-info__error">Обязательное поле</div>
+                                <div className="training-info__error">
+                                    {`Название тренировки должно быть 1-${ValidationSetting.TrainingTitleMaxLength} символов`}
+                                </div>
+
                               </div>
-                              <div className="training-info__textarea">
+                              <div className={
+                                      classNames({
+                                        "training-info__textarea": true,
+                                        "training-info__input is-invalid": formErrors.description
+                                      })
+                                    }>
                                 <label>
                                   <span className="training-info__label">Описание тренировки</span>
-                                  <textarea name="description" defaultValue={training.description} disabled></textarea>
+                                  <textarea
+                                    name="description"
+                                    maxLength={ValidationSetting.TrainingDescriptionMaxLength}
+                                    defaultValue={formData.description}
+                                    disabled={!editStatus}
+                                    onChange={formDataChangeHandler}
+                                  >
+                                  </textarea>
                                 </label>
+                                {
+                                  <div className="training-info__error">
+                                    {`Описание тренировки должно быть ${ValidationSetting.TrainingDescriptionMinLength}-${ValidationSetting.TrainingDescriptionMaxLength} символов`}
+                                  </div>
+                                }
                               </div>
                             </div>
                             <div className="training-info__rating-wrapper">
@@ -129,7 +244,12 @@ function EditTrainingPage(): JSX.Element {
                                       <use xlinkHref="#icon-star"></use>
                                     </svg>
                                   </span>
-                                  <input type="text" name="rating" value={`${parseInt(training.rate)}`} disabled />
+                                  <input
+                                    type="text"
+                                    name="rating"
+                                    value={`${parseInt(training.rate)}`}
+                                    disabled
+                                  />
                                 </label>
                               </div>
                               <ul className="training-info__list">
@@ -159,101 +279,129 @@ function EditTrainingPage(): JSX.Element {
                               </ul>
                             </div>
                             <div className="training-info__price-wrapper">
-                              <div className="training-info__input training-info__input--price">
-                                <label><span className="training-info__label">Стоимость</span>
-                                  <input type="text" name="price" value={`${training.price} ₽`} disabled />
+                              <div className={
+                                      classNames({
+                                        "training-info__input training-info__input--price": true
+                                      })
+                                    }>
+                                <label>
+                                  <span className="training-info__label">Стоимость</span>
+                                  <input
+                                    type="text"
+                                    name="price"
+                                    value={`${formData.price} ₽`}
+                                    disabled={!editStatus}
+                                    onChange={formDataChangeHandler}
+                                  />
                                 </label>
-                                <div className="training-info__error">Введите число</div>
                               </div>
-                              <button className="btn-flat btn-flat--light btn-flat--underlined training-info__discount" type="button">
-                                <svg width="14" height="14" aria-hidden="true">
-                                  <use xlinkHref="#icon-discount"></use>
-                                </svg><span>Сделать скидку 10%</span>
+                                <button
+                                  className="btn-flat btn-flat--light btn-flat--underlined training-info__discount"
+                                  type="button"
+                                  onClick={specialOfferButtonClickHandler}
+                                >
+                                  <svg width="14" height="14" aria-hidden="true">
+                                    <use xlinkHref="#icon-discount"></use>
+                                  </svg>
+                                  <span>
+                                    {
+                                      (formData.isSpecialOffer) ? 'Отменить скидку': 'Сделать скидку 10%'
+                                    }
+                                  </span>
                               </button>
                             </div>
                           </div>
                         </form>
                       </div>
                     </div>
-                    <div className="training-video">
-                      <h2 className="training-video__title">Видео</h2>
-                      <div className="training-video__video">
-                        {
-                          !trainingStatus &&
-                          <div className="training-video__thumbnail">
-                          <picture>
-                            <source type="image/webp" srcSet={`${Setting.BaseUrl}/${training.image}`} />
-                            <img
-                              src={`${Setting.BaseUrl}/${training.image}`}
-                              width="922" height="566"
-                              alt="Обложка видео"
-                            />
-                          </picture>
-                          </div>
-                        }
-                        {
-                          trainingStatus &&
-                          <>
-                            <video
-                              ref={videoRef}
-                              width="922" height="566"
-                              src={`${Setting.BaseUrl}/${training.video}`}
-                              onClick={videoClickHandler}
-                            ></video>
-                          </>
-                        }
 
-                        {
-                            isVideoPaused &&
-                            <button
-                                className={
-                                  classNames({
-                                    "training-video__play-button btn-reset": true,
-                                    "is-disabled": !trainingStatus
-                                  })
+                    <div className={
+                      classNames({
+                        "training-video": true,
+                        "training-video--load": !formData.video
+                      })
+                    }>
+
+                          <h2 className="training-video__title">Видео</h2>
+                          <div className="training-video__video">
+                                <video
+                                  ref={videoRef}
+                                  width="922" height="566"
+                                  src={formData.video}
+                                  onClick={videoClickHandler}
+                                ></video>
+
+
+                              {
+                                isVideoPaused &&
+                                <button
+                                    className={
+                                      classNames({
+                                        "training-video__play-button btn-reset": true
+                                      })
+                                    }
+                                    onClick={videoStartBtnClickHandler}
+                                  >
+                                    <svg width="18" height="30" aria-hidden="true">
+                                      <use xlinkHref="#icon-arrow"></use>
+                                    </svg>
+                                  </button>
                                 }
-                                disabled={!trainingStatus}
-                                onClick={videoStartBtnClickHandler}
-                              >
-                                <svg width="18" height="30" aria-hidden="true">
-                                  <use xlinkHref="#icon-arrow"></use>
-                                </svg>
-                              </button>
-                        }
-                      </div>
+                          </div>
+
                       <div className="training-video__drop-files">
-                    <form action="#" method="post">
-                      <div className="training-video__form-wrapper">
-                        <div className="drag-and-drop">
-                          <label><span className="drag-and-drop__label" tabIndex={0}>Загрузите сюда файлы формата MOV, AVI или MP4
-                              <svg width="20" height="20" aria-hidden="true">
-                                <use xlinkHref="#icon-import-video"></use>
-                              </svg></span>
-                            <input type="file" name="import" tabIndex={-1} accept=".mov, .avi, .mp4" />
-                          </label>
+                          <form action="#" method="post">
+                            <div className="training-video__form-wrapper">
+                              <div className="drag-and-drop">
+                                <label>
+                                  <span className="drag-and-drop__label" tabIndex={0}>Загрузите сюда файлы формата MOV, AVI или MP4
+                                    <svg width="20" height="20" aria-hidden="true">
+                                      <use xlinkHref="#icon-import-video"></use>
+                                    </svg></span>
+                                  <input
+                                    type="file"
+                                    name="import"
+                                    tabIndex={-1}
+                                    accept=".mov, .avi, .mp4"
+                                    ref={fileInputRef}
+                                  />
+                                </label>
+                              </div>
+                            </div>
+                          </form>
+                        </div>
+
+                        <div className={classNames({
+                          "training-video__buttons-wrapper": true
+                        })}>
+
+                            <div className="training-video__edit-buttons">
+                              <button
+                                className="btn"
+                                type="button"
+                                onClick={saveVideoBtnCLickHandler}
+                              >Сохранить</button>
+                              <button
+                                className="btn btn--outlined"
+                                type="button"
+                                onClick={() => setFormData({...formData, video: ''})}
+                              >Удалить
+                              </button>
+                            </div>
                         </div>
                       </div>
-                    </form>
-                  </div>
-                  <div className="training-video__buttons-wrapper">
-                    <button className="btn training-video__button training-video__button--start" type="button" disabled>Приступить</button>
-                    <div className="training-video__edit-buttons">
-                      <button className="btn" type="button">Сохранить</button>
-                      <button className="btn btn--outlined" type="button">Удалить</button>
-                    </div>
-                  </div>
 
-                    </div>
+
+
                   </div>
                 </div>
               </div>
             </section>
-          }
         </main>
-
-
-
-  )
+        }
+      </>
+)
 }
+
 
 export default EditTrainingPage;

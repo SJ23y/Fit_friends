@@ -16,6 +16,17 @@ const addNewTraining = createAsyncThunk<
   return data;
 });
 
+const updateTraining = createAsyncThunk<
+  Training,
+  {newTraining: FormData, trainingId: string},
+  { dispatch: Dispatch; state: State; extra: AxiosInstance }
+>('updateTraining', async ({newTraining, trainingId}, { extra: api }) => {
+
+  const { data } = await api.post<Training>(`${ApiRoute.Trainings}/update/${trainingId}`, newTraining);
+
+  return data;
+});
+
 const uploadTrainingById = createAsyncThunk<
   Training | void,
   string,
@@ -31,5 +42,6 @@ const uploadTrainingById = createAsyncThunk<
 
 export {
   uploadTrainingById,
-  addNewTraining
+  addNewTraining,
+  updateTraining
 }

@@ -7,6 +7,7 @@ import { AuthenticationService } from "@backend/authentication";
 import { CreateTrainingDto } from "./dto/create-training.dto";
 import { FileManagerService } from "@backend/file-manager";
 import { getRanndomElement } from "@backend/shared-helpers";
+import { UpdateTrainingDto } from "./dto/update-training.dto";
 
 @Injectable()
 export class TrainingService {
@@ -51,16 +52,36 @@ export class TrainingService {
   }
 
   public async updateTrainingRating(trainingId: string, rating: number):  Promise<TrainingEntity | null> {
-    console.log('in training update service')
     const currentTraining =  await this.trainigRepository.getTrainingById(trainingId);
 
     if (!currentTraining) {
       throw new NotFoundException(`Training with id ${trainingId} not found`);
     }
     currentTraining.rate = (currentTraining.rate > 0) ? (currentTraining.rate + rating) / 2 : currentTraining.rate + rating;
-    console.log('new rate: ', currentTraining.rate)
     await this.trainigRepository.update(currentTraining);
 
     return currentTraining;
+  }
+
+  public async updateTraining(trainingId: string, dto: UpdateTrainingDto, user: TokenPayload, file: Express.Multer.File):  Promise<TrainingEntity> {
+    const currentTraining =  await this.trainigRepository.getTrainingById(trainingId);
+
+    if (!currentTraining) {
+      throw new NotFoundException(`Training with id ${trainingId} not found`);
+    }
+
+    if (user.role !== Role.COACH && user.sub !== currentTraining.coachId) {
+      throw new ConflictException('Данное действие вам не доступно');
+    }
+
+    const video = await this.fileService.writeFile(file);
+
+    const trainingEntity = new TrainingEntity({
+      ...currentTraining.toPOJO(),
+      ...dto,
+      video: video?.replace(/\\/g, '/') ?? ''
+    })
+    await this.trainigRepository.update(trainingEntity);
+    return trainingEntity;
   }
 }

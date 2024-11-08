@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { NameSpace } from '../../consts';
-import { addNewTraining, uploadTrainingById } from './thunk-actions';
+import { addNewTraining, updateTraining, uploadTrainingById } from './thunk-actions';
 import { TrainingProcess } from '../../types/state';
 import { Training } from '../../types/trainings';
 
@@ -38,6 +38,17 @@ const trainingProcess = createSlice({
           state.currentTraining = action.payload;
         }
       })
+      .addCase(updateTraining.pending, (state) => {
+        state.loadingStatus = true;
+      })
+      .addCase(updateTraining.fulfilled, (state, action) => {
+        state.loadingStatus = false;
+        if (action.payload) {
+          state.currentTraining = action.payload;
+        }
+      })
+      .addCase(updateTraining.rejected, (state) => {
+        state.loadingStatus = false;})
   },
 });
 

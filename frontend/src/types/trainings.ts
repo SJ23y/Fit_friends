@@ -1,4 +1,5 @@
 import { Gender, TrainDuration, UserLevel } from "../consts";
+import { UserData } from "./auth";
 
 export type Training = {
   id: string;
@@ -13,9 +14,18 @@ export type Training = {
   gender: Gender;
   video: string;
   rate: string;
-  coach: string;
+  coach: UserData;
+  coachId: string;
   isSpecialOffer: boolean;
   createdAt: Date;
+}
+
+export type UpdateTraining = {
+  title?: string;
+  description?: string;
+  video?: string;
+  isSpecialOffer?: boolean;
+  price?: number;
 }
 
 export type Trainings = Training[];

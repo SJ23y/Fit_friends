@@ -7,7 +7,7 @@ import ReviewCard from "./review-card";
 
 type ReviewSidebarProps = {
   trainingId: string;
-  onAddReviewBtnClick: (status: boolean) => void;
+  onAddReviewBtnClick?: (status: boolean) => void;
   addReviewDisable: boolean;
   addReviewStatus: boolean;
 }
@@ -45,7 +45,8 @@ function ReviewSidebarTemplate({trainingId, onAddReviewBtnClick, addReviewDisabl
         }
       </ul>
       {
-        addReviewStatus
+        addReviewStatus &&
+        onAddReviewBtnClick
         &&
         <button
           className="btn btn--medium reviews-side-bar__button"

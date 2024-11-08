@@ -9,6 +9,7 @@ import { JwtAuthGuard } from '@backend/authentication';
 import { RequestWithTokenPayload } from '@backend/shared-core';
 import { CreateTrainingDto } from './dto/create-training.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { UpdateTrainingDto } from './dto/update-training.dto';
 
 @ApiTags('Training')
 @Controller('trainings')
@@ -39,7 +40,7 @@ export class TrainingController {
     @Req() {user}: RequestWithTokenPayload,
     @UploadedFile(new ParseFilePipe({
       validators: [
-        new FileTypeValidator({ fileType: '.(mov|avi|mp4)' }),
+        new FileTypeValidator({ fileType: '.(mov|avi|mp4|quicktime)' }),
       ],
       fileIsRequired: false})) file: Express.Multer.File) {
 
@@ -79,6 +80,39 @@ export class TrainingController {
     return fillDto(TrainingRdo, currentTraining);
   }
 
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Тренировка успешно обновлена'
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Тренировка с указанным id не найдена'
+  })
+  @ApiResponse({
+    status: HttpStatus.CONFLICT,
+    description: 'Данное действие вам не доступно'
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Данное действие доступно только авторизованным пользователям'
+  })
+  @UseInterceptors(FileInterceptor('video'))
+  @UseGuards(JwtAuthGuard)
+  @Post('/update/:trainingId')
+  public async update(
+    @Body() dto: UpdateTrainingDto,
+    @Req() {user}: RequestWithTokenPayload,
+    @Param('trainingId', ParseUUIDPipe) trainingId: string,
+    @UploadedFile(new ParseFilePipe({
+      validators: [
+        new FileTypeValidator({ fileType: '.(mov|avi|mp4|MOV|quicktime)' }),
+      ],
+      fileIsRequired: false})) file: Express.Multer.File) {
+
+    console.log('file', file);
+    const newTraining = await this.trainingService.updateTraining(trainingId, dto, user, file);
+    return fillDto(TrainingRdo, newTraining);
+  }
 
 
 }

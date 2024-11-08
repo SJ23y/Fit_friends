@@ -20,6 +20,7 @@ import { useAppSelector } from '../../hooks/use-app-dispatch';
 import { getUserLoadingStatus } from '../../store/user-process/selectors';
 import Questionnaire from '../../pages/questionnaire/questuinaire';
 import { getTrainingLoadingStatus } from '../../store/training-process/selectors';
+import EditTrainingPage from '../../pages/edit-training-page/edit-training-page';
 
 function App(): JSX.Element {
   const userLoadingStatus = useAppSelector(getUserLoadingStatus);
@@ -118,6 +119,15 @@ function App(): JSX.Element {
                 }
             />
           </Route>
+
+          <Route
+              path={`${AppRoute.Edit}/:trainingId`}
+              element={
+                <PrivateRoute>
+                  <EditTrainingPage />
+                </PrivateRoute>
+              }
+          />
 
           <Route
               path={`${AppRoute.Training}/:trainingId`}

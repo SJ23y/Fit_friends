@@ -2,23 +2,20 @@ import React, { memo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AppRoute, Setting } from "../../consts";
 import { Training } from "../../types/trainings";
-import { useAppDispatch } from "../../hooks/use-app-dispatch";
-import { changeCurrentTraining } from "../../store/training-process/training-process";
 
 type DetailedTrainingCardProps = {
   training: Training,
   totalPrice?: number,
-  totalCount?: number
+  totalCount?: number,
+  isCoachCard?: boolean
 }
 
-function DetailedTrainingCardTemplate({training, totalPrice, totalCount}: DetailedTrainingCardProps): JSX.Element {
-  const dispatch = useAppDispatch();
+function DetailedTrainingCardTemplate({training, totalPrice, totalCount, isCoachCard}: DetailedTrainingCardProps): JSX.Element {
   const navigate = useNavigate();
 
   const trainingLinkClickHandler = (evt: React.MouseEvent<HTMLAnchorElement>) => {
     evt.preventDefault();
-    dispatch(changeCurrentTraining(training));
-    navigate(`${AppRoute.Training}/${training.id}`)
+    navigate((isCoachCard) ? `${AppRoute.Edit}/${training.id}` : `${AppRoute.Training}/${training.id}`)
   }
 
   return(
@@ -63,7 +60,7 @@ function DetailedTrainingCardTemplate({training, totalPrice, totalCount}: Detail
             <div className="thumbnail-training__button-wrapper">
               <Link
                 className="btn btn--small thumbnail-training__button-catalog"
-                to={`${AppRoute.Training}/${training.id}`}
+                to={(isCoachCard) ? `${AppRoute.Edit}/${training.id}` : `${AppRoute.Training}/${training.id}`}
                 onClick={trainingLinkClickHandler}
               >Подробнее</Link>
               <Link
@@ -76,7 +73,7 @@ function DetailedTrainingCardTemplate({training, totalPrice, totalCount}: Detail
             totalCount !== undefined && totalPrice &&
             <Link
               className="btn-flat btn-flat--underlined thumbnail-training__button-orders"
-              to={`${AppRoute.Training}/${training.id}`}
+              to={(isCoachCard) ? `${AppRoute.Edit}/${training.id}` : `${AppRoute.Training}/${training.id}`}
               onClick={trainingLinkClickHandler}
             >
               <svg width="18" height="18" aria-hidden="true">

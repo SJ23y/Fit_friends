@@ -4042,16 +4042,16 @@ input:active + .custom-textarea__text {
   pointer-events: none;
 }
 
-.training-info__input.is-invalid input {
+.training-info__input.is-invalid > input {
   border: 1px solid #ff3e49;
 }
 
-.training-info__input.is-invalid input:hover,
-.training-info__input.is-invalid input:focus {
+.training-info__input.is-invalid > input:hover,
+.training-info__input.is-invalid > input:focus {
   border: 1px solid #ff3e49;
 }
 
-.training-info__input.is-invalid .training-info__error {
+.training-info__input.is-invalid > .training-info__error {
   opacity: 1;
 }
 
