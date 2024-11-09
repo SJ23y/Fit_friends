@@ -1,8 +1,8 @@
-import { PaginationResult, PaymentType } from "@backend/shared-core";
+import { Order, PaginationResult, PaymentType, Role, TokenPayload } from "@backend/shared-core";
 import { PurchaseQuery } from "./purchase.query";
 import { PurchaseRepository } from "./purchase.repository";
 import { PurchaseEntity } from "./purchase.entity";
-import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
+import { BadRequestException, ConflictException, Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
 import { CreatePurchaseDto } from "./dto/create-purchase.dto";
 import { ReduceTrainingsDto } from "./dto/reduce-trainings.dto";
 
@@ -47,7 +47,7 @@ export class PurchaseService {
     return training;
   }
 
-  public async reduceTrainingsCount(purchaseId: string, dto: ReduceTrainingsDto, userId?: string):  Promise<PurchaseEntity> {
+  public async reduceTrainingsCount(purchaseId: string, dto: ReduceTrainingsDto/*, userId?: string*/):  Promise<PurchaseEntity> {
     const currentPurchase = await this.purchaseRepository.getPurchaseById(purchaseId);
 
     if (! currentPurchase) {
@@ -69,9 +69,14 @@ export class PurchaseService {
     return currentPurchase;
   }
 
-
-  public async getCoachTrainingsPurchases(userId?: string, query?: PurchaseQuery): Promise<void> {
-    await this.purchaseRepository.getCoachTrainingsPurchases(userId, query);
+  public async getCoachOrders(user: TokenPayload, query?: PurchaseQuery): Promise<PaginationResult<Order>> {
+    if (!user.sub) {
+      throw new UnauthorizedException('Please, login to get this information');
+    }
+    if (user.role !== Role.COACH) {
+      throw new ConflictException('Данная информация доступна только тренерам');
+    }
+    const paginatedOrders = await this.purchaseRepository.getCoachOrders(user.sub, query);
+    return paginatedOrders;
   }
-
 }

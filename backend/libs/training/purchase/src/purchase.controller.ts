@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpStatus, NotFoundException, Param, ParseUUIDPipe, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Param, ParseUUIDPipe, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { PurchaseService } from './purchase.service';
 import { PurchaseQuery } from './purchase.query';
@@ -9,6 +9,7 @@ import { JwtAuthGuard } from '@backend/authentication';
 import { CreatePurchaseDto } from './dto/create-purchase.dto';
 import { ReduceTrainingsDto } from './dto/reduce-trainings.dto';
 import { RequestWithTokenPayload } from '@backend/shared-core';
+import { OrdersWithPaginationRdo } from './rdo/orders-with-pagination.rdo';
 
 
 @ApiTags('purchase')
@@ -52,14 +53,22 @@ export class PurchaseController {
   @ApiResponse({
     type: PurchasesWithPaginationRdo,
     status: HttpStatus.OK,
-    description: 'Предоставляет список тренировок'
+    description: 'Предоставляет список заказов'
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Данная информация доступна только авторизованным пользователям'
+  })
+  @ApiResponse({
+    status: HttpStatus.CONFLICT,
+    description: 'Данная информация доступна только тренерам'
   })
   @UseGuards(JwtAuthGuard)
-  @Get('/coach')
-  public async getCoachTrainingsPurchases(@Req() { user }: RequestWithTokenPayload, @Query() query?: PurchaseQuery) {
-    const paginationResult = await this.purchaseService.getCoachTrainingsPurchases(user?.sub, query);
+  @Get('/orders')
+  public async getCoachOrders(@Req() { user }: RequestWithTokenPayload, @Query() query?: PurchaseQuery) {
+    const paginationResult = await this.purchaseService.getCoachOrders(user, query);
 
-    return fillDto(PurchasesWithPaginationRdo, paginationResult);
+    return fillDto(OrdersWithPaginationRdo, paginationResult);
   }
 
   @ApiResponse({
@@ -92,13 +101,9 @@ export class PurchaseController {
   public async reduceTrainingsCount(
     @Param('purchaseId', ParseUUIDPipe) purchaseId: string,
     @Body() dto: ReduceTrainingsDto,
-    @Req() { user }: RequestWithTokenPayload,
+    /*@Req() { user }: RequestWithTokenPayload,*/
     ) {
-    const purchase = await this.purchaseService.reduceTrainingsCount(purchaseId, dto, user?.sub);
-
-    if (! purchase) {
-      throw new NotFoundException(`Purchase with id ${purchaseId} not found`);
-    }
+    const purchase = await this.purchaseService.reduceTrainingsCount(purchaseId, dto/*, user?.sub*/);
 
     return fillDto(PurchaseRdo, purchase);
   }

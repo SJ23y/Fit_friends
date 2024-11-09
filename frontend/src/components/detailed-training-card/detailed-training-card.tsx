@@ -2,9 +2,10 @@ import React, { memo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AppRoute, Setting } from "../../consts";
 import { Training } from "../../types/trainings";
+import { Order } from "../../types/purchase";
 
 type DetailedTrainingCardProps = {
-  training: Training,
+  training: Training | Order,
   totalPrice?: number,
   totalCount?: number,
   isCoachCard?: boolean

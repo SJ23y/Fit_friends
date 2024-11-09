@@ -1,55 +1,78 @@
 import { useNavigate } from "react-router-dom";
 import { AppRoute, Setting, SortBy, SortDirection } from "../../consts";
 import { useAppDispatch, useAppSelector } from "../../hooks/use-app-dispatch";
-import { getPurchases } from "../../store/purchase-process/selectors";
-import { uploadPurchases } from "../../store/purchase-process/thunk-actions";
+import { getOrders } from "../../store/purchase-process/selectors";
+import { uploadCoachOrders, uploadPurchases } from "../../store/purchase-process/thunk-actions";
 import React, { useEffect, useState } from "react";
 import DetailedTrainingCard from "../../components/detailed-training-card/detailed-training-card";
+
 
 function MyOrders(): JSX.Element {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const [currentSortBy, setCurrentSortBy] = useState<SortBy>(Setting.DefaultSortBy);
-  const [currentSortDirection, setCurrentSortDirection] = useState<SortDirection>(Setting.DefaultSortDirection);
-  const paginatedPurhases = useAppSelector(getPurchases);
+  const [currentSorting, setCurrentSorting] = useState({sortBy: SortBy.DATE, sortDirection: SortDirection.DESC});
+  const [totalPriseSorting, setTotalPriceSorting] = useState({status: false, sortDirection: SortDirection.DESC});
+  const [totalCountSorting, setTotalCountSorting] = useState({status: false, sortDirection: SortDirection.DESC});
+  const paginatedOrders = useAppSelector(getOrders);
 
-  const changeSortingHandler = (sortBy: SortBy) => {
-    if (currentSortBy === sortBy) {
-      setCurrentSortDirection(
-        (currentSortDirection === SortDirection.ASC) ? SortDirection.DESC : SortDirection.ASC
-      )
-      dispatch(uploadPurchases({
-        page: Setting.DefaultStartPage,
-        count: Setting.OrdersPerPageCount,
-        sortBy: sortBy,
-        sortDirection: (currentSortDirection === SortDirection.ASC) ? SortDirection.DESC : SortDirection.ASC
-      }))
+  const changeTotalPriceSortingHandler = () => {
+    if (totalPriseSorting.status) {
+      setCurrentSorting({
+        sortBy: SortBy.TOTAL_PRICE,
+        sortDirection: (totalPriseSorting.sortDirection === SortDirection.DESC) ? SortDirection.ASC : SortDirection.DESC
+      });
+      setTotalPriceSorting({
+        status: true,
+        sortDirection: (totalPriseSorting.sortDirection === SortDirection.DESC) ? SortDirection.ASC : SortDirection.DESC
+      })
     } else {
-      setCurrentSortBy(sortBy);
-      dispatch(uploadPurchases({
-        page: Setting.DefaultStartPage,
-        count: Setting.OrdersPerPageCount,
-        sortBy: sortBy,
-        sortDirection: currentSortDirection
-      }))
+      setCurrentSorting({
+        sortBy: SortBy.TOTAL_PRICE,
+        sortDirection: totalPriseSorting.sortDirection
+      });
+      setTotalPriceSorting({
+        status: true,
+        sortDirection: totalPriseSorting.sortDirection
+      })
     }
+  }
 
+  const changeTotalCountSortingHandler = () => {
+    if (totalCountSorting.status) {
+      setCurrentSorting({
+        sortBy: SortBy.TRAININGS_COUNT,
+        sortDirection: (totalCountSorting.sortDirection === SortDirection.DESC) ? SortDirection.ASC : SortDirection.DESC
+      });
+      setTotalCountSorting({
+        status: true,
+        sortDirection: (totalCountSorting.sortDirection === SortDirection.DESC) ? SortDirection.ASC : SortDirection.DESC
+      })
+    } else {
+      setCurrentSorting({
+        sortBy: SortBy.TRAININGS_COUNT,
+        sortDirection: totalCountSorting.sortDirection
+      });
+      setTotalCountSorting({
+        status: true,
+        sortDirection: totalCountSorting.sortDirection
+      })
+    }
   }
 
   const showMoreButtonClickHandler = (evt: React.MouseEvent<HTMLButtonElement>) => {
     evt.preventDefault();
-    if (paginatedPurhases) {
+    if (paginatedOrders) {
       dispatch(uploadPurchases({
-        page: paginatedPurhases?.currentPage + 1,
+        page: paginatedOrders?.currentPage + 1,
         count: Setting.OrdersPerPageCount,
-        sortBy: currentSortBy,
-        sortDirection:currentSortDirection
+        sortBy: currentSorting.sortBy,
+        sortDirection: currentSorting.sortDirection
       }));
     }
   }
 
   useEffect(() => {
-    dispatch(uploadPurchases({
+    dispatch(uploadCoachOrders({
       page: Setting.DefaultStartPage,
       count: Setting.OrdersPerPageCount,
       sortBy: Setting.DefaultSortBy,
@@ -57,8 +80,19 @@ function MyOrders(): JSX.Element {
     }))
   }, []);
 
-  return(
+  useEffect(() => {
+    if (paginatedOrders?.entities && paginatedOrders.entities.length > 1) {
+      dispatch(uploadCoachOrders({
+        page: Setting.DefaultStartPage,
+        count: Setting.OrdersPerPageCount,
+        sortBy: currentSorting.sortBy,
+        sortDirection: currentSorting.sortDirection
+      }));
+    }
+  }, [currentSorting]);
 
+
+  return(
       <main>
         <section className="my-orders">
           <div className="container">
@@ -82,17 +116,17 @@ function MyOrders(): JSX.Element {
                     <button
                       className="btn-filter-sort"
                       type="button"
-                      onClick={() => changeSortingHandler(SortBy.TOTAL_PRICE)}
+                      onClick={changeTotalPriceSortingHandler}
                     >
                       <span>Сумме</span>
                         {
-                          currentSortDirection === SortDirection.DESC &&
+                          totalPriseSorting.sortDirection === SortDirection.DESC &&
                           <svg width="16" height="10" aria-hidden="true">
                             <use xlinkHref="#icon-sort-up"></use>
                           </svg>
                         }
                         {
-                          currentSortDirection === SortDirection.ASC &&
+                          totalPriseSorting.sortDirection === SortDirection.ASC &&
                           <svg width="16" height="10" aria-hidden="true">
                             <use xlinkHref="#icon-sort-down"></use>
                           </svg>
@@ -101,17 +135,17 @@ function MyOrders(): JSX.Element {
                     <button
                       className="btn-filter-sort"
                       type="button"
-                      onClick={() => changeSortingHandler(SortBy.TRAININGS_COUNT)}
+                      onClick={changeTotalCountSortingHandler}
                     >
                       <span>Количеству</span>
                       {
-                          currentSortDirection === SortDirection.DESC &&
+                          totalCountSorting.sortDirection === SortDirection.DESC &&
                           <svg width="16" height="10" aria-hidden="true">
                             <use xlinkHref="#icon-sort-up"></use>
                           </svg>
                         }
                         {
-                          currentSortDirection === SortDirection.ASC &&
+                           totalCountSorting.sortDirection === SortDirection.ASC &&
                           <svg width="16" height="10" aria-hidden="true">
                             <use xlinkHref="#icon-sort-down"></use>
                           </svg>
@@ -122,19 +156,19 @@ function MyOrders(): JSX.Element {
               </div>
               <ul className="my-orders__list">
                 {
-                  paginatedPurhases?.entities.map((purchase) => (
-                    purchase.train &&
+                  paginatedOrders?.entities.map((order) => (
                     <DetailedTrainingCard
-                      training={purchase.train}
-                      totalCount={purchase.trainCount}
-                      totalPrice={purchase.totalPrice}
-                      key={`train-card-${purchase.id}`}
+                      training={order}
+                      isCoachCard={true}
+                      totalCount={order.trainTotalCount}
+                      totalPrice={order.trainTotalPrice}
+                      key={`train-card-${order.id}`}
                     />
                   ))
                 }
               </ul>
               {
-                paginatedPurhases?.currentPage !== paginatedPurhases?.totalPages &&
+                paginatedOrders?.currentPage !== paginatedOrders?.totalPages &&
                 <div className="show-more my-orders__show-more">
                   <button
                     className="btn show-more__button show-more__button--more"

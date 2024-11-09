@@ -14,6 +14,22 @@ export type Purchase = {
   train?: Training
 }
 
+export type Order = {
+  id: string;
+  type: string;
+  price: number;
+  trainTotalPrice: number;
+  trainTotalCount: number;
+  coachId: string;
+  trainingId: string;
+  image: string;
+  callorieQuantity: number;
+  rate: number;
+  title: string;
+  description: string;
+  createdAt: Date;
+}
+
 export type Purchases = Purchase[];
 
 export type NewPurchase = Pick<Purchase, 'price' | 'trainId' | 'paymentType' | 'trainCount' | 'type'>;

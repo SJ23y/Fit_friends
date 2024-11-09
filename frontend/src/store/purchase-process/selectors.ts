@@ -4,10 +4,14 @@ import { State } from '../../types/state';
 const getPurchases = (state: Pick<State, NameSpace.PURCHASE>) =>
   state[NameSpace.PURCHASE].purchases;
 
+const getOrders = (state: Pick<State, NameSpace.PURCHASE>) =>
+  state[NameSpace.PURCHASE].coachOrders;
+
 const getTrainingPurchase = (state: Pick<State, NameSpace.PURCHASE>) =>
   state[NameSpace.PURCHASE].currentTrainingPurchase;
 
 export {
   getPurchases,
-  getTrainingPurchase
+  getTrainingPurchase,
+  getOrders
 };

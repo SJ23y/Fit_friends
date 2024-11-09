@@ -47,7 +47,7 @@ export {
   DEFAULT_VIDEO_NAMES,
   DEFAULT_FILE_NAMES,
   FILE_FIELDS_KEYS } from './settings/file.setting';
-
+export { Order } from './interfaces/order.interface';
 export { CustomError } from './interfaces/custom-error.interface';
 export { TrainingStats } from './interfaces/training-stats.interface';
 export { UserQuestionnarie, CoachQuestionnarie } from './interfaces/questionnarie.interface';

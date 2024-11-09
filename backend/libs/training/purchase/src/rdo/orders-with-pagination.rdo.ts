@@ -1,15 +1,15 @@
 import { Expose, Type } from "class-transformer";
-import { PurchaseRdo } from "./purchase.rdo";
 import { ApiProperty } from "@nestjs/swagger";
+import { OrderRdo } from "./order.rdo";
 
-export class PurchasesWithPaginationRdo {
+export class OrdersWithPaginationRdo {
   @ApiProperty({
     description: 'List of purchases',
     example: ['purchase1', 'purchase2']
   })
   @Expose()
-  @Type(() => PurchaseRdo)
-  entities: PurchaseRdo[];
+  @Type(() => OrderRdo)
+  entities: OrderRdo[];
 
   @ApiProperty({
     description: 'Total page count of selected entity',

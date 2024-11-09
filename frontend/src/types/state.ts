@@ -8,7 +8,7 @@ import { Training, Trainings } from './trainings';
 import { PaginatedResult, TrainingPaginatedResult } from './paginatedResult';
 import { Query } from './query';
 import { Review } from './review';
-import { Purchase } from './purchase';
+import { Order, Purchase } from './purchase';
 
 export type MainProcess = {
   trainings: null | TrainingPaginatedResult<Training>;
@@ -26,6 +26,8 @@ export type ReviewProcess = {
 export type PurchaseProcess = {
   purchases: null | PaginatedResult<Purchase>;
   currentTrainingPurchase: null | Purchase;
+  coachOrders: null | PaginatedResult<Order>
+  loadinStatus: boolean;
 };
 
 export type TrainingProcess = {

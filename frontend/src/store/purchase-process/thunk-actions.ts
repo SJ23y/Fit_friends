@@ -3,7 +3,7 @@ import { AxiosInstance } from 'axios';
 import { Dispatch, State } from '../../types/state';
 import { ApiRoute } from '../../consts';
 import { PaginatedResult } from '../../types/paginatedResult';
-import { NewPurchase, Purchase } from '../../types/purchase';
+import { NewPurchase, Order, Purchase } from '../../types/purchase';
 import { createQueryString } from '../../utils';
 import { Query } from '../../types/query';
 
@@ -17,13 +17,13 @@ const uploadPurchases = createAsyncThunk<
   return data;
 });
 
-const uploadCoachPurchases = createAsyncThunk<
-  unknown,
+const uploadCoachOrders = createAsyncThunk<
+  PaginatedResult<Order>,
   Query,
   { dispatch: Dispatch; state: State; extra: AxiosInstance }
->('uploadCoachPurchases', async (query, { extra: api }) => {
-  await api.get<unknown>(`${ApiRoute.Purchases}/coach?${createQueryString(query)}`);
-
+>('uploadCoachOrders', async (query, { extra: api }) => {
+  const {data} = await api.get<PaginatedResult<Order>>(`${ApiRoute.Purchases}/orders?${createQueryString(query)}`);
+  return data;
 });
 
 const uploadPurchaseByTrainingId = createAsyncThunk<
@@ -67,5 +67,5 @@ export {
   addNewPurchase,
   uploadPurchaseByTrainingId,
   reducePurchaseTrainings,
-  uploadCoachPurchases
+  uploadCoachOrders
 };
