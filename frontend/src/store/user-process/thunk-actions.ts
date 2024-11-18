@@ -1,9 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosInstance } from 'axios';
 import { Dispatch, State } from '../../types/state';
-import { ApiRoute } from '../../consts';
+import { ApiRoute, AppRoute } from '../../consts';
 import { dropToken, saveToken } from '../../services/token';
 import { AuthData, CoachQuestionnaire, TokenData, UpdateUser, UserData, UserQuestionnaire } from '../../types/auth';
+import { redirectToRoute } from '../actions';
 
 
 const checkAuthorization = createAsyncThunk<
@@ -27,11 +28,12 @@ const registerUser = createAsyncThunk<
   UserData,
   FormData,
   { dispatch: Dispatch; state: State; extra: AxiosInstance }
->('registerUser', async (newUser, { extra: api }) => {
+>('registerUser', async (newUser, { dispatch, extra: api }) => {
 
   const { data } = await api.post<UserData>(ApiRoute.Register, newUser);
   const { data:{accessToken, refreshToken} } = await api.post<TokenData>(ApiRoute.Login, {email: newUser.get('email'), password: newUser.get('password')});
   saveToken(accessToken, refreshToken);
+  dispatch(redirectToRoute(AppRoute.Questionnaire));
   return data;
 });
 

@@ -18,7 +18,7 @@ function PersonalAccount(): JSX.Element {
               <div className="inner-page__wrapper">
                 <h1 className="visually-hidden">Личный кабинет</h1>
                 <UserInfoSection user={user} />
-                { user.role === Role.USER ? <UserAccountContent user={user} /> : <CoachAccountContent user={user} />}
+                { user.role === Role.USER ? <UserAccountContent user={user} /> : <CoachAccountContent  />}
               </div>
             </div>
           </section>

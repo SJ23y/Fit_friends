@@ -1,4 +1,4 @@
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { AppRoute, Role } from "../../consts";
 import { useAppSelector } from "../../hooks/use-app-dispatch"
 import { getUserInfo } from "../../store/user-process/selectors"
@@ -12,7 +12,7 @@ function Questionnaire() {
     return <Navigate to={AppRoute.Intro} />
   }
 
-  return user.role === Role.COACH ? <QuestionnaireCoach /> : <QuestionnaireUser />
+  return (user.role === Role.COACH) ? <QuestionnaireCoach /> : <QuestionnaireUser />
 }
 
 export default Questionnaire;

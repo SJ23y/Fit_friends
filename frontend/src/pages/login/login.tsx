@@ -1,9 +1,10 @@
 import { useNavigate } from "react-router-dom";
-import { ApiRoute, AppRoute, Role, Setting, ValidationSetting } from "../../consts";
+import { ApiRoute, AppRoute, Setting, ValidationSetting } from "../../consts";
 import { useAppDispatch, useAppSelector } from "../../hooks/use-app-dispatch";
-import { checkAuthentication, getUserError, getUserInfo } from "../../store/user-process/selectors";
+import { checkAuthentication, getUserError } from "../../store/user-process/selectors";
 import React, { useEffect, useRef } from "react";
 import { loginUser } from "../../store/user-process/thunk-actions";
+import { Helmet } from "react-helmet-async";
 
 function Login(): JSX.Element {
   const navigate = useNavigate();
@@ -33,6 +34,9 @@ function Login(): JSX.Element {
 
   return(
     <div className="wrapper">
+      <Helmet>
+        <title>Fitfriends | Вход</title>
+      </Helmet>
       {
       !isAuth &&
         <main>

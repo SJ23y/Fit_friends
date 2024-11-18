@@ -1,0 +1,65 @@
+name: fit_friends
+services:
+  fit_friends.postgres:
+    image: postgres:14-alpine
+    container_name: fit_friends.postgres
+    env_file:
+      - ./api.env
+    ports:
+      - 5431:5432
+    volumes:
+      - fit_friends.postgres:/postgresql/data
+
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+    networks:
+      - fit_friends
+
+  fit_friends.backend:
+    image: fitfriends-backend:v.1.0
+    container_name: fit_friends.backend
+    restart: always
+    depends_on:
+      - fit_friends.postgres
+    env_file:
+      - ./api.env
+      - ./account.env
+      - ./file.env
+    ports:
+      - 3000:3000
+    networks:
+      - fit_friends
+
+
+  fit_friends.frontend:
+    image: fitfriends-frontend:v.1.0
+    container_name: fit_friends.frontend
+    restart: always
+    depends_on:
+      - fit_friends.backend
+    ports:
+      - 80:80
+
+  fit_friends.pgadmin:
+    image: dpage/pgadmin4
+    container_name: fit_friends.pgadmin
+    env_file:
+      - "api.env"
+    ports:
+      - 8088:80
+    depends_on:
+      - fit_friends.postgres
+    networks:
+      - fit_friends
+
+volumes:
+  fit_friends.postgres:
+
+networks:
+  fit_friends:
+      driver: bridge

@@ -6,7 +6,6 @@ import { uploadTrainings } from "../../store/thunk-actions";
 import DetailedTrainingCard from "../../components/detailed-training-card/detailed-training-card";
 import EmptyListCard from "../../components/empty-list-card/empty-list-card";
 import TrainingFilterBoxCoach from "../../components/trainings-filter-box/trainings-filter-box-coach";
-import { changeQuery } from "../../store/main-process/main-process";
 import { getUserInfo } from "../../store/user-process/selectors";
 import { useNavigate } from "react-router-dom";
 
@@ -32,7 +31,6 @@ function MyTrainings(): JSX.Element {
     if (user?.role !== Role.COACH) {
       navigate(AppRoute.Main);
     } else {
-      dispatch(changeQuery({...query, filterBy: FilterBy.COACH}));
       dispatch(uploadTrainings({
         page: Setting.DefaultStartPage,
         count: Setting.TrainingsCatalogItemsPerPage,
@@ -44,7 +42,7 @@ function MyTrainings(): JSX.Element {
   }, [])
 
   useEffect(() => {
-    dispatch(uploadTrainings(query));
+    dispatch(uploadTrainings({...query, filterBy: FilterBy.COACH}));
   }, [query])
 
   return(
@@ -70,37 +68,44 @@ function MyTrainings(): JSX.Element {
 
                   <ul className="training-catalog__list">
                     {
-                      paginatedTrainings.entities.map((training) => (
-                        <li className="training-catalog__item">
-                          <DetailedTrainingCard training={training} key={training.id} isCoachCard={true} />
+                      paginatedTrainings.entities.map((training, index) => (
+                        <li className="training-catalog__item" key={`training-${training.id}-${index}`}>
+                          <DetailedTrainingCard training={training}  isCoachCard={true} />
                         </li>
                       ))
                     }
                   </ul>
-                  {
-                    paginatedTrainings?.currentPage !== paginatedTrainings?.totalPages &&
+
                     <div className="show-more training-catalog__show-more">
                       {
                         paginatedTrainings?.currentPage !== paginatedTrainings?.totalPages &&
-                        <button
-                          className="btn show-more__button show-more__button--more"
-                          type="button"
-                          onClick={showMoreButtonClickHandler}
-                        >
-                          Показать еще
-                        </button>
+                        <>
+                          <button
+                            className="btn show-more__button show-more__button--more"
+                            type="button"
+                            onClick={showMoreButtonClickHandler}
+                          >
+                            Показать еще
+                          </button>
+                        </>
                       }
                       {
-                        paginatedTrainings?.currentPage == paginatedTrainings?.totalPages &&
+                        paginatedTrainings?.currentPage &&
+                        paginatedTrainings.currentPage > 1 &&
+                        paginatedTrainings.currentPage === paginatedTrainings?.totalPages &&
                         <button
                           className="btn show-more__button show-more__button--to-top"
                           type="button"
+                          onClick={() => window.scrollTo({
+                            top: 0,
+                            left: 0,
+                            behavior: "smooth",
+                          })}
                         >
                           Вернуться в начало
                         </button>
                       }
                     </div>
-                  }
                 </div>
               }
               {

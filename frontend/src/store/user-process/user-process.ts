@@ -49,6 +49,7 @@ const userProcess = createSlice({
       })
       .addCase(registerUser.fulfilled, (state, action) => {
         state.authorizationStatus = AuthorizationStatus.Auth;
+        state.loadingStatus = false;
         state.user = action.payload;
         state.error = null;
       })

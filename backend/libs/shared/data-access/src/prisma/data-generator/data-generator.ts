@@ -1,4 +1,4 @@
-import { PrismaClient, User } from "@prisma/client";
+import { PrismaClient, Training, User } from "@prisma/client";
 import { generateMockTraining } from "../mock-data/mock-trainings";
 import { generateMockUser } from "../mock-data/mock-users";
 import { genSalt, hash } from 'bcrypt';
@@ -11,7 +11,7 @@ import { generateMockReview } from "../mock-data/mock-reviews";
 import { generateMockCoachQuestionnaire, generateMockUserQuestionnaire } from "../mock-data/mock-questionnaire";
 
 export class DataGenerator {
-  private trainingIds: string[] = [];
+  private createdTrainings: Training[] = [];
   private createdUsers: User[] = [];
 
   constructor(
@@ -36,7 +36,7 @@ export class DataGenerator {
           }
         }
       });
-      this.trainingIds.push(training.id);
+      this.createdTrainings.push(training);
     };
     console.log(`${this.trainings} trainings was created`);
   }
@@ -72,20 +72,21 @@ export class DataGenerator {
   private async generatePurchases(client: PrismaClient) {
     for (let i=0; i < this.purchaces; i++) {
       const user = getRanndomElement(this.createdUsers);
-      const trainingId = getRanndomElement(this.trainingIds);
+      const training = getRanndomElement(this.createdTrainings);
       const purchase = generateMockPurchase();
       await client.purchase.create({
           data: {
-            price: purchase.price,
+            price: training.price,
             trainCount: purchase.trainCount,
-            totalPrice: purchase.price * purchase.trainCount,
+            totalPrice: training.price * purchase.trainCount,
             paymentType: purchase.paymentType,
             type: purchase.type,
+            remainingTrainings: purchase.trainCount,
             user: {
               connect: {id: user.id}
             },
             train: {
-              connect: {id: trainingId}
+              connect: {id: training.id}
             }
           }
         })
@@ -96,8 +97,8 @@ export class DataGenerator {
   private async generateReviews(client: PrismaClient) {
     for (let i=0; i < this.reviews; i++) {
       const review = generateMockReview();
-      const trainingId = getRanndomElement(this.trainingIds)
-      const trainingRate = await client.training.findFirst({where: {id: trainingId}, select: {rate: true}});
+      const training = getRanndomElement(this.createdTrainings)
+      const trainingRate = await client.training.findFirst({where: {id: training.id}, select: {rate: true}});
       const newRate = (trainingRate && trainingRate.rate > 0) ? (trainingRate?.rate + review.rate) / 2 : review.rate;
       await client.review.create({
         data: {
@@ -107,12 +108,12 @@ export class DataGenerator {
             connect: {id: getRanndomElement(this.createdUsers).id}
           },
           train: {
-            connect: {id: trainingId}
+            connect: {id: training.id}
           }
         }
       });
       await client.training.update({
-        where: {id: trainingId},
+        where: {id: training.id},
         data: {
           id: undefined,
           title: undefined,

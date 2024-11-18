@@ -86,17 +86,27 @@ function TrainingFilterBoxCoachTemplate({ maxPrice, minPrice, maxCallories, minC
   }
 
   useEffect(() => {
-    dispatch(changeQuery({
-      ...query,
-      page: Setting.DefaultStartPage,
-      maxPrice: priceRange.maxPrice,
-      minPrice: priceRange.minPrice,
-      maxCallories: calloriesRange.maxCallories,
-      minCallories: calloriesRange.minCallories,
-      maxRating: ratingRange.maxRating,
-      minRating: ratingRange.minRating,
-      durations: durations
-    }))
+    if (
+      maxPrice !== priceRange.maxPrice ||
+      minPrice !== priceRange.minPrice ||
+      minCallories !== calloriesRange.minCallories ||
+      maxCallories !== calloriesRange.maxCallories ||
+      query.maxRating !== ratingRange.maxRating ||
+      query.minRating !== ratingRange.minRating
+    ) {
+        dispatch(changeQuery({
+        ...query,
+        page: Setting.DefaultStartPage,
+        maxPrice: priceRange.maxPrice,
+        minPrice: priceRange.minPrice,
+        maxCallories: calloriesRange.maxCallories,
+        minCallories: calloriesRange.minCallories,
+        maxRating: ratingRange.maxRating,
+        minRating: ratingRange.minRating,
+        durations: durations
+      }));
+    }
+
   }, [priceRange, calloriesRange, ratingRange, durations])
 
   return(

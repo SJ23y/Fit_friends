@@ -1,6 +1,7 @@
-import { duration } from "@mui/material";
+import { jwtDecode } from "jwt-decode";
 import { CoachQuestionnaire, UserQuestionnaire } from "./types/auth";
 import { Query } from "./types/query"
+import dayjs from "dayjs";
 
 export const createQueryString = ({
   count,
@@ -62,4 +63,11 @@ export const  isUserQuestionnaire = (questionnaire: UserQuestionnaire | CoachQue
 
 export const  isCoachQuestionnaire = (questionnaire: UserQuestionnaire | CoachQuestionnaire): questionnaire is CoachQuestionnaire => {
   return (questionnaire as CoachQuestionnaire).description !== null
+}
+
+export const isTokenExpired = (token: string) => {
+  const payload = jwtDecode(token);
+  if (payload.exp) {
+    return dayjs().isAfter(dayjs.unix(payload.exp));
+  }
 }

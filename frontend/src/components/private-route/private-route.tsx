@@ -1,4 +1,3 @@
-import IntroPage from '../../pages/intro/intro.page';
 import { useAppSelector } from '../../hooks/use-app-dispatch';
 import { checkAuthentication } from '../../store/user-process/selectors';
 import { Navigate } from 'react-router-dom';

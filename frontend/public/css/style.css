@@ -9808,10 +9808,6 @@ input:active + .custom-textarea__text {
   max-width: 256px;
 }
 
-.show-more__button--to-top {
-  display: none;
-}
-
 .gyms-catalog {
   display: -webkit-box;
   display: -ms-flexbox;

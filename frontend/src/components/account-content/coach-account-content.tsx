@@ -1,13 +1,9 @@
 import { memo } from "react"
-import { UserData } from "../../types/auth"
 import { Link } from "react-router-dom"
 import { AppRoute } from "../../consts"
 
-type CoachAccountContentProps = {
-  user: UserData
-}
 
-function CoachAccountContentTemplate({user}: CoachAccountContentProps): JSX.Element {
+function CoachAccountContentTemplate(): JSX.Element {
   return(
     <div className="inner-page__content">
                 <div className="personal-account-coach">
@@ -53,7 +49,7 @@ function CoachAccountContentTemplate({user}: CoachAccountContentProps): JSX.Elem
                           </picture>
                         </div>
                         {/*<!-- <p className="thumbnail-spec-gym__type">Ближайший зал</p> -->*/}
-                        <div className="thumbnail-spec-gym__header" align ="center">
+                        <div className="thumbnail-spec-gym__header">
                           <h3 className="thumbnail-spec-gym__title">Скоро тут будет интересно</h3>
                         </div>
                     </div>

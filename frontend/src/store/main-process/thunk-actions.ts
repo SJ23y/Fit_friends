@@ -41,6 +41,7 @@ const uploadPopularTrainings = createAsyncThunk<
   { dispatch: Dispatch; state: State; extra: AxiosInstance }
 >('uploadPopularTrainings', async (query, { extra: api }) => {
   const { data } = await api.get<TrainingPaginatedResult<Training>>(`${ApiRoute.Trainings}?${createQueryString(query)}`);
+  console.log('data from action:', data);
   return data.entities;
 });
 

@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import PrivateRoute from '../private-route/private-route';
 import { HelmetProvider } from 'react-helmet-async';
 import IntroPage from '../../pages/intro/intro.page';
@@ -21,6 +21,8 @@ import { getUserLoadingStatus } from '../../store/user-process/selectors';
 import Questionnaire from '../../pages/questionnaire/questuinaire';
 import { getTrainingLoadingStatus } from '../../store/training-process/selectors';
 import EditTrainingPage from '../../pages/edit-training-page/edit-training-page';
+import HistoryRouter from '../history-route/history-route';
+import browserHistory from '../../browser-history';
 
 function App(): JSX.Element {
   const userLoadingStatus = useAppSelector(getUserLoadingStatus);
@@ -35,7 +37,7 @@ function App(): JSX.Element {
       {
       !userLoadingStatus &&
       !trainingLoadingStatus &&
-      <BrowserRouter>
+      <HistoryRouter history={browserHistory}>
         <Routes>
           <Route path="" element={<IntroPage />} />
 
@@ -138,7 +140,7 @@ function App(): JSX.Element {
               }
           />
         </Routes>
-      </BrowserRouter>
+      </HistoryRouter>
     }
 
     </HelmetProvider>

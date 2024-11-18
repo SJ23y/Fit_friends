@@ -65,24 +65,35 @@ function TrainingCatalog(): JSX.Element {
                       ))
                     }
                   </ul>
-                  {
-                    paginatedTrainings?.currentPage !== paginatedTrainings?.totalPages &&
                     <div className="show-more training-catalog__show-more">
-                      <button
-                        className="btn show-more__button show-more__button--more"
-                        type="button"
-                        onClick={showMoreButtonClickHandler}
-                      >
-                        Показать еще
-                      </button>
-                      <button
-                        className="btn show-more__button show-more__button--to-top"
-                        type="button"
-                      >
-                        Вернуться в начало
-                      </button>
+                      {
+                        paginatedTrainings?.currentPage !== paginatedTrainings?.totalPages &&
+                          <button
+                            className="btn show-more__button show-more__button--more"
+                            type="button"
+                            onClick={showMoreButtonClickHandler}
+                          >
+                            Показать еще
+                          </button>
+                      }
+                      {
+                        paginatedTrainings?.currentPage &&
+                        paginatedTrainings.currentPage === paginatedTrainings?.totalPages &&
+                        paginatedTrainings.currentPage > 1 &&
+                        <button
+                          className="btn show-more__button show-more__button--to-top"
+                          type="button"
+                          onClick={() => window.scrollTo({
+                            top: 0,
+                            left: 0,
+                            behavior: "smooth"
+                          })}
+                        >
+                            Вернуться в начало
+
+                        </button>
+                      }
                     </div>
-                  }
                 </div>
               }
               {

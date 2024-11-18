@@ -11,7 +11,7 @@ export function generateMockPurchase(): Purchase {
     price: getRandomInteger(0, 5000),
     trainCount: getRandomInteger(1, 50),
     totalPrice: 0,
-    paymentType: getRanndomElement(Object.values(PaymentType))
-
+    paymentType: getRanndomElement(Object.values(PaymentType)),
+    remainingTrainings: 0
   }
 }

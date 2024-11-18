@@ -1,10 +1,11 @@
 import { useNavigate } from "react-router-dom";
-import { AppRoute, FilterBy, Setting, SortBy, SortDirection } from "../../consts";
+import { AppRoute, FilterBy, Setting } from "../../consts";
 import { useAppDispatch, useAppSelector } from "../../hooks/use-app-dispatch";
 import { getPurchases } from "../../store/purchase-process/selectors";
 import { uploadPurchases } from "../../store/purchase-process/thunk-actions";
 import React, { useEffect, useState } from "react";
 import DetailedTrainingCard from "../../components/detailed-training-card/detailed-training-card";
+import EmptyListCard from "../../components/empty-list-card/empty-list-card";
 
 function MyPurchases(): JSX.Element {
   const navigate = useNavigate();
@@ -103,10 +104,20 @@ function MyPurchases(): JSX.Element {
                     </li>
                   ))
                 }
+                {
+                  paginatedPurhases?.entities &&
+                  paginatedPurhases?.entities.length === 0 &&
+                  <div className="training-catalog">
+                    <EmptyListCard />
+                  </div>
+                }
               </ul>
-              {
-                paginatedPurhases?.currentPage !== paginatedPurhases?.totalPages &&
+
                 <div className="show-more my-purchases__show-more">
+                {
+                  paginatedPurhases?.totalPages !== undefined &&
+                  paginatedPurhases.totalPages > 1 &&
+                  paginatedPurhases?.currentPage !== paginatedPurhases?.totalPages &&
                   <button
                     className="btn show-more__button show-more__button--more"
                     type="button"
@@ -115,16 +126,25 @@ function MyPurchases(): JSX.Element {
                       Показать еще
 
                   </button>
-                  <button
-                    className="btn show-more__button show-more__button--to-top"
-                    type="button"
+                  }
+                  {
+                    paginatedPurhases?.currentPage &&
+                    paginatedPurhases.currentPage === paginatedPurhases?.totalPages &&
+                    paginatedPurhases.currentPage > 1 &&
+                    <button
+                      className="btn show-more__button show-more__button--to-top"
+                      type="button"
+                      onClick={() => window.scrollTo({
+                        top: 0,
+                        left: 0,
+                        behavior: "smooth",
+                      })}
+                    >
+                        Вернуться в начало
 
-                  >
-                      Вернуться в начало
-
-                  </button>
+                    </button>
+                  }
                 </div>
-              }
             </div>
           </div>
         </section>

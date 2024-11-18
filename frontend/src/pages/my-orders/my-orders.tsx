@@ -1,15 +1,18 @@
 import { useNavigate } from "react-router-dom";
-import { AppRoute, Setting, SortBy, SortDirection } from "../../consts";
+import { AppRoute, Role, Setting, SortBy, SortDirection } from "../../consts";
 import { useAppDispatch, useAppSelector } from "../../hooks/use-app-dispatch";
 import { getOrders } from "../../store/purchase-process/selectors";
 import { uploadCoachOrders, uploadPurchases } from "../../store/purchase-process/thunk-actions";
 import React, { useEffect, useState } from "react";
 import DetailedTrainingCard from "../../components/detailed-training-card/detailed-training-card";
+import { getUserInfo } from "../../store/user-process/selectors";
+import EmptyListCard from "../../components/empty-list-card/empty-list-card";
 
 
 function MyOrders(): JSX.Element {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const user = useAppSelector(getUserInfo);
   const [currentSorting, setCurrentSorting] = useState({sortBy: SortBy.DATE, sortDirection: SortDirection.DESC});
   const [totalPriseSorting, setTotalPriceSorting] = useState({status: false, sortDirection: SortDirection.DESC});
   const [totalCountSorting, setTotalCountSorting] = useState({status: false, sortDirection: SortDirection.DESC});
@@ -72,12 +75,16 @@ function MyOrders(): JSX.Element {
   }
 
   useEffect(() => {
+    if (user?.role !== Role.COACH) {
+      navigate(AppRoute.Main);
+    } else {
     dispatch(uploadCoachOrders({
       page: Setting.DefaultStartPage,
       count: Setting.OrdersPerPageCount,
       sortBy: Setting.DefaultSortBy,
       sortDirection: Setting.DefaultSortDirection
     }))
+  }
   }, []);
 
   useEffect(() => {
@@ -166,25 +173,47 @@ function MyOrders(): JSX.Element {
                     />
                   ))
                 }
+                {
+                  paginatedOrders?.entities &&
+                  paginatedOrders?.entities.length === 0 &&
+                  <div className="training-catalog">
+                    <EmptyListCard />
+                  </div>
+                }
               </ul>
-              {
-                paginatedOrders?.currentPage !== paginatedOrders?.totalPages &&
+
                 <div className="show-more my-orders__show-more">
-                  <button
-                    className="btn show-more__button show-more__button--more"
-                    type="button"
-                    onClick={showMoreButtonClickHandler}
-                  >
-                    Показать еще
-                  </button>
-                  <button
-                    className="btn show-more__button show-more__button--to-top"
-                    type="button"
-                  >
-                    Вернуться в начало
-                  </button>
+                  {
+                    paginatedOrders?.totalPages !== undefined &&
+                    paginatedOrders.totalPages > 1 &&
+                    paginatedOrders?.currentPage !== paginatedOrders?.totalPages &&
+
+                    <button
+                      className="btn show-more__button show-more__button--more"
+                      type="button"
+                      onClick={showMoreButtonClickHandler}
+                    >
+                      Показать еще
+                    </button>
+                  }
+                  {
+                    paginatedOrders?.currentPage &&
+                    paginatedOrders.currentPage === paginatedOrders?.totalPages &&
+                    paginatedOrders.currentPage > 1 &&
+                    <button
+                      className="btn show-more__button show-more__button--to-top"
+                      type="button"
+                      onClick={() => window.scrollTo({
+                        top: 0,
+                        left: 0,
+                        behavior: "smooth",
+                      })}
+                    >
+                        Вернуться в начало
+
+                    </button>
+                  }
                 </div>
-              }
             </div>
           </div>
         </section>

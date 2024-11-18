@@ -5,6 +5,7 @@ import { checkAuthentication } from "../../store/user-process/selectors";
 import { ApiRoute, AppRoute, Gender, LOCATIONS, Role, Setting, ValidationSetting } from "../../consts";
 import { registerUser } from "../../store/user-process/thunk-actions";
 import CustomSelect from "../../components/custom-select/custom-select";
+import { Helmet } from "react-helmet-async";
 function Register(): JSX.Element {
   const navigate = useNavigate();
   const [avatar, setAvatar] = useState<string | null>(null);
@@ -35,12 +36,14 @@ const formSubmitHandler = (evt: React.FormEvent<HTMLFormElement>) => {
       formData.set('location', location ?? '');
       formData.delete('user-agreement');
       dispatch(registerUser(formData));
-      navigate(AppRoute.Questionnaire);
     }
   }
 
   return(
     <div className="wrapper">
+      <Helmet>
+        <title>Fitfriends | Регистрация</title>
+      </Helmet>
       {
         !isAuth &&
         <main>
