@@ -2,6 +2,7 @@ import { jwtDecode } from "jwt-decode";
 import { CoachQuestionnaire, UserQuestionnaire } from "./types/auth";
 import { Query } from "./types/query"
 import dayjs from "dayjs";
+import { Action } from "@reduxjs/toolkit";
 
 export const createQueryString = ({
   count,
@@ -71,3 +72,15 @@ export const isTokenExpired = (token: string) => {
     return dayjs().isAfter(dayjs.unix(payload.exp));
   }
 }
+
+export const getRandomInteger = (a: number, b: number) => {
+  const lower = Math.ceil(Math.min(a, b));
+  const upper = Math.floor(Math.max(a, b));
+  const result = Math.random() * (upper - lower + 1) + lower;
+  return Math.floor(result);
+};
+
+
+export const getRanndomElement = <T>(arr: T[]) => arr[getRandomInteger(0, arr.length - 1)];
+
+export const extactActionsType = (actions: Action<string>[]) => actions.map(({ type }) => type);

@@ -109,7 +109,6 @@ export class TrainingController {
       ],
       fileIsRequired: false})) file: Express.Multer.File) {
 
-    console.log('file', file);
     const newTraining = await this.trainingService.updateTraining(trainingId, dto, user, file);
     return fillDto(TrainingRdo, newTraining);
   }

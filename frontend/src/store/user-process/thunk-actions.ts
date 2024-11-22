@@ -19,7 +19,7 @@ const checkAuthorization = createAsyncThunk<
     const { data:{accessToken, refreshToken} } = await api.post<TokenData>(ApiRoute.Refresh);
     saveToken(accessToken, refreshToken);
   } finally {
-     const { data } = await api.post<UserData>(ApiRoute.Check);
+    const { data } = await api.post<UserData>(ApiRoute.Check);
     return data;
   }
 });
@@ -31,8 +31,7 @@ const registerUser = createAsyncThunk<
 >('registerUser', async (newUser, { dispatch, extra: api }) => {
 
   const { data } = await api.post<UserData>(ApiRoute.Register, newUser);
-  const { data:{accessToken, refreshToken} } = await api.post<TokenData>(ApiRoute.Login, {email: newUser.get('email'), password: newUser.get('password')});
-  saveToken(accessToken, refreshToken);
+  dispatch(loginUser( {email: <string>newUser.get('email'), password: <string>newUser.get('password')}))
   dispatch(redirectToRoute(AppRoute.Questionnaire));
   return data;
 });
@@ -56,7 +55,6 @@ const updateUser = createAsyncThunk<
   return data;
 });
 
-
 const loginUser = createAsyncThunk<
   UserData & TokenData,
   AuthData,
@@ -77,6 +75,7 @@ const logoutUser = createAsyncThunk<
 >('logoutUser', async (_arg, { extra: api }) => {
   await api.delete(ApiRoute.Logout);
   dropToken();
+  return;
 });
 
 const getUserById = createAsyncThunk<

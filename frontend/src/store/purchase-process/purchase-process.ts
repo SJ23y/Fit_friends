@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { NameSpace /*Setting, SortBy, SortDirection*/ } from '../../consts';
+import { NameSpace } from '../../consts';
 import { PurchaseProcess } from '../../types/state';
 import {
   addNewPurchase,
@@ -12,7 +12,7 @@ import {
 const initialState: PurchaseProcess = {
   purchases: null,
   currentTrainingPurchase: null,
-  loadinStatus: false,
+  loadingStatus: false,
   coachOrders: null
 };
 
@@ -23,7 +23,7 @@ const purchaseProcess = createSlice({
   extraReducers(builder) {
     builder
       .addCase(uploadPurchases.pending, (state) => {
-        state.loadinStatus = true;
+        state.loadingStatus = true;
       })
       .addCase(uploadPurchases.fulfilled, (state, action) => {
         if (state.purchases && action.payload.currentPage > 1) {
@@ -34,37 +34,37 @@ const purchaseProcess = createSlice({
         } else {
           state.purchases = action.payload;
         }
-        state.loadinStatus = false;
+        state.loadingStatus = false;
       })
       .addCase(addNewPurchase.pending, (state) => {
-        state.loadinStatus = true;
+        state.loadingStatus = true;
       })
       .addCase(addNewPurchase.fulfilled, (state, action) => {
         if (state.purchases) {
           state.purchases.entities = [action.payload, ...state.purchases.entities];
         }
         state.currentTrainingPurchase = action.payload;
-        state.loadinStatus = false;
+        state.loadingStatus = false;
       })
       .addCase(addNewPurchase.rejected, (state) => {
-        state.loadinStatus = false;
+        state.loadingStatus = false;
       })
       .addCase(uploadPurchaseByTrainingId.pending, (state) => {
-        state.loadinStatus = true
+        state.loadingStatus = true
       })
       .addCase(uploadPurchaseByTrainingId.fulfilled, (state, action) => {
         state.currentTrainingPurchase = action.payload;
-        state.loadinStatus = false
+        state.loadingStatus = false
       })
       .addCase(uploadPurchaseByTrainingId.rejected, (state) => {
         state.currentTrainingPurchase = null;
-        state.loadinStatus = false;
+        state.loadingStatus = false;
       })
       .addCase(reducePurchaseTrainings.fulfilled, (state, action) => {
         state.currentTrainingPurchase = action.payload;
       })
       .addCase(uploadCoachOrders.pending, (state) => {
-        state.loadinStatus = true
+        state.loadingStatus = true
       })
       .addCase(uploadCoachOrders.fulfilled, (state, action) => {
         if (state.coachOrders && action.payload.currentPage > 1) {
@@ -75,11 +75,11 @@ const purchaseProcess = createSlice({
         } else {
           state.coachOrders = action.payload;
         }
-        state.loadinStatus = false
+        state.loadingStatus = false
       })
       .addCase(uploadCoachOrders.rejected, (state) => {
         state.currentTrainingPurchase = null;
-        state.loadinStatus = false;
+        state.loadingStatus = false;
       })
   },
 });

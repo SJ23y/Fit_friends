@@ -14,7 +14,6 @@ const trainingProcess = createSlice({
   initialState,
   reducers: {
     changeCurrentTraining: (state, action: PayloadAction<Training>) => {
-      console.log('[Training process] action.payload', action.payload);
       state.currentTraining = action.payload;
     },
   },
@@ -37,6 +36,9 @@ const trainingProcess = createSlice({
         if (action.payload) {
           state.currentTraining = action.payload;
         }
+      })
+      .addCase(addNewTraining.rejected, (state) => {
+        state.loadingStatus = false;
       })
       .addCase(updateTraining.pending, (state) => {
         state.loadingStatus = true;

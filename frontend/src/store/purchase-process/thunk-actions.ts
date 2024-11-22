@@ -13,7 +13,6 @@ const uploadPurchases = createAsyncThunk<
   { dispatch: Dispatch; state: State; extra: AxiosInstance }
 >('uploadPurchases', async (query, { extra: api }) => {
   const { data } = await api.get<PaginatedResult<Purchase>>(`${ApiRoute.Purchases}/user?${createQueryString(query)}`);
-  console.log('Purchases data: ', data);
   return data;
 });
 
@@ -32,7 +31,6 @@ const uploadPurchaseByTrainingId = createAsyncThunk<
   { dispatch: Dispatch; state: State; extra: AxiosInstance }
 >('uploadPurchaseByTrainingId', async (trainingId, { extra: api }) => {
   const { data } = await api.get<Purchase>(`${ApiRoute.Purchases}/${trainingId}`);
-  console.log('Purchase data: ', data);
   return data;
 });
 
@@ -58,7 +56,6 @@ const reducePurchaseTrainings = createAsyncThunk<
   { dispatch: Dispatch; state: State; extra: AxiosInstance }
 >('reducePurchaseTrainings', async ({purchaseId, trainId, trainCount}, { extra: api }) => {
   const { data } = await api.patch<Purchase>(`${ApiRoute.Purchases}/${purchaseId}`, {trainId, trainCount});
-  console.log('Purchase data: ', data);
   return data;
 });
 

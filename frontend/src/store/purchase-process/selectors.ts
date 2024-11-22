@@ -10,8 +10,12 @@ const getOrders = (state: Pick<State, NameSpace.PURCHASE>) =>
 const getTrainingPurchase = (state: Pick<State, NameSpace.PURCHASE>) =>
   state[NameSpace.PURCHASE].currentTrainingPurchase;
 
+const getPurchaseLoadingStatus = (state: Pick<State, NameSpace.PURCHASE>) =>
+  state[NameSpace.PURCHASE].loadingStatus;
+
 export {
   getPurchases,
   getTrainingPurchase,
-  getOrders
+  getOrders,
+  getPurchaseLoadingStatus
 };

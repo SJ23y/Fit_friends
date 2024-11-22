@@ -2,10 +2,10 @@ import {  Setting } from "../../consts";
 import { useAppDispatch, useAppSelector } from "../../hooks/use-app-dispatch";
 import { getQuery, getTrainings } from "../../store/main-process/selectors";
 import { useEffect } from "react";
-import { uploadTrainings } from "../../store/thunk-actions";
 import DetailedTrainingCard from "../../components/detailed-training-card/detailed-training-card";
 import EmptyListCard from "../../components/empty-list-card/empty-list-card";
 import TrainingFilterBoxUser from "../../components/trainings-filter-box/trainings-filter-box-user";
+import { uploadTrainings } from "../../store/main-process/thunk-actions";
 
 function TrainingCatalog(): JSX.Element {
   const dispatch = useAppDispatch();

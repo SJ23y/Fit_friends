@@ -2,12 +2,12 @@ import {  AppRoute, FilterBy, Role, Setting } from "../../consts";
 import { useAppDispatch, useAppSelector } from "../../hooks/use-app-dispatch";
 import { getQuery, getTrainings } from "../../store/main-process/selectors";
 import { useEffect } from "react";
-import { uploadTrainings } from "../../store/thunk-actions";
 import DetailedTrainingCard from "../../components/detailed-training-card/detailed-training-card";
 import EmptyListCard from "../../components/empty-list-card/empty-list-card";
 import TrainingFilterBoxCoach from "../../components/trainings-filter-box/trainings-filter-box-coach";
 import { getUserInfo } from "../../store/user-process/selectors";
 import { useNavigate } from "react-router-dom";
+import { uploadTrainings } from "../../store/main-process/thunk-actions";
 
 
 function MyTrainings(): JSX.Element {

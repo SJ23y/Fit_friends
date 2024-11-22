@@ -1,27 +1,92 @@
-import { CITIES, DEFAULT_CITY, SortBy } from '../../consts';
-import offers from '../../mocks/offers';
-import { toggleFavoriteStatus, uploadOffers } from './thunk-actions';
-import { changeCity, changeSortBy, mainProcess } from './main-process';
+import { Setting } from '../../consts';
+import { generateMockTraining } from '../../mock-data/mock-trainings';
+import {  changeQuery, mainProcess } from './main-process';
 import { describe, it, expect } from 'vitest';
+import { uploadFeaturedTrainings, uploadPopularTrainings, uploadSpecialTrainings, uploadTrainings } from './thunk-actions';
+import { faker } from '@faker-js/faker';
 
 describe('Main-process slice', () => {
   const initialState = {
-    city: DEFAULT_CITY,
-    initialOffers: null,
-    sortBy: SortBy.Popular,
-    isLoading: false,
+    trainings: null,
+    featuredTrainings: null,
     errorStatus: false,
-    favoriteOffers: null,
+    specialTrainings: null,
+    popularTrainings: null,
+    query: {
+      count: Setting.TrainingsCatalogItemsPerPage,
+      sortBy: Setting.DefaultSortBy,
+      sortDirection: Setting.DefaultSortDirection,
+      page: Setting.DefaultStartPage,
+      maxPrice: null,
+      minPrice: null,
+      maxCallories: null,
+      minCallories: null,
+      maxRating: null,
+      minRating: null,
+      type: null,
+      free: null,
+      durations: null
+    }
   };
 
   const state = {
-    city: CITIES[2],
-    initialOffers: offers,
-    sortBy: SortBy.PriceDown,
-    isLoading: false,
-    errorStatus: false,
-    favoriteOffers: null,
+      trainings: {
+        entities: Array.from({length: 5}, () => generateMockTraining()),
+        totalPages: 2,
+        currentPage: 1,
+        totalItems: 10,
+        itemsPerPage: 6,
+        minPrice: 1000,
+        maxPrice: 3000,
+        minCallories: 1000,
+        maxCallories: 2000
+      },
+      featuredTrainings: Array.from({length: 3}, () => generateMockTraining()),
+      errorStatus: false,
+      specialTrainings: Array.from({length: 3}, () => generateMockTraining()),
+      popularTrainings: Array.from({length: 3}, () => generateMockTraining()),
+      query: {
+        count: Setting.TrainingsCatalogItemsPerPage,
+        sortBy: Setting.DefaultSortBy,
+        sortDirection: Setting.DefaultSortDirection,
+        page: Setting.DefaultStartPage,
+        maxPrice: null,
+        minPrice: null,
+        maxCallories: null,
+        minCallories: null,
+        maxRating: null,
+        minRating: null,
+        type: null,
+        free: null,
+        durations: null
+      }
+    }
+
+    let newTrainings = {
+      entities: Array.from({length: 3}, () => generateMockTraining()),
+      totalPages: faker.number.int(),
+      currentPage: faker.number.int(),
+      totalItems: faker.number.int(),
+      itemsPerPage: faker.number.int(),
+      minPrice: faker.number.int(),
+      maxPrice: faker.number.int(),
+      minCallories: faker.number.int(),
+      maxCallories: faker.number.int()
   };
+
+  beforeEach(() => {
+    newTrainings = {
+      entities: Array.from({length: 3}, () => generateMockTraining()),
+      totalPages: faker.number.int(),
+      currentPage: faker.number.int(),
+      totalItems: faker.number.int(),
+      itemsPerPage: faker.number.int(),
+      minPrice: faker.number.int(),
+      maxPrice: faker.number.int(),
+      minCallories: faker.number.int(),
+      maxCallories: faker.number.int()
+    };
+  })
 
   it('Should return initial state with empty action', () => {
     const emptyAction = { type: '' };
@@ -39,82 +104,46 @@ describe('Main-process slice', () => {
     expect(result).toEqual(initialState);
   });
 
-  it('Should change sortBy', () => {
-    const result = mainProcess.reducer(
-      state,
-      changeSortBy({ sortBy: SortBy.Rating }),
-    );
-
-    expect(result.sortBy).toBe(SortBy.Rating);
-  });
-
-  it('Should change city', () => {
-    const result = mainProcess.reducer(state, changeCity({ city: CITIES[4] }));
-
-    expect(result.city).toBe(CITIES[4]);
-  });
-
-  it('Should set isLoading to true with uploadOffers.pending', () => {
-    const result = mainProcess.reducer(state, uploadOffers.pending);
-
-    expect(result.isLoading).toBe(true);
-  });
-
-  it('Should set isLoading to false and set initialOffers to offers.slice(3) with uploadOffers.fulfilled', () => {
-    const expectedValue = offers.slice(3);
+  it('Should change query', () => {
+    const newQuery = {
+      ...state.query,
+      minCallories: 1000,
+      maxRating: 3,
+      minRating: 1,
+    }
 
     const result = mainProcess.reducer(
       state,
-      uploadOffers.fulfilled(expectedValue, '', undefined),
+      changeQuery(newQuery),
     );
 
-    expect(result.initialOffers).toEqual(expectedValue);
-    expect(result.isLoading).toBe(false);
+    expect(result.query).toEqual(newQuery);
   });
 
-  it('Should set isLoading to false and set errorStatus to true with uploadOffers.rejected', () => {
-    const result = mainProcess.reducer(state, uploadOffers.rejected);
-
-    expect(result.errorStatus).toBe(true);
-    expect(result.isLoading).toBe(false);
-  });
-
-  it('Should replace currentOffer in initialOffers and favoriteOffers with toggleFavoriteStatus.fulfilled', () => {
-    const currentOffer = {
-      id: '6af6f711-c28d-4121-82cd-e0b462a27f00',
-      title: 'Beautiful studio at great location',
-      type: 'apartment',
-      price: 120,
-      city: {
-        name: 'Amsterdam',
-        location: {
-          latitude: 52.35514938496378,
-          longitude: 4.673877537499948,
-          zoom: 8,
-        },
-      },
-      location: {
-        latitude: 52.3809553943508,
-        longitude: 4.939309666406198,
-        zoom: 8,
-      },
-      isFavorite: true,
-      isPremium: false,
-      rating: 4,
-      previewImage: 'img/apartment-01.jpg',
-    };
-
+  it('Should set trainings to newTrainings.entities with uploadTrainings.fulfilled', () => {
     const result = mainProcess.reducer(
       state,
-      toggleFavoriteStatus.fulfilled(currentOffer, '', {
-        offerId: '1',
-        status: 0,
-      }),
+      uploadTrainings.fulfilled(newTrainings, '', state.query),
     );
 
-    expect(result.initialOffers?.[0]).toEqual(currentOffer);
-    expect(
-      result.favoriteOffers?.find((offer) => offer.id === currentOffer.id),
-    ).toEqual(currentOffer);
+    expect(result.trainings).toEqual({...newTrainings, entities: [...state.trainings.entities, ...newTrainings.entities]});
+  });
+
+  it('Should set featuredTrainings to newTrainings to true with uploadFeaturedTrainings.fulfilled', () => {
+    const result = mainProcess.reducer(state, uploadFeaturedTrainings.fulfilled(newTrainings.entities, '', initialState.query));
+
+    expect(result.featuredTrainings).toEqual(newTrainings.entities);
+  });
+
+  it('Should set popularTrainings to newTrainings.entities to true with uploadPopularTrainings.fulfilled', () => {
+    const result = mainProcess.reducer(state, uploadPopularTrainings.fulfilled(newTrainings.entities, '', initialState.query));
+
+    expect(result.popularTrainings).toEqual(newTrainings.entities);
+  });
+
+  it('Should set specialTrainings to newTrainings.entities to true with uploadSpecialTrainings.fulfilled', () => {
+    const result = mainProcess.reducer(state, uploadSpecialTrainings.fulfilled(newTrainings.entities, '', initialState.query));
+
+    expect(result.specialTrainings).toEqual(newTrainings.entities);
   });
 });

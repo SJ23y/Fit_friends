@@ -53,11 +53,12 @@ export const getRandomInteger = (a: number, b: number) => {
   return Math.floor(result);
 };
 
+
+export const getRanndomElement = <T>(arr: T[]) => arr[getRandomInteger(0, arr.length - 1)];
+
 export const  isUserQuestionnaire = (questionnaire: UserQuestionnarie | CoachQuestionnarie): questionnaire is UserQuestionnarie => {
   return (questionnaire as UserQuestionnarie).trainDuration !== undefined
 }
-export const getRanndomElement = <T>(arr: T[]) => arr[getRandomInteger(0, arr.length - 1)];
-
 /*
 export function getRabbitMqConnectionString({user, password, host, port}) {
   console.log(`amqp://${user}:${password}@${host}:${port}`);

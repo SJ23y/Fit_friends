@@ -1,80 +1,88 @@
-import { NameSpace, SortBy } from '../../consts';
-import offers from '../../mocks/offers';
-import {
-  getCurrentCity,
-  getErrorStatus,
-  getFavoriteOffers,
-  getInitialOffers,
-  getLoadingStatus,
-  getSortBy,
-} from './selectors';
+import { NameSpace, Setting } from '../../consts';
+import { generateMockTraining } from '../../mock-data/mock-trainings';
+import { getErrorStatus, getFeaturedTrainings, getPopularlTrainings, getQuery, getSpecialTrainings, getTrainings } from './selectors';
 
 describe('Main-process selectors', () => {
   const state = {
-    [NameSpace.OFFERS]: {
-      city: 'Paris',
-      initialOffers: offers,
-      offers: offers,
-      sortBy: SortBy.Popular,
-      isLoading: false,
+    [NameSpace.MAIN]: {
+      trainings: {
+        entities: Array.from({length: 5}, () => generateMockTraining()),
+        totalPages: 2,
+        currentPage: 1,
+        totalItems: 10,
+        itemsPerPage: 6,
+        minPrice: 1000,
+        maxPrice: 3000,
+        minCallories: 1000,
+        maxCallories: 2000
+      },
+      featuredTrainings: Array.from({length: 3}, () => generateMockTraining()),
       errorStatus: false,
-      favoriteOffers: offers,
+      specialTrainings: Array.from({length: 3}, () => generateMockTraining()),
+      popularTrainings: Array.from({length: 3}, () => generateMockTraining()),
+      query: {
+        count: Setting.TrainingsCatalogItemsPerPage,
+        sortBy: Setting.DefaultSortBy,
+        sortDirection: Setting.DefaultSortDirection,
+        page: Setting.DefaultStartPage,
+        maxPrice: null,
+        minPrice: null,
+        maxCallories: null,
+        minCallories: null,
+        maxRating: null,
+        minRating: null,
+        type: null,
+        free: null,
+        durations: null
+      }
     },
   };
 
-  it('Should return SorBy from the State', () => {
-    const { sortBy } = state[NameSpace.OFFERS];
+  it('Should return trainings from the State', () => {
+    const { trainings } = state[NameSpace.MAIN];
 
-    const result = getSortBy(state);
+    const result = getTrainings(state);
 
-    expect(result).toBe(sortBy);
+    expect(result).toEqual(trainings);
   });
 
-  it('Should return initialOffers from the State', () => {
-    const { initialOffers } = state[NameSpace.OFFERS];
+  it('Should return specialTrainings from the State', () => {
+    const { specialTrainings } = state[NameSpace.MAIN];
 
-    const result = getInitialOffers(state);
+    const result = getSpecialTrainings(state);
 
-    expect(result).toEqual(initialOffers);
+    expect(result).toEqual(specialTrainings);
   });
 
-  it('Should return offers from the State', () => {
-    const { offers: filteredOffers } = state[NameSpace.OFFERS];
+  it('Should return popularTrainings from the State', () => {
+    const { popularTrainings } = state[NameSpace.MAIN];
 
-    const result = getInitialOffers(state);
+    const result = getPopularlTrainings(state);
 
-    expect(result).toEqual(filteredOffers);
+    expect(result).toEqual(popularTrainings);
   });
 
-  it('Should return loadingStatus from the State', () => {
-    const { isLoading } = state[NameSpace.OFFERS];
+ it('Should return featuredTrainings from the State', () => {
+    const { featuredTrainings } = state[NameSpace.MAIN];
 
-    const result = getLoadingStatus(state);
+    const result = getFeaturedTrainings(state);
 
-    expect(result).toBe(isLoading);
+    expect(result).toEqual(featuredTrainings);
   });
 
-  it('Should return loadingStatus from the State', () => {
-    const { city } = state[NameSpace.OFFERS];
+  it('Should return query from the State', () => {
+    const { query } = state[NameSpace.MAIN];
 
-    const result = getCurrentCity(state);
+    const result = getQuery(state);
 
-    expect(result).toBe(city);
+    expect(result).toEqual(query);
   });
 
   it('Should return errorStatus from the State', () => {
-    const { errorStatus } = state[NameSpace.OFFERS];
+    const { errorStatus } = state[NameSpace.MAIN];
 
     const result = getErrorStatus(state);
 
     expect(result).toBe(errorStatus);
-  });
-
-  it('Should return loadingStatus from the State', () => {
-    const { favoriteOffers } = state[NameSpace.OFFERS];
-
-    const result = getFavoriteOffers(state);
-
-    expect(result).toEqual(favoriteOffers);
   });
 });

@@ -11,7 +11,8 @@ export type Purchase = {
   totalPrice: number;
   paymentType: PaymentType;
   createdAt: Date;
-  train?: Training
+  train?: Training,
+  remainingTrainings?: number
 }
 
 export type Order = {

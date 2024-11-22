@@ -23,10 +23,12 @@ import { getTrainingLoadingStatus } from '../../store/training-process/selectors
 import EditTrainingPage from '../../pages/edit-training-page/edit-training-page';
 import HistoryRouter from '../history-route/history-route';
 import browserHistory from '../../browser-history';
+import { getPurchaseLoadingStatus } from '../../store/purchase-process/selectors';
 
 function App(): JSX.Element {
   const userLoadingStatus = useAppSelector(getUserLoadingStatus);
   const trainingLoadingStatus = useAppSelector(getTrainingLoadingStatus);
+  const purchaseLoadingStatus = useAppSelector(getPurchaseLoadingStatus);
 
   if ((userLoadingStatus || trainingLoadingStatus)) {
     return <span>Loading ...</span>
@@ -37,6 +39,7 @@ function App(): JSX.Element {
       {
       !userLoadingStatus &&
       !trainingLoadingStatus &&
+      !purchaseLoadingStatus &&
       <HistoryRouter history={browserHistory}>
         <Routes>
           <Route path="" element={<IntroPage />} />

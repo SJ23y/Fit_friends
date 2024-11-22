@@ -35,7 +35,21 @@ const userProcess = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.authorizationStatus = AuthorizationStatus.Auth;
-        state.user = action.payload;
+        state.user = {
+          "id": action.payload.id,
+          "email": action.payload.email,
+          "name": action.payload.name,
+          "password": action.payload.password,
+          "avatar": action.payload.avatar,
+          "gender": action.payload.gender,
+          "birthDate": action.payload.birthDate,
+          "description": action.payload.description,
+          "location": action.payload.location,
+          "questionnaire": action.payload.questionnaire,
+          "role": action.payload.role,
+          "backgroundImage": action.payload.backgroundImage,
+          "trainings": action.payload.trainings
+        };
         state.error = null;
         state.loadingStatus = false;
       })

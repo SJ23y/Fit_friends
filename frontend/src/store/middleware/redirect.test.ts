@@ -29,11 +29,11 @@ describe('Redirect middleware', () => {
   });
 
   it('Should redirect to /favorites with redirectToRoute action', () => {
-    const redirectAction = redirectToRoute(AppRoute.Favorites);
+    const redirectAction = redirectToRoute(AppRoute.Main);
 
     store.dispatch(redirectAction);
 
-    expect(browserHistory.location.pathname).toBe(AppRoute.Favorites);
+    expect(browserHistory.location.pathname).toBe(AppRoute.Main);
   });
 
   it('Should not redirect to /login with empty action', () => {

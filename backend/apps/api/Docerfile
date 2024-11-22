@@ -4,7 +4,9 @@ WORKDIR /opt/readme-blog
 COPY ./dist/apps/api/package.json .
 RUN npm install --omit=dev
 COPY ./dist/apps/api/assets/prisma/schema.prisma ./schema.prisma
+COPY ./dist/apps/api/assets/prisma/migrations ./migrations
+COPY ./dist/apps/api/assets/static ./static
 RUN npx prisma generate --schema schema.prisma
 RUN cp -R ../../../../../node_modules/.prisma ./node_modules && rm -rf .../../../../../node_modules
 COPY ./dist/apps/api .
-CMD ["sh","-c","npx prisma migrate dev --schema ./schema.prisma --name 'initial migration' && node main.js"]
+CMD ["sh","-c","npx prisma migrate deploy --schema ./schema.prisma && node main.js"]

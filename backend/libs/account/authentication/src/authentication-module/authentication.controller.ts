@@ -65,6 +65,37 @@ export class AuthenticationController {
   }
 
   @ApiResponse({
+    status: HttpStatus.OK,
+    description: AuthenticationMessages.UserCreated
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: AuthenticationMessages.UserFound
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: AuthenticationMessages.Unauthorized
+  })
+  @UseInterceptors(FileInterceptor('avatar'))
+  @UseGuards(JwtAuthGuard)
+  @Post('user/update')
+  public async update(
+    @Body() dto: UpdateUserDto,
+    @Req() {user:payload}: RequestWithTokenPayload,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({ maxSize: 1000000 }),
+          new FileTypeValidator({ fileType: '.(png|jpeg|jpg)' }),
+        ],
+        fileIsRequired: false
+      }),
+    ) file: Express.Multer.File) {
+    const user = await this.authenticationService.update(dto, file, payload.sub);
+    return fillDto(UserRdo, user.toPOJO());
+  }
+
+  @ApiResponse({
     type: LoggedUserRdo,
     status: HttpStatus.OK,
     description: AuthenticationMessages.LoggedSuccess
@@ -80,37 +111,6 @@ export class AuthenticationController {
     const userToken = await this.authenticationService.createUserToken(user);
 
     return fillDto(LoggedUserRdo, {...user.toPOJO(), ...userToken});
-  }
-
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: AuthenticationMessages.PasswordUpdated
-  })
-  @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
-    description: AuthenticationMessages.UserNotFound
-  })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: AuthenticationMessages.Unauthorized
-  })
-  @UseGuards(JwtAuthGuard)
-  @Post('user/update')
-  public async update(
-    @Body() dto: UpdateUserDto,
-    @UploadedFile(
-      new ParseFilePipe({
-        validators: [
-          new MaxFileSizeValidator({ maxSize: 1000000 }),
-          new FileTypeValidator({ fileType: '.(png|jpeg|jpg)' }),
-        ],
-        fileIsRequired: false
-      }),
-    ) file: Express.Multer.File,
-    @Req() { user: payload }: RequestWithTokenPayload) {
-    const user = await this.authenticationService.update(dto, file, payload?.sub);
-
-    return fillDto(UserRdo, user.toPOJO());
   }
 
   @ApiResponse({
@@ -163,7 +163,7 @@ export class AuthenticationController {
   })
   @UseGuards(JwtAuthGuard)
   @Get('user/:userId')
-  public async getUserIbfo(@Param('userId') userId: string) {
+  public async getUserInfo(@Param('userId') userId: string) {
     const user = await this.authenticationService.getUser(userId);
     console.log('User', user);
     return fillDto(UserRdo, user.toPOJO());

@@ -29,3 +29,4 @@ export type UpdateTraining = {
 }
 
 export type Trainings = Training[];
+
