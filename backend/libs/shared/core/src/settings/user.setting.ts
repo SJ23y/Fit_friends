@@ -24,8 +24,6 @@ export enum Role {
 };
 
 export const DefaultQuestionnaireWoman = {
-  id: 'undefined',
-  userId: 'undefined',
   createdAt: new Date(),
   updatedAt: new Date(),
   userLevel: UserLevel.AMATEUR,
@@ -37,8 +35,6 @@ export const DefaultQuestionnaireWoman = {
 }
 
 export const DefaultQuestionnaireMan = {
-  id: 'undefined',
-  userId: 'undefined',
   createdAt: new Date(),
   updatedAt: new Date(),
   userLevel: UserLevel.AMATEUR,

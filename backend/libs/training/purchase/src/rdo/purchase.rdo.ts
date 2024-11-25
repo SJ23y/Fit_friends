@@ -47,6 +47,13 @@ export class PurchaseRdo {
   trainCount: number;
 
   @ApiProperty({
+    description: 'Train count that was bought',
+    example: 5
+  })
+  @Expose()
+  remainingTrainings: number;
+
+  @ApiProperty({
     description: 'Price of all trainings',
     example: 7500
   })

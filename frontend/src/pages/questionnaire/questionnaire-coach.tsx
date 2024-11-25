@@ -1,8 +1,7 @@
 import React, { useRef, useState } from "react";
-import { ApiRoute, AppRoute, Setting, TRAIN_TYPES, UserLevel, ValidationSetting } from "../../consts";
+import { ApiRoute, Setting, TRAIN_TYPES, UserLevel, ValidationSetting } from "../../consts";
 import { useAppDispatch } from "../../hooks/use-app-dispatch";
-import { updateUser } from "../../store/user-process/thunk-actions";
-import { useNavigate } from "react-router-dom";
+import { saveQuestionnaireResult } from "../../store/user-process/thunk-actions";
 import { Helmet } from "react-helmet-async";
 
 function QuestionnaireCoach(): JSX.Element {
@@ -11,7 +10,6 @@ function QuestionnaireCoach(): JSX.Element {
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [isError, setIsError] = useState<boolean>(false);
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
   const typeChangeHandler = (value: string) => {
     if (selectedTypes.includes(value)) {
@@ -36,13 +34,9 @@ function QuestionnaireCoach(): JSX.Element {
         userLevel: questionnaire.get('userLevel') as UserLevel,
         description: questionnaire.get('description') as string,
         trainType: selectedTypes,
-        individualTraining}
-        dispatch(updateUser({
-          user: {
-            questionnaire: newQuestionnaire
-          },
-        cb: () => navigate(AppRoute.Account)
-      }));
+        individualTraining: individualTraining
+      }
+        dispatch(saveQuestionnaireResult(newQuestionnaire));
     }
   }
 

@@ -78,13 +78,15 @@ function MyOrders(): JSX.Element {
     if (user?.role !== Role.COACH) {
       navigate(AppRoute.Main);
     } else {
-    dispatch(uploadCoachOrders({
-      page: Setting.DefaultStartPage,
-      count: Setting.OrdersPerPageCount,
-      sortBy: Setting.DefaultSortBy,
-      sortDirection: Setting.DefaultSortDirection
-    }))
-  }
+      dispatch(
+        uploadCoachOrders({
+          page: Setting.DefaultStartPage,
+          count: Setting.OrdersPerPageCount,
+          sortBy: Setting.DefaultSortBy,
+          sortDirection: Setting.DefaultSortDirection
+        })
+      )
+    }
   }, []);
 
   useEffect(() => {

@@ -17,9 +17,10 @@ FitFriends — это онлайн площадка для поиска трен
       POSTGRES_PASSWORD=test - пароль пользователя для БД в postgresSql  
       POSTGRES_DB=db-name - имя для БД в postgresSql  
       PGADMIN_DEFAULT_EMAIL=example@mail.com - имя пользователя для pgAdmin  
-      PGADMIN_DEFAULT_PASSWORD=test - пароль пользователя для pgAdmin  
+      PGADMIN_DEFAULT_PASSWORD=test - пароль пользователя для pgAdmin
+      DATABASE_URL=postgres://user:password@fit_friends.postgres:5432/fitfriends - путь к базе данных для Prisma
     - file.env:  
-      STATIC_DIRECTORY_PATH=H:\static - путь на сервере, где будут храниться статические файлы  
+      STATIC_DIRECTORY_PATH=H:\static - абсолютный путь на сервере, где будут храниться статические файлы  
       UPLOADS_DIRECTORY_PATH=\uploads - маршрут, по которому будут отдаваться сохранённые ранее пользовательские файлы  
 
   Перед запуском сервера необходимо развернуть БД в докер-контейнере с помощью команды:
@@ -43,9 +44,29 @@ FitFriends — это онлайн площадка для поиска трен
   '{server url}/spec'
 
 - **Запуск фронтенда**:  
-  Запуск бэкенда осуществляется из дерикториии 'frontend'.
+  Запуск фронтенда осуществляется из дерикториии 'frontend'.
 
-  Запуск сервера бекенда осуществляется командой:
+  Запуск сервера фронтенда осуществляется командой:
   ```bash
   npm start
+  ```
+- **Запуск проекта в докер-контейнере**:
+
+  Для запуска проекта в контейнере предварительно необходимо в корневую директорию проекта скопировать все файлы с переменными окружения из бэкенд части приложения, либо создать их заново.
+
+  Из дерикториии 'frontend' запустить команды:
+  ```bash
+  npm run build
+  docker build --file ./Docerfile --tag fitfriends-frontend:v.1.0 .
+  ```
+
+  Из дерикториии 'backend' запустить команды:
+  ```bash
+  npx nx run api:build
+  docker build --file ./apps/api/Docerfile --tag fitfriends-backend:v.1.0 .
+  ```
+  Из корневой директории запустить команду:
+  ```bash
+  
+  docker compose up -d
   ```

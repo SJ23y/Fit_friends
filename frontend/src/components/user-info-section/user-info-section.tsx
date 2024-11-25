@@ -1,6 +1,6 @@
 import { memo, useRef, useState } from "react";
 import { UserData } from "../../types/auth";
-import { ApiRoute, Gender, LOCATIONS, Role, Setting, TRAIN_TYPES, UserLevel } from "../../consts";
+import { ApiRoute, Gender, LOCATIONS, Role, Setting, TRAIN_TYPES, UserLevel, ValidationSetting } from "../../consts";
 import CustomSelect from "../custom-select/custom-select";
 import { updateUser } from "../../store/user-process/thunk-actions";
 import { useAppDispatch } from "../../hooks/use-app-dispatch";
@@ -16,6 +16,7 @@ function UserInfoSectionTemplate({user}: UserInfoSectionProps): JSX.Element {
   const [formData, setFormData] = useState(user);
   const [avatar, setAvatar] = useState<string>(`${Setting.BaseUrl}/${user.avatar}`);
   const avatarRef = useRef<HTMLInputElement | null>(null);
+  const formRef = useRef<HTMLFormElement | null>(null);
   const dispatch = useAppDispatch();
 
   const formDataChangeHandler = (evt: React.FormEvent) => {
@@ -51,8 +52,8 @@ function UserInfoSectionTemplate({user}: UserInfoSectionProps): JSX.Element {
         }
       })
     }
-
   }
+
   const changeSpecializationHandler = (evt: React.FormEvent) => {
     const {value} = evt.target as HTMLInputElement;
     let newTypes: string[] = [];
@@ -70,15 +71,20 @@ function UserInfoSectionTemplate({user}: UserInfoSectionProps): JSX.Element {
       setEditStatus(true)
     } else {
       evt.preventDefault();
-      const newUser = {
-        name: formData.name,
-        description: formData.description,
-        location: formData.location,
-        gender: formData.gender,
-        avatar: avatarRef.current?.files?.[0] ?? undefined,
-        questionnaire: formData.questionnaire
+      const avatar = avatarRef.current?.files?.[0];
+      if (formRef.current && avatar) {
+        const data = new FormData(formRef.current);
+        data.append('location', formData.location);
+        data.append('avatar', avatar);
+        data.append('userLevel', formData.questionnaire.userLevel);
+        data.append('gender', formData.gender);
+        if (isUserQuestionnaire(formData.questionnaire)) {
+          data.set('isReadyForTrain', formData.questionnaire.isReadyForTrain.toString())
+        } else {
+          data.set('individualTraining', formData.questionnaire.individualTraining.toString())
+        }
+        dispatch(updateUser({user: data, cb: () => setEditStatus(false)}));
       }
-      dispatch(updateUser({user: newUser, cb: () => setEditStatus(false)}));
     }
   }
 
@@ -144,6 +150,7 @@ function UserInfoSectionTemplate({user}: UserInfoSectionProps): JSX.Element {
         }
       </div>
       <form
+        ref={formRef}
         className="user-info__form"
         action={ApiRoute.UserUpdate}
         method="post"
@@ -168,6 +175,9 @@ function UserInfoSectionTemplate({user}: UserInfoSectionProps): JSX.Element {
                 <input
                   type="text"
                   name="name"
+                  minLength={ValidationSetting.userNameMinLength}
+                  maxLength={ValidationSetting.userNameMaxLength}
+                  required
                   value={formData.name}
                   disabled={!editStatus}
                   onChange={formDataChangeHandler}
@@ -180,6 +190,9 @@ function UserInfoSectionTemplate({user}: UserInfoSectionProps): JSX.Element {
               <span className="custom-textarea__label">Описание</span>
               <textarea
                 name="description"
+                minLength={ValidationSetting.CoachDescriptionMinLength}
+                maxLength={ValidationSetting.CoachDescriptionMaxLength}
+                required
                 placeholder=" "
                 disabled={!editStatus}
                 value={formData.description}
@@ -198,7 +211,7 @@ function UserInfoSectionTemplate({user}: UserInfoSectionProps): JSX.Element {
                   <>
                     <input
                       type="checkbox"
-                      name="ready-for-training"
+                      name="isReadyForTrain"
                       disabled={!editStatus}
                       checked={ formData.questionnaire.isReadyForTrain }
                       onChange={changeTrainingStatusHandler}
@@ -210,7 +223,7 @@ function UserInfoSectionTemplate({user}: UserInfoSectionProps): JSX.Element {
                   <>
                     <input
                       type="checkbox"
-                      name="ready-for-training"
+                      name="individualTraining"
                       disabled={!editStatus}
                       checked={ formData.questionnaire.individualTraining }
                       onChange={changeTrainingStatusHandler}
@@ -239,7 +252,7 @@ function UserInfoSectionTemplate({user}: UserInfoSectionProps): JSX.Element {
                     <input
                       className="visually-hidden"
                       type="checkbox"
-                      name="specialization"
+                      name="trainType"
                       value={type}
                       disabled={!editStatus}
                       checked={formData.questionnaire.trainType.includes(type)}

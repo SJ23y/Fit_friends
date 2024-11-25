@@ -100,10 +100,9 @@ export class PurchaseController {
   @UseGuards(JwtAuthGuard)
   public async reduceTrainingsCount(
     @Param('purchaseId', ParseUUIDPipe) purchaseId: string,
-    @Body() dto: ReduceTrainingsDto,
-    /*@Req() { user }: RequestWithTokenPayload,*/
+    @Body() dto: ReduceTrainingsDto
     ) {
-    const purchase = await this.purchaseService.reduceTrainingsCount(purchaseId, dto/*, user?.sub*/);
+    const purchase = await this.purchaseService.reduceTrainingsCount(purchaseId, dto);
 
     return fillDto(PurchaseRdo, purchase);
   }

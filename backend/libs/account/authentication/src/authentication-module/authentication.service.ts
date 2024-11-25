@@ -5,13 +5,14 @@ import { AUTH_USER_EXIST, AUTH_USER_NOT_FOUND, AUTH_USER_PASSWORD_WRONG, AUTH_US
 import { LoginUserDto } from '../dto/login-user.dto';
 import { ConfigType } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { CoachQuestionnarie, DEFAULT_AVATAR_NAMES, DEFAULT_BACKGROUND_IMAGE_NAMES, DefaultQuestionnaireMan, DefaultQuestionnaireWoman, Gender, Token, User, UserQuestionnarie } from '@backend/shared-core';
+import { CoachQuestionnarie, DEFAULT_AVATAR_NAMES, DEFAULT_BACKGROUND_IMAGE_NAMES, DefaultQuestionnaireMan, DefaultQuestionnaireWoman, Gender, Role, Token, User, UserQuestionnarie } from '@backend/shared-core';
 import { jwtConfig } from '@backend/user-config';
 import { RefreshTokenService } from '../refresh-token-module/refresh-token.service';
-import { createJwtPayload, getRanndomElement } from '@backend/shared-helpers';
+import { createJwtPayload, fillDto, getRanndomElement } from '@backend/shared-helpers';
 import { randomUUID } from 'crypto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { FileManagerService } from '@backend/file-manager';
+import { QustionnaireRdo } from '../rdo/questionnaire.rdo';
 
 @Injectable()
 export class AuthenticationService {
@@ -63,7 +64,7 @@ export class AuthenticationService {
     }
 
     if (! existUser.questionnaire) {
-      existUser.questionnaire = (existUser.gender === Gender.FEMALE) ? DefaultQuestionnaireWoman : DefaultQuestionnaireMan;
+      existUser.questionnaire = (existUser.gender === Gender.FEMALE && existUser.role === Role.USER) ? DefaultQuestionnaireWoman : DefaultQuestionnaireMan;
     }
 
     return existUser;
@@ -77,7 +78,7 @@ export class AuthenticationService {
     }
 
     if (!existUser.questionnaire) {
-      existUser.questionnaire = (existUser.gender === Gender.FEMALE) ? DefaultQuestionnaireWoman : DefaultQuestionnaireMan;
+      existUser.questionnaire = (existUser.gender === Gender.FEMALE && existUser.role === Role.USER) ? DefaultQuestionnaireWoman : DefaultQuestionnaireMan;
     }
 
     return existUser;
@@ -97,13 +98,16 @@ export class AuthenticationService {
       throw new NotFoundException(AUTH_USER_NOT_FOUND);
     }
 
+    const questionnaire = dto?.questionnaire ?? fillDto(QustionnaireRdo, dto) as UserQuestionnarie | CoachQuestionnarie;
 
     const updatedUser = await this.userRepository.update(
       id,
       {
         ...existUser.toPOJO(),
         ...dto,
-        questionnaire: dto.questionnaire as UserQuestionnarie | CoachQuestionnarie
+        questionnaire: {
+          ...questionnaire
+        }
       });
     return updatedUser;
   }

@@ -33,7 +33,7 @@ function MyPurchases(): JSX.Element {
       sortBy: Setting.DefaultSortBy,
       sortDirection: Setting.DefaultSortDirection
     }))
-  }, []);
+  }, [ ]);
 
   useEffect(() => {
     if (activeFlag) {

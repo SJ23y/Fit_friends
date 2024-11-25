@@ -12,7 +12,6 @@ const rootReducer = combineReducers({
   [NameSpace.MAIN]: mainProcess.reducer,
   [NameSpace.REVIEW]: reviewProcess.reducer,
   [NameSpace.PURCHASE]: purchaseProcess.reducer,
-
 });
 
 export { rootReducer };

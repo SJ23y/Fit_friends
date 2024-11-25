@@ -5,7 +5,6 @@ import { ApiRoute, AppRoute, Gender, Role, Setting, TRAIN_TYPES, TrainDuration, 
 import { useNavigate } from "react-router-dom";
 import CustomSelect from "../../components/custom-select/custom-select";
 import { addNewTraining } from "../../store/training-process/thunk-actions";
-import { Training } from "../../types/trainings";
 
 function CreateTrainingForm():JSX.Element {
   const user = useAppSelector(getUserInfo);
@@ -36,10 +35,6 @@ function CreateTrainingForm():JSX.Element {
         data.append('level', level);
         data.append('isSpecialOffer', 'false')
         dispatch(addNewTraining(data))
-        .then((action) => {
-          const training = action.payload as Training;
-          navigate(`${AppRoute.Training}/${training.id}`);
-        })
       }
     }
   }

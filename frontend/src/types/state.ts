@@ -26,7 +26,7 @@ export type ReviewProcess = {
 export type PurchaseProcess = {
   purchases: null | PaginatedResult<Purchase>;
   currentTrainingPurchase: null | Purchase;
-  coachOrders: null | PaginatedResult<Order>
+  coachOrders: null | PaginatedResult<Order>;
   loadingStatus: boolean;
 };
 

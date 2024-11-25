@@ -91,6 +91,8 @@ export class AuthenticationController {
         fileIsRequired: false
       }),
     ) file: Express.Multer.File) {
+    console.log('UpdateUserDto', dto);
+    console.log('file', file);
     const user = await this.authenticationService.update(dto, file, payload.sub);
     return fillDto(UserRdo, user.toPOJO());
   }

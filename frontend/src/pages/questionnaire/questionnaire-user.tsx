@@ -1,8 +1,7 @@
 import { useRef, useState } from "react";
 import { useAppDispatch } from "../../hooks/use-app-dispatch";
-import { updateUser } from "../../store/user-process/thunk-actions";
-import { ApiRoute, AppRoute, Setting, TRAIN_TYPES, TrainDuration, UserLevel, ValidationSetting } from "../../consts";
-import { useNavigate } from "react-router-dom";
+import { saveQuestionnaireResult,  } from "../../store/user-process/thunk-actions";
+import { ApiRoute, Setting, TRAIN_TYPES, TrainDuration, UserLevel, ValidationSetting } from "../../consts";
 import { Helmet } from "react-helmet-async";
 import { UserQuestionnaire } from "../../types/auth";
 
@@ -11,7 +10,6 @@ function QuestionnaireUser(): JSX.Element {
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [isError, setIsError] = useState<boolean>(false);
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
   const typeChangeHandler = (value: string) => {
     if (selectedTypes.includes(value)) {
@@ -32,7 +30,6 @@ function QuestionnaireUser(): JSX.Element {
 
     if (formRef.current) {
       const questionnaire = new FormData(formRef.current);
-      console.log({...Object.fromEntries(questionnaire), trainType: selectedTypes})
       const newQuestionnaire = {
         userLevel: questionnaire.get('userLevel') as UserLevel,
         trainDuration: questionnaire.get('trainDuration') as TrainDuration,
@@ -41,13 +38,7 @@ function QuestionnaireUser(): JSX.Element {
         isReadyForTrain: true,
         trainType: selectedTypes,
         } as UserQuestionnaire
-      dispatch(updateUser({
-        user: {
-          questionnaire: newQuestionnaire
-        },
-      cb: () => navigate(AppRoute.Main)
-    }));
-
+      dispatch(saveQuestionnaireResult(newQuestionnaire));
     }
   }
 

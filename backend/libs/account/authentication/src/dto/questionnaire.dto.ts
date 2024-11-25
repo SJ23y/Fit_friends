@@ -1,7 +1,8 @@
 import { TRAIN_TYPES, TrainDuration, UserLevel } from "@backend/shared-core";
 import { ApiProperty } from "@nestjs/swagger";
-import { ArrayMaxSize, IsArray, IsBoolean, IsIn, IsNumber, IsOptional, IsString, Length, Max, Min } from "class-validator";
+import { ArrayMaxSize, IsArray, IsBoolean, IsIn, IsNumber, IsOptional, isString, IsString, Length, Max, Min } from "class-validator";
 import { AuthenticationValidateMessage } from "../authentication-module/authentication.consts";
+import { Transform } from "class-transformer";
 
 export class QuestionnaireDto {
     @ApiProperty({
@@ -20,6 +21,7 @@ export class QuestionnaireDto {
     @IsIn(TRAIN_TYPES, {each: true, message: AuthenticationValidateMessage.InvalidTrainType})
     @IsString({each: true})
     @IsArray()
+    @Transform(({value}) => (isString(value) ? [value] : [...value]))
     @ArrayMaxSize(3, {message: AuthenticationValidateMessage.TrainTypesInvalidCount})
     @IsOptional()
     public trainType: string[];
@@ -59,6 +61,7 @@ export class QuestionnaireDto {
     })
     @IsBoolean()
     @IsOptional()
+    @Transform(({value}) => (value === 'true') ? true : false)
     public isReadyForTrain?: boolean;
 
     @ApiProperty({
@@ -67,6 +70,7 @@ export class QuestionnaireDto {
     })
     @IsBoolean()
     @IsOptional()
+    @Transform(({value}) => (value === 'true') ? true : false)
     public individualTraining?: boolean;
 
     @ApiProperty({
@@ -76,6 +80,6 @@ export class QuestionnaireDto {
     @IsString()
     @Length(10, 140, {message: AuthenticationValidateMessage.CoachMeritsInvalid})
     @IsOptional()
-    public description?: boolean;
+    public description?: string;
 }
 

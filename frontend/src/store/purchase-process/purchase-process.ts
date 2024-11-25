@@ -57,7 +57,6 @@ const purchaseProcess = createSlice({
         state.loadingStatus = false
       })
       .addCase(uploadPurchaseByTrainingId.rejected, (state) => {
-        state.currentTrainingPurchase = null;
         state.loadingStatus = false;
       })
       .addCase(reducePurchaseTrainings.fulfilled, (state, action) => {
@@ -78,10 +77,9 @@ const purchaseProcess = createSlice({
         state.loadingStatus = false
       })
       .addCase(uploadCoachOrders.rejected, (state) => {
-        state.currentTrainingPurchase = null;
         state.loadingStatus = false;
       })
   },
 });
 
-export {   purchaseProcess };
+export { purchaseProcess };

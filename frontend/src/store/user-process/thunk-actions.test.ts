@@ -110,6 +110,7 @@ describe('Async actions', () => {
 
   it('should dispatch "updateUser.pending" and "updateUser.fulfilled" with thunk updateUser and code 200', async () => {
     const returnedData = generateMockUser();
+    const data = new FormData();
     const fakeModule = {
       cb: () => 'update user'
     }
@@ -117,7 +118,7 @@ describe('Async actions', () => {
     vi.spyOn(fakeModule, 'cb');
 
     mockAxiosAdapter.onPost(ApiRoute.UserUpdate).reply(200, {...returnedData, avatar: ''});
-    await store.dispatch(updateUser({user: returnedData, cb: fakeModule.cb}));
+    await store.dispatch(updateUser({user: data, cb: fakeModule.cb}));
 
     const emittedActions = store.getActions();
     const actions = extactActionsType(emittedActions);
@@ -129,13 +130,13 @@ describe('Async actions', () => {
   });
 
   it('should dispatch "updateUser.pending" and "updateUser.rejected" with thunk updateUser and code 400', async () => {
-    const returnedData = generateMockUser();
+    const data = new FormData();
     const fakeModule = {
       cb: () => 'update user'
     }
 
     mockAxiosAdapter.onPost(ApiRoute.UserUpdate).reply(400);
-    await store.dispatch(updateUser({user:returnedData, cb: fakeModule.cb}));
+    await store.dispatch(updateUser({user: data, cb: fakeModule.cb}));
 
     const emittedActions = store.getActions();
     const actions = extactActionsType(emittedActions);

@@ -88,9 +88,7 @@ function EditTrainingPage(): JSX.Element {
       const data = new FormData(formRef.current);
       formData.price && data.append('price', formData.price.toString());
       const file = fileInputRef.current?.files?.[0];
-      console.log('file_type', file?.type);
       file && data.append('video', file);
-      console.log('Form data', Object.fromEntries(data));
       dispatch(updateTraining({
         trainingId: training?.id ?? '',
         newTraining: data

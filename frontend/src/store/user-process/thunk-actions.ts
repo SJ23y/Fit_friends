@@ -1,9 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosInstance } from 'axios';
 import { Dispatch, State } from '../../types/state';
-import { ApiRoute, AppRoute } from '../../consts';
+import { ApiRoute, AppRoute, Role } from '../../consts';
 import { dropToken, saveToken } from '../../services/token';
-import { AuthData, CoachQuestionnaire, TokenData, UpdateUser, UserData, UserQuestionnaire } from '../../types/auth';
+import { AuthData, CoachQuestionnaire, TokenData, UserData, UserQuestionnaire } from '../../types/auth';
 import { redirectToRoute } from '../actions';
 
 
@@ -12,16 +12,8 @@ const checkAuthorization = createAsyncThunk<
   undefined,
   { dispatch: Dispatch; state: State; extra: AxiosInstance }
 >('checkAuthorization', async (_arg, { extra: api }) => {
-  try {
-    const { data } = await api.post<UserData>(ApiRoute.Check);
-    return data;
-  } catch {
-    const { data:{accessToken, refreshToken} } = await api.post<TokenData>(ApiRoute.Refresh);
-    saveToken(accessToken, refreshToken);
-  } finally {
-    const { data } = await api.post<UserData>(ApiRoute.Check);
-    return data;
-  }
+  const { data } = await api.post<UserData>(ApiRoute.Check);
+  return data;
 });
 
 const registerUser = createAsyncThunk<
@@ -31,7 +23,7 @@ const registerUser = createAsyncThunk<
 >('registerUser', async (newUser, { dispatch, extra: api }) => {
 
   const { data } = await api.post<UserData>(ApiRoute.Register, newUser);
-  dispatch(loginUser( {email: <string>newUser.get('email'), password: <string>newUser.get('password')}))
+  await dispatch(loginUser( {email: <string>newUser.get('email'), password: <string>newUser.get('password')}))
   dispatch(redirectToRoute(AppRoute.Questionnaire));
   return data;
 });
@@ -40,14 +32,15 @@ const saveQuestionnaireResult = createAsyncThunk<
   UserData,
   CoachQuestionnaire | UserQuestionnaire,
   { dispatch: Dispatch; state: State; extra: AxiosInstance }
->('saveQuestionnaireResult', async (questionnaire, { extra: api }) => {
+>('saveQuestionnaireResult', async (questionnaire, { dispatch, extra: api }) => {
   const { data } = await api.post<UserData>(ApiRoute.UserUpdate, {questionnaire: questionnaire});
+  dispatch(redirectToRoute((data.role === Role.COACH) ? AppRoute.Account : AppRoute.Main));
   return data;
 });
 
 const updateUser = createAsyncThunk<
   UserData,
-  {user: UpdateUser, cb: () => void},
+  {user: FormData, cb: () => void},
   { dispatch: Dispatch; state: State; extra: AxiosInstance }
 >('updateUser', async ({user, cb}, { extra: api }) => {
   const { data } = await api.post<UserData>(ApiRoute.UserUpdate, user);

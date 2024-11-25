@@ -59,11 +59,11 @@ export const createQueryString = ({
 }
 
 export const  isUserQuestionnaire = (questionnaire: UserQuestionnaire | CoachQuestionnaire): questionnaire is UserQuestionnaire => {
-  return (questionnaire as UserQuestionnaire).isReadyForTrain !== null
+  return (questionnaire as UserQuestionnaire)?.trainDuration !== null;
 }
 
 export const  isCoachQuestionnaire = (questionnaire: UserQuestionnaire | CoachQuestionnaire): questionnaire is CoachQuestionnaire => {
-  return (questionnaire as CoachQuestionnaire).description !== null
+  return (questionnaire as CoachQuestionnaire)?.individualTraining !==  null;
 }
 
 export const isTokenExpired = (token: string) => {

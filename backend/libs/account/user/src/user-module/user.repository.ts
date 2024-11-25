@@ -67,10 +67,19 @@ export class UserRepository extends BasePostgresRepository<UserEntity, PrismaUse
   }
 
   public async update(userId: string, user: AuthUser): Promise<UserEntity> {
+    console.log('q:', user.questionnaire)
     const updatedUser = await this.client.user.update({
       where: {id: userId},
       data: {
-        ...user,
+        name:  user.name,
+        email: user.email,
+        avatar: user.avatar,
+        gender: user.gender,
+        birthDate: user.birthDate,
+        description: user.description,
+        location: user.location,
+        backgroundImage: user.backgroundImage,
+        role: user.role,
         questionnaire: {
           upsert: user.questionnaire && {
             where: {userId},

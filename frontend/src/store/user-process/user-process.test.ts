@@ -167,13 +167,14 @@ describe('User-process slice', () => {
 
   it('Should set user to mockUser and loadingStatus to false and error to null with updateUser.fulfilled', () => {
     const mockUser = generateMockUser();
+    const data = new FormData()
 
     const result = userProcess.reducer(
       state,
       updateUser.fulfilled(
         mockUser,
         '',
-        {user: mockUser, cb: () => 'Updated user'}
+        {user: data, cb: () => 'Updated user'}
       ));
 
     expect(result.error).toBe(null);

@@ -31,19 +31,14 @@ const createAPI = (): AxiosInstance => {
       }
     }
     return config;
-
-
   });
 
   api.interceptors.response.use(
     (response) => response,
     (error: AxiosError<DetailMessageType>) => {
-      if (error.response && error.response.data) {
-        throw Promise.reject(error.response.data);
-      }
-      throw error
+      throw error;
     }
-);
+  );
 
   return api;
 };

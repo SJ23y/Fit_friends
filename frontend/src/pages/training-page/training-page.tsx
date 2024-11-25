@@ -54,9 +54,9 @@ function TrainingPage(): JSX.Element {
   useEffect(() => {
     if (trainingId && trainingId !== training?.id) {
       dispatch(uploadTrainingById(trainingId));
-    }
-    if (trainingId && trainingId !== purchase?.trainId) {
-      dispatch(uploadPurchaseByTrainingId(trainingId));
+      if (trainingId !== purchase?.trainId) {
+        dispatch(uploadPurchaseByTrainingId(trainingId));
+      }
     }
   }, [])
 
@@ -82,8 +82,8 @@ function TrainingPage(): JSX.Element {
                   <ReviewSidebar
                     trainingId={training.id}
                     onAddReviewBtnClick={(status: boolean) => setReviewPopupStatus(status)}
-                    addReviewStatus={purchase !== null && purchase.trainCount > 0}
-                    addReviewDisable={purchase !== null && purchase.trainCount === purchase.totalPrice/purchase.price}
+                    addReviewStatus={(purchase) ? purchase.trainCount > 0 : false}
+                    addReviewDisable={(purchase) ? purchase.trainCount === purchase.remainingTrainings : false}
                   />
 
                   <div className="training-card">
@@ -93,19 +93,20 @@ function TrainingPage(): JSX.Element {
                         <div className="training-info__coach">
                           <div className="training-info__photo">
                             <picture>
-                              <source
-                                type="image/webp"
-                                srcSet={`${Setting.StaticUrl}/img/content/avatars/coaches/photo-1.webp, ${Setting.StaticUrl}/img/content/avatars/coaches/photo-1@2x.webp 2x`} />
-                              <img
-                                src={`${Setting.StaticUrl}/img/content/avatars/coaches/photo-1.png`}
-                                srcSet={`${Setting.StaticUrl}/img/content/avatars/coaches/photo-1@2x.png 2x`}
+                            <img
+                                src={`${Setting.BaseUrl}/${training.coach.avatar}`}
                                 width="64" height="64"
                                 alt="Изображение тренера" />
                             </picture>
                           </div>
                           <div className="training-info__coach-info">
                             <span className="training-info__label">Тренер</span>
-                            <Link className="training-info__name" to={`${AppRoute.User}/sdshdhskd`}>Валерия</Link>
+                            <Link
+                              className="training-info__name"
+                              to={`${AppRoute.User}/${training.coach.id}`}
+                            >
+                              {training.coach.name}
+                            </Link>
                           </div>
                         </div>
                       </div>
@@ -174,7 +175,7 @@ function TrainingPage(): JSX.Element {
                               <button
                                 className="btn training-info__buy"
                                 type="button"
-                                disabled={purchase !== null && purchase.trainCount > 0}
+                                disabled={(purchase) ? purchase.trainCount > 0 : false}
                                 onClick={() => setPurchasePopupStatus(true)}
                               >Купить</button>
                             </div>
@@ -228,26 +229,29 @@ function TrainingPage(): JSX.Element {
                               </button>
                             }
                       </div>
-                      <div className={classNames({
-                        "training-video__buttons-wrapper": true,
-                        "training-video--stop": trainingStatus
-                      })}>
-                        <button
-                          className="btn training-video__button training-video__button--start"
-                          type="button"
-                          disabled={(purchase === null || purchase.trainCount === 0)}
-                          onClick={startTrainingBtnClickHandler}
-                        >
-                            Приступить
-                        </button>
-                        <button
-                          className="btn training-video__button training-video__button--stop"
-                          type="button"
-                          onClick={() => setTrainingStatus(false)}
-                        >
-                          Закончить
-                        </button>
-                      </div>
+                      {
+                        purchase &&
+                        <div className={classNames({
+                          "training-video__buttons-wrapper": true,
+                          "training-video--stop": trainingStatus
+                        })}>
+                          <button
+                            className="btn training-video__button training-video__button--start"
+                            type="button"
+                            disabled={(purchase === null || purchase.trainCount === 0)}
+                            onClick={startTrainingBtnClickHandler}
+                          >
+                              Приступить
+                          </button>
+                          <button
+                            className="btn training-video__button training-video__button--stop"
+                            type="button"
+                            onClick={() => setTrainingStatus(false)}
+                          >
+                            Закончить
+                          </button>
+                        </div>
+                      }
                     </div>
                   </div>
                 </div>
@@ -274,8 +278,6 @@ function TrainingPage(): JSX.Element {
         }
 
       </div>
-
-
   )
 }
 
