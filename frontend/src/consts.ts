@@ -17,6 +17,7 @@ export enum AppRoute {
   NewTraining = '/new-training',
   CoachTrainings = '/coach-trainings',
   Edit = '/edit-training',
+  Users = '/users',
   User = '/user'
 }
 
@@ -101,7 +102,8 @@ export enum FilterBy {
   SPECIAL = 'isSpecialOffer',
   USER = 'user',
   COACH = 'coach',
-  ACTIVE_PURCHASE = 'active'
+  ACTIVE_PURCHASE = 'active',
+  READY_FOR_TRAINING = 'true'
 }
 
 export enum SortBy {
@@ -109,7 +111,8 @@ export enum SortBy {
   DATE = 'createdAt',
   TOTAL_PRICE = 'totalPrice',
   TRAININGS_COUNT = 'trainingsCount',
-  PRICE = 'price'
+  PRICE = 'price',
+  ROLE = 'role'
 }
 
 export enum SortDirection {
@@ -128,16 +131,21 @@ export const Setting = {
   MaxSpecialTrainingCount: 3,
   MaxPopularTrainingCount: 9,
   MaxFeaturedTrainingCount: 9,
+  MaxLookForCompanyCount: 8,
+  MaxUserCatalogCount: 24,
   MaxItemsPerPage: 50,
   FeaturedSliderStep: 1,
   PopularSliderStep: 1,
+  CompanySliderStep: 1,
   FeaturedCardPerStep: 3,
   PopularCardPerStep: 4,
+  CompanyCardPerStep: 4,
   SPECIAL_TRAINING_DISCONT: 0.2,
   MaxRating: 5,
   DefaultPurchaseType: 'абонемент',
   OrdersPerPageCount: 4,
-  TrainingsCatalogItemsPerPage: 6
+  TrainingsCatalogItemsPerPage: 6,
+  UserFilterIntitalCount: 4
 } as const;
 
 

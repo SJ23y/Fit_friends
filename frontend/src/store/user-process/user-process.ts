@@ -1,20 +1,39 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { AuthorizationStatus, NameSpace } from '../../consts';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { AuthorizationStatus, NameSpace, Setting } from '../../consts';
 import { UserProcess } from '../../types/state';
-import { checkAuthorization, getUserById, loginUser, logoutUser, registerUser, saveQuestionnaireResult, updateUser } from './thunk-actions';
+import { checkAuthorization, getUserById, loginUser, logoutUser, registerUser, saveQuestionnaireResult, updateUser, uploadUsers } from './thunk-actions';
+import { UserData } from '../../types/auth';
+import { Query } from '../../types/query';
 
 const initialState: UserProcess = {
   authorizationStatus: AuthorizationStatus.Unknown,
   user: null,
   error: null,
   loadingStatus: false,
-  currentlyViewedUser: null
+  currentlyViewedUser: null,
+  users: null,
+  query: {
+    count: Setting.MaxUserCatalogCount,
+    sortBy: Setting.DefaultSortBy,
+    sortDirection: Setting.DefaultSortDirection,
+    page: Setting.DefaultStartPage
+  }
 };
 
 const userProcess = createSlice({
   name: NameSpace.USER,
   initialState,
-  reducers: {},
+  reducers: {
+    setCurrentlyViewedUser: (state, action: PayloadAction<UserData>) => {
+      state.currentlyViewedUser = action.payload;
+    },
+    changeUserQuery: (state, action: PayloadAction<Partial<Query>>) => {
+      state.query = {
+        ...state.query,
+        ...action.payload
+      }
+    }
+  },
   extraReducers(builder) {
     builder
       .addCase(checkAuthorization.pending, (state) => {
@@ -109,8 +128,20 @@ const userProcess = createSlice({
       .addCase(saveQuestionnaireResult.rejected, (state) => {
         state.loadingStatus = false;
       })
-
+      .addCase(uploadUsers.fulfilled, (state, action) => {
+        state.error = null;
+        if (state.users && action.payload.currentPage > Setting.DefaultStartPage) {
+          state.users = {
+            ...action.payload,
+            entities: [...state.users.entities, ...action.payload.entities]
+          }
+        } else {
+          state.users = action.payload;
+        }
+      })
   },
 });
 
-export { userProcess };
+const { setCurrentlyViewedUser, changeUserQuery } = userProcess.actions;
+
+export { userProcess, setCurrentlyViewedUser, changeUserQuery };

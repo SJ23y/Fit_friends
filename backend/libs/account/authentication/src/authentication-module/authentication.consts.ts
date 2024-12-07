@@ -16,7 +16,9 @@ export const AuthenticationMessages = {
   WrongToken: 'Your token is not valid or expired',
   PasswordUpdated: 'Your password was successfully updated',
   Unauthorized: 'You should be authorized to change password',
-  UserLogout: 'You was logout. All of your tokens were deleted'
+  UserLogout: 'You was logout. All of your tokens were deleted',
+  UserList: 'You\'ve got the list of all registered users',
+  NotForCoach: 'This kind of information not allowed for the coaches'
 } as const;
 
 

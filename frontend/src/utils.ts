@@ -18,7 +18,9 @@ export const createQueryString = ({
   minRating,
   type,
   free,
-  durations
+  durations,
+  locations,
+  level
 }: Query) => {
   let queryString = `count=${count}&page=${page}&sortBy=${sortBy}&sortDirection=${sortDirection}`;
   if (filterBy) {
@@ -45,9 +47,17 @@ export const createQueryString = ({
   if (free) {
     queryString += `&free=${free}`;
   }
+  if (level) {
+    queryString += `&level=${level}`;
+  }
   if (type) {
-    type.forEach((type) => {
-      queryString += `&type[]=${type}`;
+    type.forEach((item) => {
+      queryString += `&type[]=${item}`;
+    })
+  }
+  if (locations) {
+    locations.forEach((location) => {
+      queryString += `&locations[]=${location}`;
     })
   }
   if (durations) {

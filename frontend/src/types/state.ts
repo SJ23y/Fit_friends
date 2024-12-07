@@ -41,6 +41,8 @@ export type UserProcess = {
   error: SerializedError | null;
   loadingStatus: boolean;
   currentlyViewedUser: UserData | null;
+  users: PaginatedResult<UserData> | null;
+  query: Query;
 };
 
 export type State = ReturnType<typeof store.getState>;

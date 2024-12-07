@@ -1,6 +1,6 @@
 import { BasePostgresRepository, PrismaClientService } from '@backend/data-access';
 import { TrainingEntity } from './training.entity';
-import { AuthUser, DEFAULT_PAGE_NUMBER, DefaultQuestionnaireMan, DefaultQuestionnaireWoman, FilterBy, Gender, MAX_TRAINING_COUNT_LIMIT, PaginationResult, Role, SortBy, TrainingPaginationResult, TrainingStats } from '@backend/shared-core';
+import { AuthUser, DEFAULT_PAGE_NUMBER, DefaultQuestionnaireMan, DefaultQuestionnaireWoman, FilterBy, Gender, MAX_TRAINING_COUNT_LIMIT, Role, SortBy, TrainingPaginationResult, TrainingStats } from '@backend/shared-core';
 import { TrainingFactory } from './training.factory';
 import { TrainingQuery } from './training.query';
 import { Prisma, Training as PrismaTraining } from '@prisma/client';

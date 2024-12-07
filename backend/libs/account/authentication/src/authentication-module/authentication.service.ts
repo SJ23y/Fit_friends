@@ -1,11 +1,11 @@
 import { ConflictException, HttpException, HttpStatus, Inject, Injectable, Logger, NotFoundException, UnauthorizedException } from '@nestjs/common';
-import { UserEntity, UserRepository } from '@backend/user';
+import { UserEntity, UserQuery, UserRepository } from '@backend/user';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { AUTH_USER_EXIST, AUTH_USER_NOT_FOUND, AUTH_USER_PASSWORD_WRONG, AUTH_USER_UNAUTHORISED } from './authentication.consts';
 import { LoginUserDto } from '../dto/login-user.dto';
 import { ConfigType } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { CoachQuestionnarie, DEFAULT_AVATAR_NAMES, DEFAULT_BACKGROUND_IMAGE_NAMES, DefaultQuestionnaireMan, DefaultQuestionnaireWoman, Gender, Role, Token, User, UserQuestionnarie } from '@backend/shared-core';
+import { CoachQuestionnarie, DEFAULT_AVATAR_NAMES, DEFAULT_BACKGROUND_IMAGE_NAMES, DefaultQuestionnaireMan, DefaultQuestionnaireWoman, Gender, PaginationResult, Role, Token, TokenPayload, User, UserQuestionnarie } from '@backend/shared-core';
 import { jwtConfig } from '@backend/user-config';
 import { RefreshTokenService } from '../refresh-token-module/refresh-token.service';
 import { createJwtPayload, fillDto, getRanndomElement } from '@backend/shared-helpers';
@@ -129,5 +129,15 @@ export class AuthenticationService {
       this.logger.error(`[Token generation error]: ${ error }`);
       throw new HttpException('Ошибка при создании токена', HttpStatus.INTERNAL_SERVER_ERROR)
     }
+  }
+
+  public async getAllUsers(userPayload: TokenPayload, query?: UserQuery): Promise<PaginationResult<UserEntity>> {
+    if (userPayload.role === Role.COACH) {
+      throw new ConflictException('This kind of information not allowed for the coaches');
+    }
+
+    const paginatedUsers = this.userRepository.getUsers(userPayload.sub, query);
+
+    return paginatedUsers;
   }
 }

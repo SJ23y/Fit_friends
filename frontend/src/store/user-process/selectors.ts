@@ -2,10 +2,8 @@ import { SerializedError } from '@reduxjs/toolkit';
 import { AuthorizationStatus, NameSpace } from '../../consts';
 import { UserData } from '../../types/auth';
 import { State } from '../../types/state';
-
-/*const getAuthorizationStatus = (
-  state: Pick<State, NameSpace.USER>,
-): AuthorizationStatus => state[NameSpace.USER].authorizationStatus;*/
+import { PaginatedResult } from '../../types/paginatedResult';
+import { Query } from '../../types/query';
 
 const checkAuthentication = (state: Pick<State, NameSpace.USER>): boolean => state[NameSpace.USER].authorizationStatus === AuthorizationStatus.Auth;
 
@@ -21,4 +19,10 @@ const getUserLoadingStatus = (state: Pick<State, NameSpace.USER>): boolean =>
 const getUserCardInfo = (state: Pick<State, NameSpace.USER>): UserData | null =>
   state[NameSpace.USER].currentlyViewedUser;
 
-export { getUserLoadingStatus, getUserError, /*getAuthorizationStatus,*/ checkAuthentication, getUserInfo, getUserCardInfo };
+const getUsers = (state: Pick<State, NameSpace.USER>): PaginatedResult<UserData> | null =>
+  state[NameSpace.USER].users;
+
+const getUsersQuery = (state: Pick<State, NameSpace.USER>): Query =>
+  state[NameSpace.USER].query;
+
+export { getUserLoadingStatus, getUserError, checkAuthentication, getUserInfo, getUserCardInfo, getUsers,getUsersQuery };

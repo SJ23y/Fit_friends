@@ -2,8 +2,9 @@ import { BasePostgresRepository, PrismaClientService } from '@backend/data-acces
 import { UserEntity } from './user.entity';
 import { UserFactory } from './user.factory';
 import { Injectable } from '@nestjs/common';
-import { User as PrismaUser } from '@prisma/client';
-import { AuthUser } from '@backend/shared-core';
+import { Prisma, User as PrismaUser } from '@prisma/client';
+import { AuthUser, DEFAULT_PAGE_NUMBER, MAX_USER_COUNT_LIMIT, PaginationResult, SortBy, UserLevel } from '@backend/shared-core';
+import { UserQuery } from './user.query';
 
 @Injectable()
 export class UserRepository extends BasePostgresRepository<UserEntity, PrismaUser> {
@@ -105,5 +106,59 @@ export class UserRepository extends BasePostgresRepository<UserEntity, PrismaUse
     });
 
     return this.createEntityFromDocument(updatedUser);
+  }
+
+  public async getUsers(userId: string, query?: UserQuery): Promise<PaginationResult<UserEntity>> {
+    const take = (query?.count && query.count < MAX_USER_COUNT_LIMIT) ? query.count : MAX_USER_COUNT_LIMIT;
+    const skip = (query?.page && query?.count) ? (query.page - 1) * query.count : undefined;
+    const where: Prisma.UserWhereInput = {id: {
+      not: userId
+    }};
+    let orderBy: Prisma.UserOrderByWithAggregationInput = {};
+
+    if (query?.locations) {
+      where.location = {
+        in: query.locations
+      }
+    }
+
+    if (query?.type || query?.level) {
+      console.log(query.type);
+      where.questionnaire = {
+        userLevel: (query.level) ? query.level : {in: Object.values(UserLevel)},
+        trainType: {
+          hasSome: query.type
+        }
+      }
+    }
+
+    if (query?.sortBy) {
+      switch (query.sortBy) {
+        case SortBy.DATE:
+          orderBy = {
+            createdAt: query.sortDirection
+          };
+          break;
+        case SortBy.ROLE:
+          orderBy = {
+            role: query.sortDirection
+          };
+          break;
+        }
+    }
+
+
+    const [userCount, users] = await Promise.all([
+      this.client.user.count({where}),
+      this.client.user.findMany({where, take, skip, orderBy, include: {questionnaire: true}})
+    ])
+
+    return {
+      entities: users.map((user) => this.createEntityFromDocument(user)),
+      itemsPerPage: take,
+      totalItems: userCount,
+      totalPages: Math.ceil(userCount/take),
+      currentPage: query?.page ?? DEFAULT_PAGE_NUMBER
+    }
   }
 }

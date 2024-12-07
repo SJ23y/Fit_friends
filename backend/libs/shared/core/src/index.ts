@@ -6,7 +6,8 @@ export {
   DefaultQuestionnaireWoman,
   DefaultQuestionnaireMan,
   MAX_CALLORIES_COUNT,
-  MIN_CALLORIES_COUNT } from './settings/user.setting'
+  MIN_CALLORIES_COUNT,
+  MAX_USER_COUNT_LIMIT } from './settings/user.setting'
 export {
   TRAIN_TYPES,
   TrainDuration,

@@ -16,7 +16,8 @@ export enum SortBy {
   DATE = 'createdAt',
   TOTAL_PRICE = 'totalPrice',
   TRAININGS_COUNT = 'trainingsCount',
-  PRICE = 'price'
+  PRICE = 'price',
+  ROLE = 'role'
 }
 
 export enum SortDirection {

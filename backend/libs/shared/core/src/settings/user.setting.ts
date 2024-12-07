@@ -44,3 +44,6 @@ export const DefaultQuestionnaireMan = {
   caloriePerDay: 200,
   isReadyForTrain: true
 }
+
+export const MAX_USER_COUNT_LIMIT = 50;
+export const USER_SLIDER_COUNT_LIMIT = 8;

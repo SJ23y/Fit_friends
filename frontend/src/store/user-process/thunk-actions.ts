@@ -5,6 +5,9 @@ import { ApiRoute, AppRoute, Role } from '../../consts';
 import { dropToken, saveToken } from '../../services/token';
 import { AuthData, CoachQuestionnaire, TokenData, UserData, UserQuestionnaire } from '../../types/auth';
 import { redirectToRoute } from '../actions';
+import { Query } from '../../types/query';
+import { PaginatedResult } from '../../types/paginatedResult';
+import { createQueryString } from '../../utils';
 
 
 const checkAuthorization = createAsyncThunk<
@@ -80,6 +83,15 @@ const getUserById = createAsyncThunk<
   return data;
 });
 
+const uploadUsers = createAsyncThunk<
+  PaginatedResult<UserData>,
+  Query,
+  { dispatch: Dispatch; state: State; extra: AxiosInstance }
+>('uploadUsers', async (query, { extra: api }) => {
+  const { data } = await api.get<PaginatedResult<UserData>>(`${ApiRoute.User}?${createQueryString(query)}`);
+  return data;
+});
+
 export {
   checkAuthorization,
   loginUser,
@@ -87,5 +99,6 @@ export {
   registerUser,
   updateUser,
   saveQuestionnaireResult,
-  getUserById
+  getUserById,
+  uploadUsers
 };

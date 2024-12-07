@@ -23,6 +23,7 @@ import { getTrainingLoadingStatus } from '../../store/training-process/selectors
 import EditTrainingPage from '../../pages/edit-training-page/edit-training-page';
 import HistoryRouter from '../history-route/history-route';
 import browserHistory from '../../browser-history';
+import UserCatalog from '../../pages/user-catalog/user-catalog';
 
 function App(): JSX.Element {
   const userLoadingStatus = useAppSelector(getUserLoadingStatus);
@@ -119,7 +120,16 @@ function App(): JSX.Element {
                     <UserCard />
                   </PrivateRoute>
                 }
-            />
+              />
+
+              <Route
+                path={AppRoute.Users}
+                element={
+                  <PrivateRoute>
+                    <UserCatalog />
+                  </PrivateRoute>
+                }
+              />
           </Route>
 
           <Route

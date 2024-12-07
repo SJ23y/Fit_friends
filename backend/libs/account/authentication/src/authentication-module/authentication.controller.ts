@@ -11,6 +11,7 @@ import {
   Param,
   ParseFilePipe,
   Post,
+  Query,
   Req,
   UploadedFile,
   UseGuards,
@@ -29,6 +30,8 @@ import { RequestWithTokenPayload } from '@backend/shared-core';
 import { UserRdo } from '../rdo/user.rdo';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { UserQuery } from '@backend/user';
+import { UserWithPaginationRdo } from '../rdo/user-with-pagination.rdo';
 
 @ApiTags('authentication')
 @Controller('')
@@ -165,9 +168,29 @@ export class AuthenticationController {
   })
   @UseGuards(JwtAuthGuard)
   @Get('user/:userId')
-  public async getUserInfo(@Param('userId') userId: string) {
+  public async show(@Param('userId') userId: string) {
     const user = await this.authenticationService.getUser(userId);
     console.log('User', user);
     return fillDto(UserRdo, user.toPOJO());
   }
+
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: AuthenticationMessages.UserList
+  })
+  @ApiResponse({
+    status: HttpStatus.CONFLICT,
+    description: AuthenticationMessages.NotForCoach
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: AuthenticationMessages.Unauthorized
+  })
+  @UseGuards(JwtAuthGuard)
+  @Get('user')
+  public async index(@Req() {user:payload}: RequestWithTokenPayload, @Query() query?: UserQuery) {
+    const users = await this.authenticationService.getAllUsers(payload, query);
+    return fillDto(UserWithPaginationRdo, users);
+  }
+
 }

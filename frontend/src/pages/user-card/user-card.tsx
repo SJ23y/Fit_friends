@@ -6,6 +6,7 @@ import { getUserById } from "../../store/user-process/thunk-actions";
 import { Role, Setting } from "../../consts";
 import { isCoachQuestionnaire } from "../../utils";
 import CoachTrainingsBox from "../../components/coach-trainings-box/coach-trainings-box";
+
 function UserCard(): JSX.Element {
   const user = useAppSelector(getUserCardInfo);
   const {userId} = useParams();

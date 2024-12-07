@@ -14,5 +14,7 @@ export type Query = {
   minRating?: number | null,
   type?: string[] | null,
   free?: boolean | null,
-  durations?: TrainDuration[] | null
+  durations?: TrainDuration[] | null,
+  locations?: string[] | null,
+  level?: string | null
 }
