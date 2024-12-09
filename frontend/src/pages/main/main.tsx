@@ -43,8 +43,7 @@ function Main(): JSX.Element {
     dispatch(
       uploadUsers({
         page: Setting.DefaultStartPage,
-        count: Setting.MaxLookForCompanyCount,
-        filterBy: FilterBy.READY_FOR_TRAINING
+        count: Setting.MaxLookForCompanyCount
     }));
   }
   }, [])

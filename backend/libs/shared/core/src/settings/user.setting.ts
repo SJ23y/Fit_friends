@@ -1,4 +1,3 @@
-
 export const MAX_CALLORIES_COUNT = 5000;
 export const MIN_CALLORIES_COUNT = 1000;
 

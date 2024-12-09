@@ -47,9 +47,9 @@ function HeaderTemplate(): JSX.Element {
                 <Link
                   className={classNames({
                     "main-nav__link ": true,
-                    "is-active": false
+                    "is-active": location.pathname === AppRoute.Friends
                   })}
-                  to="#"
+                  to={AppRoute.Friends}
                   aria-label="Друзья"
                 >
                   <svg width="22" height="16" aria-hidden="true">

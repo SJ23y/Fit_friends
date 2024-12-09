@@ -3,7 +3,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import { Transform } from "class-transformer";
 import { IsNumber, IsOptional } from "class-validator";
 
-export class UserQuery {
+export class FriendsQuery {
   @ApiProperty({
     description: 'Current entity instances count',
     example: 10
@@ -33,27 +33,4 @@ export class UserQuery {
   })
   @IsOptional()
   public sortDirection?: SortDirection;
-
-  @ApiProperty({
-    description: 'By locations filter',
-    example: ['Пионерская']
-  })
-  @IsOptional()
-  public locations?: string[];
-
-  @ApiProperty({
-    description: 'By training types filter',
-    example: ['пилатес']
-  })
-  @IsOptional()
-  public type?: string[];
-
-  @ApiProperty({
-    description: 'By level filter',
-    example: 'новичок'
-  })
-  @IsOptional()
-  public level?: string;
-
-
 }

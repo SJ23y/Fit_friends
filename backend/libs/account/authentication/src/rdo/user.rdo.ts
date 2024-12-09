@@ -2,6 +2,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import { Expose, Type } from "class-transformer";
 import { QustionnaireRdo } from "./questionnaire.rdo";
 import { TrainingRdo } from "./training.rdo";
+import { UserFriendRdo } from "./user-friend.rdo";
 
 export class UserRdo {
   @ApiProperty({
@@ -96,4 +97,12 @@ export class UserRdo {
   @Type(() => TrainingRdo)
   @Expose()
   public trainings: TrainingRdo;
+
+  @ApiProperty({
+    description: 'User list of friends',
+    example: '[friends]'
+  })
+  @Type(() => UserFriendRdo)
+  @Expose()
+  public friends: UserFriendRdo;
 }

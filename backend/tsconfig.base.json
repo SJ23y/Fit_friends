@@ -21,6 +21,7 @@
       "@backend/data-access": ["libs/shared/data-access/src/index.ts"],
       "@backend/file-manager": ["libs/file-manager/src/index.ts"],
       "@backend/file-manager-config": ["libs/file-manager/config/src/index.ts"],
+      "@backend/friends": ["libs/account/friends/src/index.ts"],
       "@backend/shared-core": ["libs/shared/core/src/index.ts"],
       "@backend/shared-guards": ["libs/shared/guards/src/index.ts"],
       "@backend/shared-helpers": ["libs/shared/helpers/src/index.ts"],

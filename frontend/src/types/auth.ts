@@ -22,6 +22,7 @@ export type UserData = {
   "role": Role,
   "backgroundImage": string;
   "trainings"?: Trainings;
+  "friends"?: UserFriend[];
 };
 
 export type NewUser = {
@@ -67,4 +68,20 @@ export type CoachQuestionnaire = {
   trainType: string[];
   description: string;
   individualTraining: boolean;
+}
+
+
+export type Friend = {
+  "id"?: string,
+  "name": string,
+  "avatar": File,
+  "location": string,
+  "trainTypes": string[],
+  "role": Role,
+  "trainingRequests"?: boolean
+};
+
+export type UserFriend = {
+  "userId": string;
+  "friendId": string;
 }

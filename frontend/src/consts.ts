@@ -18,7 +18,8 @@ export enum AppRoute {
   CoachTrainings = '/coach-trainings',
   Edit = '/edit-training',
   Users = '/users',
-  User = '/user'
+  User = '/user',
+  Friends = '/friends'
 }
 
 export enum AuthorizationStatus {
@@ -45,7 +46,8 @@ export enum NameSpace {
   TRAINING = 'TRAINING',
   MAIN = 'MAIN',
   REVIEW = 'Review',
-  PURCHASE = 'Purchase'
+  PURCHASE = 'Purchase',
+  FRIEND = 'Friend'
 }
 
 export const ValidationSetting = {
@@ -78,7 +80,8 @@ export enum ApiRoute {
   Reviews = '/reviews',
   Purchases = '/purchase',
   UserUpdate = '/user/update',
-  User = '/user'
+  User = '/user',
+  Friends = '/friends'
 }
 
 export enum UserLevel {
@@ -145,7 +148,8 @@ export const Setting = {
   DefaultPurchaseType: 'абонемент',
   OrdersPerPageCount: 4,
   TrainingsCatalogItemsPerPage: 6,
-  UserFilterIntitalCount: 4
+  UserFilterIntitalCount: 4,
+  FriendsPerPageCount: 9
 } as const;
 
 

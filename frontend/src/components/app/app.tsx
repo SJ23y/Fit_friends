@@ -24,6 +24,7 @@ import EditTrainingPage from '../../pages/edit-training-page/edit-training-page'
 import HistoryRouter from '../history-route/history-route';
 import browserHistory from '../../browser-history';
 import UserCatalog from '../../pages/user-catalog/user-catalog';
+import MyFriends from '../../pages/my-friends/my-friends';
 
 function App(): JSX.Element {
   const userLoadingStatus = useAppSelector(getUserLoadingStatus);
@@ -127,6 +128,15 @@ function App(): JSX.Element {
                 element={
                   <PrivateRoute>
                     <UserCatalog />
+                  </PrivateRoute>
+                }
+              />
+
+              <Route
+                path={AppRoute.Friends}
+                element={
+                  <PrivateRoute>
+                    <MyFriends />
                   </PrivateRoute>
                 }
               />

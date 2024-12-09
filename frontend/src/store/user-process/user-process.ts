@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AuthorizationStatus, NameSpace, Setting } from '../../consts';
 import { UserProcess } from '../../types/state';
 import { checkAuthorization, getUserById, loginUser, logoutUser, registerUser, saveQuestionnaireResult, updateUser, uploadUsers } from './thunk-actions';
-import { UserData } from '../../types/auth';
+import { UserData, UserFriend } from '../../types/auth';
 import { Query } from '../../types/query';
 
 const initialState: UserProcess = {
@@ -31,6 +31,24 @@ const userProcess = createSlice({
       state.query = {
         ...state.query,
         ...action.payload
+      }
+    },
+    addFriendToUser: (state, action: PayloadAction<UserFriend>) => {
+      if (state.currentlyViewedUser?.friends) {
+        state.currentlyViewedUser.friends.push(action.payload);
+      } else if (state.currentlyViewedUser) {
+        state.currentlyViewedUser.friends = [action.payload]
+      }
+    },
+    deleteFriendFromUser: (state, action: PayloadAction<string>) => {
+      if (state.currentlyViewedUser?.friends) {
+        const friends = state.currentlyViewedUser.friends.filter(
+          (friend) => friend.friendId !== action.payload && friend.userId !== action.payload
+        );
+        state.currentlyViewedUser = {
+          ...state.currentlyViewedUser,
+          friends: friends
+        }
       }
     }
   },
@@ -142,6 +160,6 @@ const userProcess = createSlice({
   },
 });
 
-const { setCurrentlyViewedUser, changeUserQuery } = userProcess.actions;
+const { setCurrentlyViewedUser, changeUserQuery, addFriendToUser, deleteFriendFromUser } = userProcess.actions;
 
-export { userProcess, setCurrentlyViewedUser, changeUserQuery };
+export { userProcess, setCurrentlyViewedUser, changeUserQuery, addFriendToUser, deleteFriendFromUser };

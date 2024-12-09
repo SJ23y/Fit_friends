@@ -3,7 +3,7 @@ import { AuthorizationStatus } from '../consts';
 import { store } from '../store';
 import { createAPI } from '../services/api';
 import { Action } from 'redux';
-import { UserData } from './auth';
+import { Friend, UserData } from './auth';
 import { Training, Trainings } from './trainings';
 import { PaginatedResult, TrainingPaginatedResult } from './paginatedResult';
 import { Query } from './query';
@@ -33,6 +33,10 @@ export type PurchaseProcess = {
 export type TrainingProcess = {
   currentTraining: null | Training;
   loadingStatus: boolean
+};
+
+export type FriendsProcess = {
+  friends: null | PaginatedResult<Friend>;
 };
 
 export type UserProcess = {

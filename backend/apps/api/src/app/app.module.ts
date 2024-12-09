@@ -6,6 +6,8 @@ import { ReviewModule }  from '@backend/training-review';
 import { PurchaseModule }  from '@backend/training-purchase';
 import { FileManagerModule } from '@backend/file-manager';
 import { FileManagerConfigModule } from '@backend/file-manager-config'
+import { FriendsModule } from '@backend/friends';
+
 @Module({
   imports: [
     AccountConfigModule,
@@ -14,7 +16,8 @@ import { FileManagerConfigModule } from '@backend/file-manager-config'
     TrainingModule,
     ReviewModule,
     PurchaseModule,
-    FileManagerModule
+    FileManagerModule,
+    FriendsModule
   ],
   controllers: [],
   providers: [],

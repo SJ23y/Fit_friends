@@ -22,7 +22,8 @@ export class UserRepository extends BasePostgresRepository<UserEntity, PrismaUse
         questionnaire: undefined,
         reviews: undefined,
         trainings: undefined,
-        purchases: undefined
+        purchases: undefined,
+        friends: undefined
       },
       include: {
         questionnaire: true
@@ -56,7 +57,8 @@ export class UserRepository extends BasePostgresRepository<UserEntity, PrismaUse
       where: { id: userId },
       include: {
         questionnaire: true,
-        trainings: true
+        trainings: true,
+        friends: true
       }
     });
 
@@ -123,7 +125,6 @@ export class UserRepository extends BasePostgresRepository<UserEntity, PrismaUse
     }
 
     if (query?.type || query?.level) {
-      console.log(query.type);
       where.questionnaire = {
         userLevel: (query.level) ? query.level : {in: Object.values(UserLevel)},
         trainType: {

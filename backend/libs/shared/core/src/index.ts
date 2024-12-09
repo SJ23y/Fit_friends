@@ -28,6 +28,7 @@ export { JwtToken } from './interfaces/jwt-token.interace';
 export { RefreshTokenPayload } from './interfaces/refresh-token-payload.interface';
 export { Training } from './interfaces/training.interface';
 export { File } from './interfaces/file.interface';
+export { Friend } from './interfaces/friend.interface';
 export {
   PaymentType,
   DEFAULT_PAGE_NUMBER,

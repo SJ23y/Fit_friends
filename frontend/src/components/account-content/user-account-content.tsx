@@ -41,7 +41,7 @@ function UserAccountContentTemplate({user}: UserAccountContentProps): JSX.Elemen
             </form>
           </div>
           <div className="personal-account-user__additional-info">
-            <Link className="thumbnail-link thumbnail-link--theme-light" to="#">
+            <Link className="thumbnail-link thumbnail-link--theme-light" to={AppRoute.Friends}>
               <div className="thumbnail-link__icon thumbnail-link__icon--theme-light">
                 <svg width="30" height="26" aria-hidden="true">
                   <use xlinkHref="#icon-friends"></use>

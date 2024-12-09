@@ -57,7 +57,7 @@ export const getRandomInteger = (a: number, b: number) => {
 export const getRanndomElement = <T>(arr: T[]) => arr[getRandomInteger(0, arr.length - 1)];
 
 export const  isUserQuestionnaire = (questionnaire: UserQuestionnarie | CoachQuestionnarie): questionnaire is UserQuestionnarie => {
-  return (questionnaire as UserQuestionnarie).trainDuration !== undefined
+  return (questionnaire as UserQuestionnarie).trainDuration !== undefined && (questionnaire as UserQuestionnarie).trainDuration !== null
 }
 /*
 export function getRabbitMqConnectionString({user, password, host, port}) {
