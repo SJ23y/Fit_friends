@@ -52,7 +52,6 @@ export class FriendsController {
   @UseGuards(JwtAuthGuard)
   @Post('/:friendId')
   public async create(@Param('friendId', ParseUUIDPipe) friendId: string, @Req() {user}: RequestWithTokenPayload) {
-    console.log('Friends controller', friendId, user);
     await this.friendsService.addFriend(user, friendId);
   }
 

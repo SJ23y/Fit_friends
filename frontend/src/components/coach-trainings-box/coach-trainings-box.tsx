@@ -13,7 +13,7 @@ function CoachTrainingsBoxTemplate({trainings, indiviDualTrainings}: CoachTraini
   const [startIndex, setStartIndex] = useState(0);
 
   return(
-    <div className="user-card-coach__training">
+    <>
                         <div className="user-card-coach__training-head">
                           <h2 className="user-card-coach__training-title">Тренировки</h2>
                           <div className="user-card-coach__training-bts">
@@ -60,32 +60,8 @@ function CoachTrainingsBoxTemplate({trainings, indiviDualTrainings}: CoachTraini
                   && <EmptyListCard />
                 }
                         </ul>
-                        <form className="user-card-coach__training-form">
-                          {
-                            indiviDualTrainings &&
-                            <button
-                              className="btn user-card-coach__btn-training"
-                              type="button">Хочу персональную тренировку
-                            </button>
-                          }
-                          {
-                            /*
-                            <div className="user-card-coach__training-check">
-                              <div className="custom-toggle custom-toggle--checkbox">
-                                <label>
-                                  <input type="checkbox" value="user-agreement-1" name="user-agreement" checked />
-                                  <span className="custom-toggle__icon">
-                                    <svg width="9" height="6" aria-hidden="true">
-                                      <use xlinkHref="#arrow-check"></use>
-                                    </svg>
-                                  </span>
-                                  <span className="custom-toggle__label">Получать уведомление на почту о новой тренировке</span>
-                                </label>
-                              </div>
-                            </div>*/
-                          }
-                        </form>
-                      </div>
+
+                      </>
   );
 }
 

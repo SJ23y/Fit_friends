@@ -9,6 +9,6 @@ import { FriendsController } from './friends.controller';
   controllers: [FriendsController],
   providers: [FriendsRepository, FriendsFactory, FriendsService],
   imports: [AuthenticationModule],
-  exports: []
+  exports: [FriendsRepository]
 })
 export class FriendsModule {}

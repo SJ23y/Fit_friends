@@ -35,6 +35,12 @@ export enum TrainDuration {
   LONG = '80-100 мин'
 }
 
+export enum RequestStatus {
+  PENDING =  'pending',
+  APPROVED = 'approved',
+  REJECTED = 'rejected'
+};
+
 export enum PaymentType {
   VISA = 'visa',
   MIR = 'mir',
@@ -81,7 +87,8 @@ export enum ApiRoute {
   Purchases = '/purchase',
   UserUpdate = '/user/update',
   User = '/user',
-  Friends = '/friends'
+  Friends = '/friends',
+  Requests = '/requests'
 }
 
 export enum UserLevel {

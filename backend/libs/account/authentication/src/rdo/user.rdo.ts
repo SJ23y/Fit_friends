@@ -3,6 +3,7 @@ import { Expose, Type } from "class-transformer";
 import { QustionnaireRdo } from "./questionnaire.rdo";
 import { TrainingRdo } from "./training.rdo";
 import { UserFriendRdo } from "./user-friend.rdo";
+import { TrainingRequestRdo } from "./training-request.rdo";
 
 export class UserRdo {
   @ApiProperty({
@@ -105,4 +106,20 @@ export class UserRdo {
   @Type(() => UserFriendRdo)
   @Expose()
   public friends: UserFriendRdo;
+
+  @ApiProperty({
+    description: 'User list of friends',
+    example: '[friends]'
+  })
+  @Type(() => TrainingRequestRdo)
+  @Expose()
+  public requests: TrainingRequestRdo[];
+
+  @ApiProperty({
+    description: 'User list of friends',
+    example: '[friends]'
+  })
+  @Type(() => TrainingRequestRdo)
+  @Expose()
+  public recievedRequests: TrainingRequestRdo[];
 }

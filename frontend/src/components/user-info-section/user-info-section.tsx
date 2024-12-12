@@ -71,11 +71,11 @@ function UserInfoSectionTemplate({user}: UserInfoSectionProps): JSX.Element {
       setEditStatus(true)
     } else {
       evt.preventDefault();
-      const avatar = avatarRef.current?.files?.[0];
+      const avatarFile = avatarRef.current?.files?.[0] ?? avatar;
       if (formRef.current && avatar) {
         const data = new FormData(formRef.current);
         data.append('location', formData.location);
-        data.append('avatar', avatar);
+        data.append('avatar', avatarFile);
         data.append('userLevel', formData.questionnaire.userLevel);
         data.append('gender', formData.gender);
         if (isUserQuestionnaire(formData.questionnaire)) {

@@ -29,6 +29,7 @@
       "@backend/training": ["libs/training/training/src/index.ts"],
       "@backend/training-purchase": ["libs/training/purchase/src/index.ts"],
       "@backend/training-review": ["libs/training/review/src/index.ts"],
+      "@backend/trainingRequest": ["libs/account/request/src/index.ts"],
       "@backend/user": ["libs/account/user/src/index.ts"],
       "@backend/user-balance": ["libs/account/balance/src/index.ts"],
       "@backend/user-config": ["libs/account/config/src/index.ts"]

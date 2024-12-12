@@ -1,0 +1,9 @@
+#make request for training
+POST http://localhost:3000/requests/09290b47-6905-4c1f-bd9f-65e33db57c37/pending HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzNTViNWZhYy1jZTM4LTRkYTAtYmMzOS1kMGYzMTUxMzQ1Y2QiLCJuYW1lIjoiU0oiLCJyb2xlIjoidXNlciIsImlhdCI6MTczMzc5MjMzOCwiZXhwIjoxNzMzNzkzMjM4fQ.aOWO3NGUrrKdcK47b5k9wg0K9IqFnfGDG4iNKvkOSws
+
+{
+}
+
+###

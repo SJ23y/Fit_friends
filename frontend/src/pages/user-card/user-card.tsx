@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks/use-app-dispatch";
-import { getUserCardInfo } from "../../store/user-process/selectors";
+import { getUserCardInfo, getUserInfo } from "../../store/user-process/selectors";
 import { useEffect, useState } from "react";
 import { getUserById } from "../../store/user-process/thunk-actions";
 import { Role } from "../../consts";
@@ -8,14 +8,17 @@ import CoachInfoCard from "../../components/coach-info-card/coach-info-card";
 import UserInfoCard from "../../components/user-info-card/user-info-card";
 import { addNewFriend, deleteFriend } from "../../store/friends-process/thunk-actions";
 import { addFriendToUser, deleteFriendFromUser } from "../../store/user-process/user-process";
+import { isUserQuestionnaire } from "../../utils";
 
 function UserCard(): JSX.Element {
-  const loggedUser = useAppSelector(getUserCardInfo);
+  const loggedUser = useAppSelector(getUserInfo);
   const viewedUser = useAppSelector(getUserCardInfo);
   const [isFriend, setIsFriend] = useState<boolean>(false);
   const {userId} = useParams();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const isReadyForTraining = (loggedUser && isUserQuestionnaire(loggedUser.questionnaire)) ? loggedUser.questionnaire.isReadyForTrain: false;
+  const isNotHasRequest = loggedUser!.requests.every((request) => request.recieverId !== viewedUser?.id);
 
   const addFriendClickHandler = () => {
     if (viewedUser?.id && loggedUser?.id) {
@@ -42,6 +45,7 @@ function UserCard(): JSX.Element {
 
   useEffect(() => {
     if (viewedUser?.friends && viewedUser.friends.length > 0) {
+      console.log(loggedUser?.id, viewedUser.friends);
       const status = viewedUser.friends.some((friend) => friend.friendId === loggedUser?.id || friend.userId === loggedUser?.id);
       setIsFriend(status);
     } else {
@@ -72,6 +76,8 @@ function UserCard(): JSX.Element {
                     onAddFriend={addFriendClickHandler}
                     onDeleteFriend={deleteFriendClickHandler}
                     isFriend={isFriend}
+                    isReadyForTraining={isReadyForTraining && isNotHasRequest}
+                    loggedUserId={loggedUser!.id}
                   />
                 }
                 {

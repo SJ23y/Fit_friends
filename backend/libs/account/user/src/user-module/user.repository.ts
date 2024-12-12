@@ -23,10 +23,14 @@ export class UserRepository extends BasePostgresRepository<UserEntity, PrismaUse
         reviews: undefined,
         trainings: undefined,
         purchases: undefined,
-        friends: undefined
+        friends: undefined,
+        recievedRequests: undefined,
+        requests: undefined
       },
       include: {
-        questionnaire: true
+        questionnaire: true,
+        requests: true,
+        recievedRequests: true
       }
     });
     user.id = newUser.id
@@ -41,7 +45,9 @@ export class UserRepository extends BasePostgresRepository<UserEntity, PrismaUse
     const foundUser = await this.client.user.findFirst({
       where: { email },
       include: {
-        questionnaire: true
+        questionnaire: true,
+        requests: true,
+        recievedRequests: true
       }
     });
 
@@ -58,7 +64,9 @@ export class UserRepository extends BasePostgresRepository<UserEntity, PrismaUse
       include: {
         questionnaire: true,
         trainings: true,
-        friends: true
+        friends: true,
+        requests: true,
+        recievedRequests: true
       }
     });
 
@@ -103,7 +111,9 @@ export class UserRepository extends BasePostgresRepository<UserEntity, PrismaUse
         purchases: undefined
       },
       include: {
-        questionnaire: true
+        questionnaire: true,
+        requests: true,
+        recievedRequests: true
       }
     });
 

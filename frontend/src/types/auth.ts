@@ -1,4 +1,5 @@
 import { Gender, Role, UserLevel } from "../consts";
+import { TrainingRequest } from "./training-request";
 import { Trainings } from "./trainings";
 
 export type Token = string;
@@ -9,7 +10,7 @@ export type TokenData = {
 }
 
 export type UserData = {
-  "id"?: string;
+  "id": string;
   "email": string,
   "name": string,
   "password": string,
@@ -21,8 +22,10 @@ export type UserData = {
   "questionnaire": UserQuestionnaire | CoachQuestionnaire,
   "role": Role,
   "backgroundImage": string;
-  "trainings"?: Trainings;
-  "friends"?: UserFriend[];
+  "trainings": Trainings;
+  "friends": UserFriend[];
+  "recievedRequests": TrainingRequest[];
+  "requests": TrainingRequest[];
 };
 
 export type NewUser = {
@@ -72,7 +75,7 @@ export type CoachQuestionnaire = {
 
 
 export type Friend = {
-  "id"?: string,
+  "id": string,
   "name": string,
   "avatar": File,
   "location": string,

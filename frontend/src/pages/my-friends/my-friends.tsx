@@ -38,7 +38,9 @@ function MyFriends(): JSX.Element {
 
   return(
     <main>
-      <section className="friends-list">
+      {
+        user&&
+        <section className="friends-list">
         <div className="container">
           <div className="friends-list__wrapper">
             <button
@@ -59,7 +61,12 @@ function MyFriends(): JSX.Element {
                 friends?.entities &&
                 friends.entities.map((friend, index) => (
                   <li className="friends-list__item" key={`friend-card-${index}-${friend.id}`}>
-                    <FriendCard friend={friend} />
+                    <FriendCard
+                      friend={friend}
+                      user={user}
+                      request={user.requests.find((request) => request.recieverId === friend.id)}
+                      recievedRequest={user.recievedRequests.find((request) => request.senderId === friend.id)}
+                    />
                   </li>
                 ))
               }
@@ -98,7 +105,8 @@ function MyFriends(): JSX.Element {
         </div>
       </div>
     </div>
-  </section>
+        </section>
+      }
 </main>
 
 )};

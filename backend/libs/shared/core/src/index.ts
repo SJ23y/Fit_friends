@@ -7,7 +7,8 @@ export {
   DefaultQuestionnaireMan,
   MAX_CALLORIES_COUNT,
   MIN_CALLORIES_COUNT,
-  MAX_USER_COUNT_LIMIT } from './settings/user.setting'
+  MAX_USER_COUNT_LIMIT,
+  RequestStatus } from './settings/user.setting'
 export {
   TRAIN_TYPES,
   TrainDuration,
@@ -53,3 +54,4 @@ export { Order } from './interfaces/order.interface';
 export { CustomError } from './interfaces/custom-error.interface';
 export { TrainingStats } from './interfaces/training-stats.interface';
 export { UserQuestionnarie, CoachQuestionnarie } from './interfaces/questionnarie.interface';
+export { RequestForTraining } from './interfaces/request-for-training.inteface';

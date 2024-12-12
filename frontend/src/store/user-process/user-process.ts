@@ -4,6 +4,7 @@ import { UserProcess } from '../../types/state';
 import { checkAuthorization, getUserById, loginUser, logoutUser, registerUser, saveQuestionnaireResult, updateUser, uploadUsers } from './thunk-actions';
 import { UserData, UserFriend } from '../../types/auth';
 import { Query } from '../../types/query';
+import { TrainingRequest } from '../../types/training-request';
 
 const initialState: UserProcess = {
   authorizationStatus: AuthorizationStatus.Unknown,
@@ -26,6 +27,16 @@ const userProcess = createSlice({
   reducers: {
     setCurrentlyViewedUser: (state, action: PayloadAction<UserData>) => {
       state.currentlyViewedUser = action.payload;
+    },
+    addNewRequest: (state, action: PayloadAction<TrainingRequest>) => {
+      if (state.user) {
+        if (action.payload.senderId === state.user.id) {
+          state.user.requests.push(action.payload);
+        }
+        if (action.payload.recieverId === state.user.id) {
+          state.user.recievedRequests.push(action.payload);
+        }
+      }
     },
     changeUserQuery: (state, action: PayloadAction<Partial<Query>>) => {
       state.query = {
@@ -85,7 +96,10 @@ const userProcess = createSlice({
           "questionnaire": action.payload.questionnaire,
           "role": action.payload.role,
           "backgroundImage": action.payload.backgroundImage,
-          "trainings": action.payload.trainings
+          "trainings": action.payload.trainings,
+          "requests": action.payload.requests,
+          "recievedRequests": action.payload.recievedRequests,
+          "friends": action.payload.friends
         };
         state.error = null;
         state.loadingStatus = false;
@@ -160,6 +174,6 @@ const userProcess = createSlice({
   },
 });
 
-const { setCurrentlyViewedUser, changeUserQuery, addFriendToUser, deleteFriendFromUser } = userProcess.actions;
+const { setCurrentlyViewedUser, changeUserQuery, addFriendToUser, deleteFriendFromUser, addNewRequest } = userProcess.actions;
 
-export { userProcess, setCurrentlyViewedUser, changeUserQuery, addFriendToUser, deleteFriendFromUser };
+export { userProcess, setCurrentlyViewedUser, changeUserQuery, addFriendToUser, deleteFriendFromUser, addNewRequest };

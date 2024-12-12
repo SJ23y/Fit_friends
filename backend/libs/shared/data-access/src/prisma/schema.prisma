@@ -28,6 +28,9 @@ model User {
   purchases Purchase[]
   friends Friend[]  @relation(name: "friend")
   friendship Friend[]  @relation(name: "user")
+  requests Request[]  @relation(name: "sender")
+  recievedRequests Request[]  @relation(name: "reciever")
+
   @@map("users")
 }
 
@@ -121,4 +124,17 @@ model Friend {
 
   @@id([userId, friendId])
   @@map("friends")
+}
+
+model Request {
+  reciever User @relation(name: "reciever", fields: [recieverId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  recieverId String @map("reciever_id")
+  sender User @relation(name: "sender", fields: [senderId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  senderId String @map("sender_id")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @default(now()) @map("updated_at")
+  status String
+
+  @@id([recieverId, senderId])
+  @@map("requests")
 }

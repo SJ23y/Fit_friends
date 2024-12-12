@@ -1,18 +1,42 @@
 import { Link } from "react-router-dom";
-import { Setting } from "../../consts";
+import { RequestStatus, Setting } from "../../consts";
 import { UserData } from "../../types/auth";
 import { isCoachQuestionnaire } from "../../utils";
 import CoachTrainingsBox from "../coach-trainings-box/coach-trainings-box";
 import { memo } from "react";
+import { useAppDispatch } from "../../hooks/use-app-dispatch";
+import { sendTrainingRequest } from "../../store/friends-process/thunk-actions";
+import { addNewRequest } from "../../store/user-process/user-process";
 
 type CoachInfoCardProps = {
   user: UserData,
   onAddFriend: () => void,
   onDeleteFriend: () => void,
-  isFriend: boolean
+  isFriend: boolean,
+  isReadyForTraining: boolean,
+  loggedUserId: string
 }
 
-function CoachInfoCardTemplate({user, onAddFriend, onDeleteFriend, isFriend}: CoachInfoCardProps): JSX.Element {
+function CoachInfoCardTemplate({loggedUserId, user, onAddFriend, onDeleteFriend, isFriend, isReadyForTraining}: CoachInfoCardProps): JSX.Element {
+  const dispatch = useAppDispatch();
+
+  const personalTrainingBtnClickHandler = () => {
+    const newRequest = {
+      senderId: loggedUserId,
+      recieverId: user.id,
+      status: RequestStatus.PENDING
+    }
+    dispatch(
+      sendTrainingRequest({
+        ...newRequest,
+        cb: () => {
+          dispatch(addNewRequest(newRequest))
+        }
+      })
+    );
+  }
+
+
   return(
     <div className="inner-page__content">
 
@@ -111,6 +135,7 @@ function CoachInfoCardTemplate({user, onAddFriend, onDeleteFriend, isFriend}: Co
                           </ul>
                         </div>
                       </div>
+                      <div className="user-card-coach__training">
                       {
 
                         user.trainings &&
@@ -119,6 +144,38 @@ function CoachInfoCardTemplate({user, onAddFriend, onDeleteFriend, isFriend}: Co
                           indiviDualTrainings={isCoachQuestionnaire(user.questionnaire) && user.questionnaire.individualTraining}
                         />
                       }
+                      <form className="user-card-coach__training-form">
+                          {
+                            isCoachQuestionnaire(user.questionnaire) &&
+                            user.questionnaire.individualTraining &&
+                            isReadyForTraining &&
+                            isFriend &&
+                            <button
+                              className="btn user-card-coach__btn-training"
+                              type="button"
+                              onClick={personalTrainingBtnClickHandler}
+                            >
+                              Хочу персональную тренировку
+                            </button>
+                          }
+                          {
+                            /*
+                            <div className="user-card-coach__training-check">
+                              <div className="custom-toggle custom-toggle--checkbox">
+                                <label>
+                                  <input type="checkbox" value="user-agreement-1" name="user-agreement" checked />
+                                  <span className="custom-toggle__icon">
+                                    <svg width="9" height="6" aria-hidden="true">
+                                      <use xlinkHref="#arrow-check"></use>
+                                    </svg>
+                                  </span>
+                                  <span className="custom-toggle__label">Получать уведомление на почту о новой тренировке</span>
+                                </label>
+                              </div>
+                            </div>*/
+                          }
+                        </form>
+                      </div>
                     </div>
                   </section>
               </div>

@@ -6,6 +6,7 @@ import { PaginatedResult } from '../../types/paginatedResult';
 import { Friend } from '../../types/auth';
 import { Query } from '../../types/query';
 import { createQueryString } from '../../utils';
+import { RequestData } from '../../types/training-request';
 
 
 const addNewFriend = createAsyncThunk<
@@ -35,8 +36,18 @@ const uploadFriends = createAsyncThunk<
   return data;
 });
 
+const sendTrainingRequest = createAsyncThunk<
+  void,
+  RequestData,
+  { dispatch: Dispatch; state: State; extra: AxiosInstance }
+>('sendTrainingRequest', async ({senderId, recieverId, status, cb}, { extra: api }) => {
+  await api.post<void>(ApiRoute.Requests, {senderId, recieverId, status});
+  cb();
+});
+
 export {
   addNewFriend,
   deleteFriend,
-  uploadFriends
+  uploadFriends,
+  sendTrainingRequest
 }

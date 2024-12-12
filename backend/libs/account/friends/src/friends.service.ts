@@ -1,7 +1,7 @@
 import { FriendsRepository } from './friends.repository';
 import { FriendsQuery } from './friends.query';
 import { FriendEntity } from './friends.entity';
-import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { PaginationResult, Role, TokenPayload } from '@backend/shared-core';
 
 @Injectable()
@@ -30,8 +30,9 @@ export class FriendsService {
       throw new ConflictException('You are not allowed to perform this action')
     }
     const existedFriend = await this.friendsRepository.isFriends(user.sub, friendId);
+
     if (!existedFriend) {
-      throw new ConflictException('This user not in your friends list')
+      throw new ConflictException('This user is not in your friends list')
     }
     await this.friendsRepository.delete(user.sub, friendId);
   }

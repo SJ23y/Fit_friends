@@ -45,7 +45,12 @@ export class FriendsRepository extends BasePostgresRepository<FriendEntity, Pris
   }
 
   public async isFriends(userId: string, friendId: string): Promise<Friend | null> {
-    const existedFriend = await this.client.friend.findFirst({ where: {userId, friendId}});
+    const existedFriend = await this.client.friend.findFirst({ where: {
+      OR: [
+        {userId, friendId},
+        {friendId: userId, userId: friendId}
+      ]
+    }});
     return existedFriend;
   }
 

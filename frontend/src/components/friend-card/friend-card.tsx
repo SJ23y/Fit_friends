@@ -1,14 +1,62 @@
-import { memo } from "react"
-import { Friend } from "../../types/auth";
-import { AppRoute, Role, Setting } from "../../consts";
+import { memo, useEffect, useState } from "react"
+import { Friend, UserData } from "../../types/auth";
+import { AppRoute, RequestStatus, Role, Setting } from "../../consts";
 import classNames from "classnames";
 import { Link } from "react-router-dom";
+import { TrainingRequest } from "../../types/training-request";
+import { useAppDispatch } from "../../hooks/use-app-dispatch";
+import { sendTrainingRequest } from "../../store/friends-process/thunk-actions";
+import { isUserQuestionnaire } from "../../utils";
+import { addNewRequest } from "../../store/user-process/user-process";
 
 type FriendCardProps = {
-  friend: Friend
+  friend: Friend,
+  user: UserData,
+  request?: TrainingRequest,
+  recievedRequest?: TrainingRequest
 }
 
-function FriendCardTemplate({friend}: FriendCardProps): JSX.Element {
+function FriendCardTemplate({friend, request, recievedRequest, user}: FriendCardProps): JSX.Element {
+  const [requestStatus, setRequestStatus] = useState<RequestStatus | null>(null);
+  const dispatch = useAppDispatch();
+  const trainingDescription = (friend.role === Role.COACH) ? 'персональную' : 'совместную';
+  const isReadyForTraining = (isUserQuestionnaire(user.questionnaire)) ? user.questionnaire.isReadyForTrain : false;
+
+  const trainingRequestStatusChangeHandler = (newRequest: TrainingRequest) => {
+    dispatch(
+      sendTrainingRequest({
+        ...newRequest,
+        cb: () => {
+          setRequestStatus(newRequest.status);
+          dispatch(addNewRequest(newRequest))
+        }
+      })
+    );
+  }
+
+  const getRequestInfoMessage = (status: RequestStatus) => {
+    if (status === RequestStatus.PENDING && request) {
+      return `Запрос на ${trainingDescription} тренировку ожидает решения`
+    }
+    if (status === RequestStatus.PENDING && recievedRequest) {
+      return `Запрос на ${(user.role === Role.COACH) ? 'персональную' : 'совместную'} тренировку`
+    }
+    if (status === RequestStatus.APPROVED) {
+      return `Запрос на ${trainingDescription} тренировку принят`
+    }
+    if (status === RequestStatus.REJECTED) {
+      return `Запрос на ${trainingDescription} тренировку отклонён`
+    }
+  }
+
+  useEffect(() => {
+    if (request && !recievedRequest) {
+      setRequestStatus(request.status);
+    } else if (!request && recievedRequest) {
+      setRequestStatus(recievedRequest.status);
+    }
+  }, [request, recievedRequest])
+
   return(
       <div className="thumbnail-friend">
         <div className={
@@ -58,9 +106,16 @@ function FriendCardTemplate({friend}: FriendCardProps): JSX.Element {
             {
               friend.trainingRequests &&
               friend.role === Role.USER &&
+              !requestStatus &&
+              isReadyForTraining &&
               <button
                 className="thumbnail-friend__invite-button"
                 type="button"
+                onClick={() => trainingRequestStatusChangeHandler({
+                  status: RequestStatus.PENDING,
+                  senderId: user.id,
+                  recieverId: friend.id
+              })}
               >
                 <svg width={43} height={46} aria-hidden="true" focusable="false">
                   <use xlinkHref="#icon-invite" />
@@ -73,12 +128,37 @@ function FriendCardTemplate({friend}: FriendCardProps): JSX.Element {
         </div>
         {
           friend.trainingRequests &&
+          requestStatus &&
           <div className="thumbnail-friend__request-status thumbnail-friend__request-status--role-user">
-            <p className="thumbnail-friend__request-text">Запрос на&nbsp;совместную тренировку</p>
-            <div className="thumbnail-friend__button-wrapper">
-              <button className="btn btn--medium btn--dark-bg thumbnail-friend__button" type="button">Принять</button>
-              <button className="btn btn--medium btn--outlined btn--dark-bg thumbnail-friend__button" type="button">Отклонить</button>
-            </div>
+            <p className="thumbnail-friend__request-text">
+              { getRequestInfoMessage(requestStatus) }
+            </p>
+            {
+              recievedRequest &&
+              requestStatus === RequestStatus.PENDING &&
+              <div className="thumbnail-friend__button-wrapper">
+                <button
+                  className="btn btn--medium btn--dark-bg thumbnail-friend__button"
+                  type="button"
+                  onClick={() => trainingRequestStatusChangeHandler({
+                    status: RequestStatus.APPROVED,
+                    senderId: friend.id,
+                    recieverId: user.id
+                })}
+                >Принять</button>
+                <button
+                  className="btn btn--medium
+                  btn--outlined btn--dark-bg
+                  thumbnail-friend__button"
+                  type="button"
+                  onClick={() => trainingRequestStatusChangeHandler({
+                    status: RequestStatus.REJECTED,
+                    senderId: friend.id,
+                    recieverId: user.id
+                })}
+                >Отклонить</button>
+              </div>
+            }
           </div>
         }
       </div>

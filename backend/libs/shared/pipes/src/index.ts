@@ -1,1 +1,1 @@
-export * from './lib/shared-pipes';
+export { ValidateRequestStatusPipe } from './validate-request-status.pipe';

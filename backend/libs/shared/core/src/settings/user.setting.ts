@@ -22,6 +22,12 @@ export enum Role {
   COACH = 'coach'
 };
 
+export enum RequestStatus {
+  PENDING =  'pending',
+  APPROVED = 'approved',
+  REJECTED = 'rejected'
+};
+
 export const DefaultQuestionnaireWoman = {
   createdAt: new Date(),
   updatedAt: new Date(),
