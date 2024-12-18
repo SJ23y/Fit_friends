@@ -1,7 +1,7 @@
 import { Entity, StorableEntity, AuthUser, Gender, Role, UserQuestionnarie, CoachQuestionnarie } from '@backend/shared-core';
 import { compare, genSalt, hash } from 'bcrypt';
 import { SALT_ROUNDS } from './user.consts';
-import { Review, Training, Purchase, Friend, Request } from '@prisma/client';
+import { Review, Training, Purchase, Friend, Request, Subscription } from '@prisma/client';
 
 const DEFAULT_USER_AVATAR = 'default-avatar.jpg'
 
@@ -24,6 +24,7 @@ export class UserEntity extends Entity implements StorableEntity<AuthUser> {
   public friends?: Friend[]
   public requests?: Request[];
   public recievedRequests?: Request[];
+  public subscriptions?: Subscription[];
 
   constructor(user?: AuthUser) {
     super();
@@ -51,6 +52,7 @@ export class UserEntity extends Entity implements StorableEntity<AuthUser> {
       this.friends = user.friends;
       this.requests = user.requests;
       this.recievedRequests = user.recievedRequests;
+      this.subscriptions = user.subscriptions;
     }
 
   }
@@ -85,7 +87,8 @@ export class UserEntity extends Entity implements StorableEntity<AuthUser> {
       purchases: this.purchases,
       friends: this.friends,
       requests: this.requests,
-      recievedRequests: this.recievedRequests
+      recievedRequests: this.recievedRequests,
+      subscriptions: this.subscriptions
     }
   }
 }

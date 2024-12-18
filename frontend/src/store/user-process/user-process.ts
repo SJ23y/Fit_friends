@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AuthorizationStatus, NameSpace, Setting } from '../../consts';
 import { UserProcess } from '../../types/state';
-import { checkAuthorization, getUserById, loginUser, logoutUser, registerUser, saveQuestionnaireResult, updateUser, uploadUsers } from './thunk-actions';
+import { addSubscription, checkAuthorization, deleteSubscription, getUserById, loginUser, logoutUser, registerUser, saveQuestionnaireResult, updateUser, uploadUsers } from './thunk-actions';
 import { UserData, UserFriend } from '../../types/auth';
 import { Query } from '../../types/query';
 import { TrainingRequest } from '../../types/training-request';
@@ -99,7 +99,8 @@ const userProcess = createSlice({
           "trainings": action.payload.trainings,
           "requests": action.payload.requests,
           "recievedRequests": action.payload.recievedRequests,
-          "friends": action.payload.friends
+          "friends": action.payload.friends,
+          "subscriptions": action.payload.subscriptions
         };
         state.error = null;
         state.loadingStatus = false;
@@ -169,6 +170,20 @@ const userProcess = createSlice({
           }
         } else {
           state.users = action.payload;
+        }
+      })
+      .addCase(addSubscription.fulfilled, (state, action) => {
+        state.error = null;
+        if (state.user) {
+          state.user.subscriptions.push(action.payload)
+        }
+      })
+      .addCase(deleteSubscription.fulfilled, (state, action) => {
+        state.error = null;
+
+        if (state.user) {
+          state.user.subscriptions = state.user.subscriptions.filter((subscription) => subscription.subscribeToId !== action.payload);
+
         }
       })
   },

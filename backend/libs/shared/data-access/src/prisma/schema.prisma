@@ -30,6 +30,7 @@ model User {
   friendship Friend[]  @relation(name: "user")
   requests Request[]  @relation(name: "sender")
   recievedRequests Request[]  @relation(name: "reciever")
+  subscriptions Subscription[]
 
   @@map("users")
 }
@@ -137,4 +138,19 @@ model Request {
 
   @@id([recieverId, senderId])
   @@map("requests")
+}
+
+model Subscription {
+  subscriber User @relation(fields: [subscribeById], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  subscribeById String @map("subscibe_by_id")
+  subscribeByName String @map("subscibe_by_name")
+  subscribeByEmail String @map("subscibe_by_email")
+  subscribeToId String @map("subscribe_to_id")
+  subscribeToName String @map("subscribe_to_name")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @default(now()) @map("updated_at")
+  lastEmail  DateTime @default(now()) @map("last_email")
+
+  @@id([subscribeById, subscribeToId])
+  @@map("subscriptions")
 }

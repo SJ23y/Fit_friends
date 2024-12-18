@@ -25,7 +25,8 @@ export enum SortDirection {
   DESC = 'desc'
 }
 
-
+export const CLIENT_URL = 'http://localhost'
+export const SERVER_URL = 'http://localhost:3000/'
 export const DEFAULT_PAGE_NUMBER = 1;
-export const AUTH_GUARD_CHECK_URL = `https://localhost:3000/auth/check`
+export const AUTH_GUARD_CHECK_URL = `http://localhost:3000/auth/check`
 export const MAX_PURCHASE_COUNT_LIMIT = 50;

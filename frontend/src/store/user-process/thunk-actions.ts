@@ -8,6 +8,7 @@ import { redirectToRoute } from '../actions';
 import { Query } from '../../types/query';
 import { PaginatedResult } from '../../types/paginatedResult';
 import { createQueryString } from '../../utils';
+import { Subscription } from '../../types/subscription';
 
 
 const checkAuthorization = createAsyncThunk<
@@ -92,6 +93,24 @@ const uploadUsers = createAsyncThunk<
   return data;
 });
 
+const addSubscription = createAsyncThunk<
+  Subscription,
+  Subscription,
+  { dispatch: Dispatch; state: State; extra: AxiosInstance }
+>('addSubscription', async (subscription, { extra: api }) => {
+  await api.post<void>(ApiRoute.Subscription, subscription);
+  return subscription;
+});
+
+const deleteSubscription = createAsyncThunk<
+  string,
+  string,
+  { dispatch: Dispatch; state: State; extra: AxiosInstance }
+>('deleteSubscription', async (coachId, { extra: api }) => {
+  await api.delete<void>(`${ApiRoute.Subscription}/${coachId}`);
+  return coachId;
+});
+
 export {
   checkAuthorization,
   loginUser,
@@ -100,5 +119,7 @@ export {
   updateUser,
   saveQuestionnaireResult,
   getUserById,
-  uploadUsers
+  uploadUsers,
+  deleteSubscription,
+  addSubscription
 };

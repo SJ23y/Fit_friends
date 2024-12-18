@@ -37,7 +37,9 @@ export {
   MAX_PURCHASE_COUNT_LIMIT,
   FilterBy,
   SortBy,
-  SortDirection
+  SortDirection,
+  SERVER_URL,
+  CLIENT_URL
  } from './settings/common.setting'
 export { PaginationResult, TrainingPaginationResult } from './interfaces/pagination-result.interface';
 export { Review } from './interfaces/review.interface';
@@ -55,3 +57,5 @@ export { CustomError } from './interfaces/custom-error.interface';
 export { TrainingStats } from './interfaces/training-stats.interface';
 export { UserQuestionnarie, CoachQuestionnarie } from './interfaces/questionnarie.interface';
 export { RequestForTraining } from './interfaces/request-for-training.inteface';
+export { Subscription } from './interfaces/subscription.interface';
+export { RabbitRouting } from './settings/messages.setting';

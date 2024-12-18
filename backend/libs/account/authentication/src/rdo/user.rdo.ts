@@ -4,6 +4,7 @@ import { QustionnaireRdo } from "./questionnaire.rdo";
 import { TrainingRdo } from "./training.rdo";
 import { UserFriendRdo } from "./user-friend.rdo";
 import { TrainingRequestRdo } from "./training-request.rdo";
+import { SubscriptionRdo } from "./subscription.rdo";
 
 export class UserRdo {
   @ApiProperty({
@@ -122,4 +123,12 @@ export class UserRdo {
   @Type(() => TrainingRequestRdo)
   @Expose()
   public recievedRequests: TrainingRequestRdo[];
+
+  @ApiProperty({
+    description: 'User list of subscriptions',
+    example: '[subscription]'
+  })
+  @Type(() => SubscriptionRdo)
+  @Expose()
+  public subscriptions: SubscriptionRdo[];
 }

@@ -1,0 +1,9 @@
+{
+  "name": "messages-broker",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/messages/messages-broker/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project messages-broker --web",
+  "targets": {}
+}

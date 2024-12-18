@@ -1,0 +1,19 @@
+# Add new subscription
+POST http://localhost:3000/subscription HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzNTViNWZhYy1jZTM4LTRkYTAtYmMzOS1kMGYzMTUxMzQ1Y2QiLCJuYW1lIjoiU0oiLCJyb2xlIjoidXNlciIsImlhdCI6MTczNDM5NDU4OCwiZXhwIjoxNzM0Mzk1NDg4fQ.Cb7GhhcvedJfKtLttfRg0vnvjFkRTwQgAuRe1zT6OmM
+Content-Type: application/json
+
+{
+  "subscribeById": "355b5fac-ce38-4da0-bc39-d0f3151345cd",
+  "subscribeByName": "SJ",
+  "subscribeByEmail": "sj@example.com",
+  "subscribeToId": "09290b47-6905-4c1f-bd9f-65e33db57c37",
+  "subscribeToName":  "Ted Lasso"
+}
+
+###
+
+# Delete subscription
+DELETE http://localhost:3000/subscription/09290b47-6905-4c1f-bd9f-65e33db57c37 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzNTViNWZhYy1jZTM4LTRkYTAtYmMzOS1kMGYzMTUxMzQ1Y2QiLCJuYW1lIjoiU0oiLCJyb2xlIjoidXNlciIsImlhdCI6MTczNDM5NDU4OCwiZXhwIjoxNzM0Mzk1NDg4fQ.Cb7GhhcvedJfKtLttfRg0vnvjFkRTwQgAuRe1zT6OmM
+

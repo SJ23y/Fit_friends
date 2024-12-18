@@ -22,10 +22,16 @@
       "@backend/file-manager": ["libs/file-manager/src/index.ts"],
       "@backend/file-manager-config": ["libs/file-manager/config/src/index.ts"],
       "@backend/friends": ["libs/account/friends/src/index.ts"],
+      "@backend/messages-broker": [
+        "libs/messages/messages-broker/src/index.ts"
+      ],
+      "@backend/messages-config": ["libs/messages/config/src/index.ts"],
+      "@backend/messages-email": ["libs/messages/messages-email/src/index.ts"],
       "@backend/shared-core": ["libs/shared/core/src/index.ts"],
       "@backend/shared-guards": ["libs/shared/guards/src/index.ts"],
       "@backend/shared-helpers": ["libs/shared/helpers/src/index.ts"],
       "@backend/shared-pipes": ["libs/shared/pipes/src/index.ts"],
+      "@backend/subscription": ["libs/messages/subscription/src/index.ts"],
       "@backend/training": ["libs/training/training/src/index.ts"],
       "@backend/training-purchase": ["libs/training/purchase/src/index.ts"],
       "@backend/training-review": ["libs/training/review/src/index.ts"],

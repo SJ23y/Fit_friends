@@ -25,12 +25,14 @@ export class UserRepository extends BasePostgresRepository<UserEntity, PrismaUse
         purchases: undefined,
         friends: undefined,
         recievedRequests: undefined,
-        requests: undefined
+        requests: undefined,
+        subscriptions: undefined
       },
       include: {
         questionnaire: true,
         requests: true,
-        recievedRequests: true
+        recievedRequests: true,
+        subscriptions: true
       }
     });
     user.id = newUser.id
@@ -47,7 +49,8 @@ export class UserRepository extends BasePostgresRepository<UserEntity, PrismaUse
       include: {
         questionnaire: true,
         requests: true,
-        recievedRequests: true
+        recievedRequests: true,
+        subscriptions: true
       }
     });
 
@@ -66,7 +69,8 @@ export class UserRepository extends BasePostgresRepository<UserEntity, PrismaUse
         trainings: true,
         friends: true,
         requests: true,
-        recievedRequests: true
+        recievedRequests: true,
+        subscriptions: true
       }
     });
 
@@ -108,12 +112,14 @@ export class UserRepository extends BasePostgresRepository<UserEntity, PrismaUse
         },
         reviews:undefined,
         trainings: undefined,
-        purchases: undefined
+        purchases: undefined,
+        subscriptions: undefined
       },
       include: {
         questionnaire: true,
         requests: true,
-        recievedRequests: true
+        recievedRequests: true,
+        subscriptions: true
       }
     });
 

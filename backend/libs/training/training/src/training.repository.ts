@@ -120,6 +120,9 @@ export class TrainigRepository extends BasePostgresRepository<TrainingEntity, Pr
 
     if (query && query?.sortBy) {
       switch (query.sortBy) {
+        case SortBy.DATE:
+          orderBy.createdAt = query.sortDirection;
+          break;
         case SortBy.POPULAR:
           orderBy.rate = query.sortDirection;
           break;

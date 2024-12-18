@@ -1,6 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
 import { QustionnaireRdo } from './questionnaire.rdo';
+import { SubscriptionRdo } from './subscription.rdo';
+import { TrainingRequestRdo } from './training-request.rdo';
+import { UserFriendRdo } from './user-friend.rdo';
+import { TrainingRdo } from './training.rdo';
 
 export class LoggedUserRdo {
   @ApiProperty({
@@ -87,6 +91,46 @@ export class LoggedUserRdo {
   })
   @Expose()
   public role: string;
+
+  @ApiProperty({
+      description: 'Coach\' trainings list',
+      example: '[{TrainingObject}]'
+    })
+    @Type(() => TrainingRdo)
+    @Expose()
+    public trainings: TrainingRdo;
+
+    @ApiProperty({
+      description: 'User list of friends',
+      example: '[friends]'
+    })
+    @Type(() => UserFriendRdo)
+    @Expose()
+    public friends: UserFriendRdo;
+
+    @ApiProperty({
+      description: 'User list of friends',
+      example: '[friends]'
+    })
+    @Type(() => TrainingRequestRdo)
+    @Expose()
+    public requests: TrainingRequestRdo[];
+
+    @ApiProperty({
+      description: 'User list of friends',
+      example: '[friends]'
+    })
+    @Type(() => TrainingRequestRdo)
+    @Expose()
+    public recievedRequests: TrainingRequestRdo[];
+
+    @ApiProperty({
+      description: 'User list of subscriptions',
+      example: '[subscription]'
+    })
+    @Type(() => SubscriptionRdo)
+    @Expose()
+    public subscriptions: SubscriptionRdo[];
 
   @ApiProperty({
     description: 'User access token',

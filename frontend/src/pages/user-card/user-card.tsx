@@ -2,7 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks/use-app-dispatch";
 import { getUserCardInfo, getUserInfo } from "../../store/user-process/selectors";
 import { useEffect, useState } from "react";
-import { getUserById } from "../../store/user-process/thunk-actions";
+import { addSubscription, deleteSubscription, getUserById } from "../../store/user-process/thunk-actions";
 import { Role } from "../../consts";
 import CoachInfoCard from "../../components/coach-info-card/coach-info-card";
 import UserInfoCard from "../../components/user-info-card/user-info-card";
@@ -14,6 +14,7 @@ function UserCard(): JSX.Element {
   const loggedUser = useAppSelector(getUserInfo);
   const viewedUser = useAppSelector(getUserCardInfo);
   const [isFriend, setIsFriend] = useState<boolean>(false);
+  const [hasSubscription, setHasSubscription] = useState<boolean>(false);
   const {userId} = useParams();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -27,6 +28,21 @@ function UserCard(): JSX.Element {
         userId: loggedUser.id,
         friendId: viewedUser.id
       }));
+    }
+  }
+
+  const subscriptionChangeHandler = (coachId: string, coachName: string) => {
+    if (viewedUser && loggedUser && !hasSubscription) {
+      dispatch(addSubscription({
+        subscribeById: loggedUser.id,
+        subscribeByName: loggedUser.name,
+        subscribeByEmail: loggedUser.email,
+        subscribeToId: coachId,
+        subscribeToName: coachName
+      }));
+    }
+    if (viewedUser && loggedUser && hasSubscription) {
+      dispatch(deleteSubscription(coachId));
     }
   }
 
@@ -45,13 +61,21 @@ function UserCard(): JSX.Element {
 
   useEffect(() => {
     if (viewedUser?.friends && viewedUser.friends.length > 0) {
-      console.log(loggedUser?.id, viewedUser.friends);
       const status = viewedUser.friends.some((friend) => friend.friendId === loggedUser?.id || friend.userId === loggedUser?.id);
       setIsFriend(status);
     } else {
       setIsFriend(false);
     }
   }, [viewedUser])
+
+  useEffect(() => {
+    if (loggedUser) {
+      const status = loggedUser!.subscriptions.some((subscription) => subscription.subscribeToId === viewedUser?.id)
+      setHasSubscription(status);
+    } else {
+      setHasSubscription(false);
+    }
+  }, [loggedUser])
 
   return(
     <main>
@@ -78,6 +102,8 @@ function UserCard(): JSX.Element {
                     isFriend={isFriend}
                     isReadyForTraining={isReadyForTraining && isNotHasRequest}
                     loggedUserId={loggedUser!.id}
+                    hasSubscription={hasSubscription}
+                    onSubscriptionChange={(coachId: string, coachName: string) => subscriptionChangeHandler(coachId, coachName)}
                   />
                 }
                 {

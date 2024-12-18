@@ -8,6 +8,7 @@ import { CreateTrainingDto } from "./dto/create-training.dto";
 import { FileManagerService } from "@backend/file-manager";
 import { getRanndomElement } from "@backend/shared-helpers";
 import { UpdateTrainingDto } from "./dto/update-training.dto";
+import { SubscriptionService } from "@backend/subscription";
 
 @Injectable()
 export class TrainingService {
@@ -15,6 +16,7 @@ export class TrainingService {
     private readonly trainigRepository: TrainigRepository,
     private readonly userService: AuthenticationService,
     private readonly fileService: FileManagerService,
+    private readonly subscriptionService: SubscriptionService
   ) {}
 
 
@@ -33,6 +35,8 @@ export class TrainingService {
       rate: 0
     })
     await this.trainigRepository.save(trainingEntity);
+    console.log('send request to subscription service')
+    await this.subscriptionService.sendEmail(trainingEntity.toPOJO());
     return trainingEntity;
   }
 

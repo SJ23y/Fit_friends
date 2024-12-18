@@ -1,0 +1,9 @@
+{
+  "name": "messages-config",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/messages/config/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project messages-config --web",
+  "targets": {}
+}

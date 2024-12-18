@@ -59,12 +59,13 @@ export const getRanndomElement = <T>(arr: T[]) => arr[getRandomInteger(0, arr.le
 export const  isUserQuestionnaire = (questionnaire: UserQuestionnarie | CoachQuestionnarie): questionnaire is UserQuestionnarie => {
   return (questionnaire as UserQuestionnarie).trainDuration !== undefined && (questionnaire as UserQuestionnarie).trainDuration !== null
 }
-/*
+
 export function getRabbitMqConnectionString({user, password, host, port}) {
   console.log(`amqp://${user}:${password}@${host}:${port}`);
   return `amqp://${user}:${password}@${host}:${port}`;
 }
 
+/*
 export function getArrayOfUniques<T>(arr: T[]): T[] {
   const set = new Set(arr);
   return Array.from(set);

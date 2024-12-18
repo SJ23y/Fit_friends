@@ -1,4 +1,5 @@
 import { Gender, Role, UserLevel } from "../consts";
+import { Subscription } from "./subscription";
 import { TrainingRequest } from "./training-request";
 import { Trainings } from "./trainings";
 
@@ -26,6 +27,7 @@ export type UserData = {
   "friends": UserFriend[];
   "recievedRequests": TrainingRequest[];
   "requests": TrainingRequest[];
+  "subscriptions": Subscription[];
 };
 
 export type NewUser = {

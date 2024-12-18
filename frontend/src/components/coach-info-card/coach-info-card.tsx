@@ -14,10 +14,21 @@ type CoachInfoCardProps = {
   onDeleteFriend: () => void,
   isFriend: boolean,
   isReadyForTraining: boolean,
-  loggedUserId: string
+  loggedUserId: string,
+  hasSubscription: boolean,
+  onSubscriptionChange: (coachId: string, coachName: string) => void
 }
 
-function CoachInfoCardTemplate({loggedUserId, user, onAddFriend, onDeleteFriend, isFriend, isReadyForTraining}: CoachInfoCardProps): JSX.Element {
+function CoachInfoCardTemplate({
+  loggedUserId,
+  user,
+  onAddFriend,
+  onDeleteFriend,
+  isFriend,
+  isReadyForTraining,
+  hasSubscription,
+  onSubscriptionChange
+}: CoachInfoCardProps): JSX.Element {
   const dispatch = useAppDispatch();
 
   const personalTrainingBtnClickHandler = () => {
@@ -159,11 +170,17 @@ function CoachInfoCardTemplate({loggedUserId, user, onAddFriend, onDeleteFriend,
                             </button>
                           }
                           {
-                            /*
+
                             <div className="user-card-coach__training-check">
                               <div className="custom-toggle custom-toggle--checkbox">
                                 <label>
-                                  <input type="checkbox" value="user-agreement-1" name="user-agreement" checked />
+                                  <input
+                                    type="checkbox"
+                                    value="user-agreement-1"
+                                    name="user-agreement"
+                                    checked={hasSubscription}
+                                    onChange={() => onSubscriptionChange(user.id, user.name)}
+                                    />
                                   <span className="custom-toggle__icon">
                                     <svg width="9" height="6" aria-hidden="true">
                                       <use xlinkHref="#arrow-check"></use>
@@ -172,7 +189,7 @@ function CoachInfoCardTemplate({loggedUserId, user, onAddFriend, onDeleteFriend,
                                   <span className="custom-toggle__label">Получать уведомление на почту о новой тренировке</span>
                                 </label>
                               </div>
-                            </div>*/
+                            </div>
                           }
                         </form>
                       </div>

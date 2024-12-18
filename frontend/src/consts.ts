@@ -88,7 +88,8 @@ export enum ApiRoute {
   UserUpdate = '/user/update',
   User = '/user',
   Friends = '/friends',
-  Requests = '/requests'
+  Requests = '/requests',
+  Subscription = '/subscription'
 }
 
 export enum UserLevel {
