@@ -150,4 +150,12 @@ export class UpdateUserDto {
   @IsBoolean()
   @IsOptional()
   public individualTraining?: boolean;
+
+  @ApiProperty({
+    description: 'Sertificate file path',
+    example: 'sertificate.pdf'
+  })
+  @IsString()
+  @IsOptional()
+  public sertificate?: string;
 }

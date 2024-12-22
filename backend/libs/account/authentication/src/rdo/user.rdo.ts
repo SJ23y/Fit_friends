@@ -131,4 +131,11 @@ export class UserRdo {
   @Type(() => SubscriptionRdo)
   @Expose()
   public subscriptions: SubscriptionRdo[];
+
+  @ApiProperty({
+    description: 'Coach list of sertificates',
+    example: '["sertificate.pdf"]'
+  })
+  @Expose()
+  public sertificates: string[];
 }

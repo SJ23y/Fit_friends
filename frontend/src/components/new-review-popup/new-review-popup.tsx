@@ -9,7 +9,6 @@ type NewReviewPopupProps = {
 }
 
 function NewReviewPopup({trainingId, onClosePopup}: NewReviewPopupProps): JSX.Element {
-  //const [content, setContent] = useState('');
   const contentRef = useRef<HTMLTextAreaElement | null>(null);
   const [rate, setRate] = useState(0);
   const [rateIsNotValid, setRateIsNotValid] = useState(false);

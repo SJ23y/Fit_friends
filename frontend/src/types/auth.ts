@@ -28,6 +28,7 @@ export type UserData = {
   "recievedRequests": TrainingRequest[];
   "requests": TrainingRequest[];
   "subscriptions": Subscription[];
+  "sertificates"?: string[];
 };
 
 export type NewUser = {

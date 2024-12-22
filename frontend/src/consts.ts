@@ -89,7 +89,8 @@ export enum ApiRoute {
   User = '/user',
   Friends = '/friends',
   Requests = '/requests',
-  Subscription = '/subscription'
+  Subscription = '/subscription',
+  Sertificate = '/sertificate'
 }
 
 export enum UserLevel {
@@ -147,10 +148,12 @@ export const Setting = {
   MaxItemsPerPage: 50,
   FeaturedSliderStep: 1,
   PopularSliderStep: 1,
+  SertificateSliderStep: 1,
   CompanySliderStep: 1,
   FeaturedCardPerStep: 3,
   PopularCardPerStep: 4,
   CompanyCardPerStep: 4,
+  SertificateCardPerStep: 3,
   SPECIAL_TRAINING_DISCONT: 0.2,
   MaxRating: 5,
   DefaultPurchaseType: 'абонемент',

@@ -84,19 +84,20 @@ export class AuthenticationService {
     return existUser;
   }
 
-  public async update( dto: UpdateUserDto, file: Express.Multer.File, id?: string,) {
+  public async update(dto: UpdateUserDto, file: Express.Multer.File, id?: string) {
     if (!id) {
       throw new UnauthorizedException(AUTH_USER_UNAUTHORISED)
     }
-    const avatar = await this.fileService.writeFile(file);
-
-    dto.avatar = avatar?.replace(/\\/g, '/') ?? undefined;
 
     const existUser = await this.userRepository.findById(id);
 
     if (! existUser) {
       throw new NotFoundException(AUTH_USER_NOT_FOUND);
     }
+
+    const avatar = await this.fileService.writeFile(file, existUser.avatar);
+
+    dto.avatar = avatar?.replace(/\\/g, '/') ?? undefined;
 
     const questionnaire = dto?.questionnaire ?? fillDto(QustionnaireRdo, dto) as UserQuestionnarie | CoachQuestionnarie;
 
@@ -139,5 +140,42 @@ export class AuthenticationService {
     const paginatedUsers = this.userRepository.getUsers(userPayload.sub, query);
 
     return paginatedUsers;
+  }
+
+  public async updateSertificates(user: TokenPayload, file?: Express.Multer.File, formerFilePath?: string): Promise<string | undefined> {
+    if (user.role === Role.USER) {
+      throw new ConflictException('This kind of information not allowed for you');
+    }
+
+    const newSertificate = await this.fileService.writeFile(file);
+
+    const existUser = await this.userRepository.findById(user.sub);
+
+    if (! existUser) {
+      throw new NotFoundException(AUTH_USER_NOT_FOUND);
+    }
+
+    let sertificates = (existUser.sertificates) ? [...existUser.sertificates] : [];
+
+    if (newSertificate) {
+      sertificates.push(newSertificate.replace(/\\/g, '/'));
+    }
+
+    if (formerFilePath) {
+      await this.fileService.deleteFile(formerFilePath);
+      console.log('formerFilePath: ',formerFilePath );
+      console.log(sertificates);
+      sertificates = sertificates.filter((sertificate) => sertificate !== formerFilePath);
+      console.log('filtered sertificates: ', sertificates);
+    }
+
+   await this.userRepository.update(
+      user.sub,
+      {
+        ...existUser.toPOJO(),
+        questionnaire: fillDto(QustionnaireRdo, existUser.questionnaire) as UserQuestionnarie | CoachQuestionnarie,
+        sertificates: sertificates
+      });
+      return newSertificate?.replace(/\\/g, '/');
   }
 }

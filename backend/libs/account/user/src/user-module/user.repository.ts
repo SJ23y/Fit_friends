@@ -26,7 +26,8 @@ export class UserRepository extends BasePostgresRepository<UserEntity, PrismaUse
         friends: undefined,
         recievedRequests: undefined,
         requests: undefined,
-        subscriptions: undefined
+        subscriptions: undefined,
+        sertificates: []
       },
       include: {
         questionnaire: true,
@@ -82,7 +83,7 @@ export class UserRepository extends BasePostgresRepository<UserEntity, PrismaUse
   }
 
   public async update(userId: string, user: AuthUser): Promise<UserEntity> {
-    console.log('q:', user.questionnaire)
+
     const updatedUser = await this.client.user.update({
       where: {id: userId},
       data: {
@@ -110,6 +111,7 @@ export class UserRepository extends BasePostgresRepository<UserEntity, PrismaUse
             }
           }
         },
+        sertificates: user.sertificates,
         reviews:undefined,
         trainings: undefined,
         purchases: undefined,

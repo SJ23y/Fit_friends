@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AuthorizationStatus, NameSpace, Setting } from '../../consts';
 import { UserProcess } from '../../types/state';
-import { addSubscription, checkAuthorization, deleteSubscription, getUserById, loginUser, logoutUser, registerUser, saveQuestionnaireResult, updateUser, uploadUsers } from './thunk-actions';
+import { addNewSertificate, addSubscription, checkAuthorization, deleteSertificate, deleteSubscription, getUserById, loginUser, logoutUser, registerUser, saveQuestionnaireResult, updateSertificate, updateUser, uploadUsers } from './thunk-actions';
 import { UserData, UserFriend } from '../../types/auth';
 import { Query } from '../../types/query';
 import { TrainingRequest } from '../../types/training-request';
@@ -100,7 +100,8 @@ const userProcess = createSlice({
           "requests": action.payload.requests,
           "recievedRequests": action.payload.recievedRequests,
           "friends": action.payload.friends,
-          "subscriptions": action.payload.subscriptions
+          "subscriptions": action.payload.subscriptions,
+          "sertificates": action.payload.sertificates
         };
         state.error = null;
         state.loadingStatus = false;
@@ -186,9 +187,38 @@ const userProcess = createSlice({
 
         }
       })
+      .addCase(addNewSertificate.fulfilled, (state, action) => {
+        if (state.user) {
+          state.user.sertificates = (state.user.sertificates) ? [...state.user.sertificates, action.payload] : [action.payload];
+        }
+      })
+      .addCase(updateSertificate.fulfilled, (state, action) => {
+        if (state.user?.sertificates) {
+          const filteredSertificates = state.user.sertificates.filter((sertificate) => sertificate !== action.payload.oldSertificate);
+          state.user.sertificates = [...filteredSertificates, action.payload.newSertificate];
+        }
+      })
+      .addCase(deleteSertificate.fulfilled, (state, action) => {
+        if (state.user?.sertificates) {
+          state.user.sertificates = state.user.sertificates.filter((sertificate) => sertificate !== action.payload)
+        }
+      });
   },
 });
 
-const { setCurrentlyViewedUser, changeUserQuery, addFriendToUser, deleteFriendFromUser, addNewRequest } = userProcess.actions;
+const {
+    setCurrentlyViewedUser,
+    changeUserQuery,
+    addFriendToUser,
+    deleteFriendFromUser,
+    addNewRequest
+} = userProcess.actions;
 
-export { userProcess, setCurrentlyViewedUser, changeUserQuery, addFriendToUser, deleteFriendFromUser, addNewRequest };
+export {
+    userProcess,
+    setCurrentlyViewedUser,
+    changeUserQuery,
+    addFriendToUser,
+    deleteFriendFromUser,
+    addNewRequest
+};

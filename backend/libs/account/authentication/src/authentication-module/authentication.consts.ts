@@ -18,7 +18,10 @@ export const AuthenticationMessages = {
   Unauthorized: 'You should be authorized to change password',
   UserLogout: 'You was logout. All of your tokens were deleted',
   UserList: 'You\'ve got the list of all registered users',
-  NotForCoach: 'This kind of information not allowed for the coaches'
+  NotForCoach: 'This kind of information not allowed for the coaches',
+  SertificateSaved: 'New sertificate was successfully uploaded',
+  SertificateUpdated: 'Sertificate was successfully updated',
+  SertificateDeleted: 'Sertificate was successfully deleted'
 } as const;
 
 

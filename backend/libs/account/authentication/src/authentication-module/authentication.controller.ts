@@ -32,6 +32,7 @@ import { UpdateUserDto } from '../dto/update-user.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UserQuery } from '@backend/user';
 import { UserWithPaginationRdo } from '../rdo/user-with-pagination.rdo';
+import { SertificateDto } from '../dto/sertificate.dto';
 
 @ApiTags('authentication')
 @Controller('')
@@ -193,4 +194,82 @@ export class AuthenticationController {
     return fillDto(UserWithPaginationRdo, users);
   }
 
+  /*
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: AuthenticationMessages.SertificateSaved
+  })
+  @ApiResponse({
+    status: HttpStatus.CONFLICT,
+    description: AuthenticationMessages.NotForCoach
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: AuthenticationMessages.Unauthorized
+  })
+  @UseInterceptors(FileInterceptor('sertificate'))
+  @UseGuards(JwtAuthGuard)
+  @Post('sertificate/upload')
+  public async uploadSertificate(
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new FileTypeValidator({ fileType: '.pdf' })
+        ],
+        fileIsRequired: false
+      }),
+    ) file: Express.Multer.File,
+    @Req() {user}: RequestWithTokenPayload) {
+    const newFilePath = await this.authenticationService.updateSertificates(user, file);
+    return newFilePath;
+  }*/
+
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: AuthenticationMessages.SertificateUpdated
+  })
+  @ApiResponse({
+    status: HttpStatus.CONFLICT,
+    description: AuthenticationMessages.NotForCoach
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: AuthenticationMessages.Unauthorized
+  })
+  @UseInterceptors(FileInterceptor('sertificate'))
+  @UseGuards(JwtAuthGuard)
+  @Post('sertificate/upload')
+  public async updateSertificate(
+    @Body() { path }: SertificateDto,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new FileTypeValidator({ fileType: '.pdf' })
+        ],
+        fileIsRequired: false
+      }),
+    ) file: Express.Multer.File,
+    @Req() {user}: RequestWithTokenPayload) {
+    const newFilePath = await this.authenticationService.updateSertificates(user, file, path);
+    return newFilePath;
+  }
+
+  @ApiResponse({
+    status: HttpStatus.NO_CONTENT,
+    description: AuthenticationMessages.SertificateDeleted
+  })
+  @ApiResponse({
+    status: HttpStatus.CONFLICT,
+    description: AuthenticationMessages.NotForCoach
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: AuthenticationMessages.Unauthorized
+  })
+  @UseGuards(JwtAuthGuard)
+  @Post('sertificate/delete')
+  public async deleteSertificate(@Body() dto: SertificateDto, @Req() {user}: RequestWithTokenPayload) {
+    console.log('sertificate delete', [user, undefined, dto]);
+    await this.authenticationService.updateSertificates(user, undefined, dto.path);
+  }
 }

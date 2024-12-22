@@ -31,6 +31,7 @@ model User {
   requests Request[]  @relation(name: "sender")
   recievedRequests Request[]  @relation(name: "reciever")
   subscriptions Subscription[]
+  sertificates String[]
 
   @@map("users")
 }

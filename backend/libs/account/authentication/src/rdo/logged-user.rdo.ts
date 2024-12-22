@@ -133,6 +133,13 @@ export class LoggedUserRdo {
     public subscriptions: SubscriptionRdo[];
 
   @ApiProperty({
+    description: 'Coach list of sertificates',
+    example: '["sertificate.pdf"]'
+  })
+  @Expose()
+  public sertificates: string[];
+
+  @ApiProperty({
     description: 'User access token',
     example: '=bfhgjfgytfvSAGDfgsh2344'
   })

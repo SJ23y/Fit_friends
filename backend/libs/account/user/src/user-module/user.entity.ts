@@ -25,6 +25,7 @@ export class UserEntity extends Entity implements StorableEntity<AuthUser> {
   public requests?: Request[];
   public recievedRequests?: Request[];
   public subscriptions?: Subscription[];
+  public sertificates?: string[];
 
   constructor(user?: AuthUser) {
     super();
@@ -53,6 +54,7 @@ export class UserEntity extends Entity implements StorableEntity<AuthUser> {
       this.requests = user.requests;
       this.recievedRequests = user.recievedRequests;
       this.subscriptions = user.subscriptions;
+      this.sertificates = user.sertificates;
     }
 
   }
@@ -88,7 +90,8 @@ export class UserEntity extends Entity implements StorableEntity<AuthUser> {
       friends: this.friends,
       requests: this.requests,
       recievedRequests: this.recievedRequests,
-      subscriptions: this.subscriptions
+      subscriptions: this.subscriptions,
+      sertificates: this.sertificates
     }
   }
 }

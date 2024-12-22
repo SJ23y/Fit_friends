@@ -111,6 +111,36 @@ const deleteSubscription = createAsyncThunk<
   return coachId;
 });
 
+const addNewSertificate = createAsyncThunk<
+  string,
+  FormData,
+  { dispatch: Dispatch; state: State; extra: AxiosInstance }
+>('addNewSertificate', async (formData, { extra: api }) => {
+  console.log('in thunk action')
+  const {data} = await api.post<string>(`${ApiRoute.Sertificate}/upload`, formData);
+  return data;
+});
+
+const updateSertificate = createAsyncThunk<
+  {newSertificate: string, oldSertificate: string},
+  FormData,
+  { dispatch: Dispatch; state: State; extra: AxiosInstance }
+>('updateSertificate', async (formData, { extra: api }) => {
+  console.log('in thunk action')
+  const {data} = await api.post<string>(`${ApiRoute.Sertificate}/upload`, formData);
+  return {newSertificate: data, oldSertificate: formData.get('path') as string};
+});
+
+const deleteSertificate = createAsyncThunk<
+  string,
+  string,
+  { dispatch: Dispatch; state: State; extra: AxiosInstance }
+>('deleteSertificate', async (path, { extra: api }) => {
+  console.log('in delete thunk action', )
+  await api.post(`${ApiRoute.Sertificate}/delete`, {path});
+  return path;
+});
+
 export {
   checkAuthorization,
   loginUser,
@@ -121,5 +151,8 @@ export {
   getUserById,
   uploadUsers,
   deleteSubscription,
-  addSubscription
+  addSubscription,
+  addNewSertificate,
+  updateSertificate,
+  deleteSertificate
 };

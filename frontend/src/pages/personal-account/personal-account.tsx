@@ -10,6 +10,7 @@ function PersonalAccount(): JSX.Element {
   const user = useAppSelector(getUserInfo);
 
   return(
+
       <main>
         {
           user &&
@@ -18,7 +19,7 @@ function PersonalAccount(): JSX.Element {
               <div className="inner-page__wrapper">
                 <h1 className="visually-hidden">Личный кабинет</h1>
                 <UserInfoSection user={user} />
-                { user.role === Role.USER ? <UserAccountContent user={user} /> : <CoachAccountContent  />}
+                { user.role === Role.USER ? <UserAccountContent user={user} /> : <CoachAccountContent user={user} />}
               </div>
             </div>
           </section>

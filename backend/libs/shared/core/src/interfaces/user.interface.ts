@@ -22,4 +22,5 @@ export interface User {
   requests?: Request[];
   recievedRequests?: Request[];
   subscriptions?: Subscription[];
+  sertificates?: string[];
 }
