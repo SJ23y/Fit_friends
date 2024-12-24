@@ -14,6 +14,14 @@ export function generateMockUser(): User {
     description: faker.person.bio(),
     location: getRanndomElement(LOCATIONS),
     backgroundImage: getRanndomElement(DEFAULT_BACKGROUND_IMAGE_NAMES),
-    role: getRanndomElement(Object.values(Role))
+    role: getRanndomElement(Object.values(Role)),
+    reviews: undefined,    
+    trainings: undefined,
+    purchases: undefined,
+    friends: undefined,
+    requests: undefined,
+    recievedRequests: undefined,
+    subscriptions: undefined,
+    sertificates: undefined    
   }
 }

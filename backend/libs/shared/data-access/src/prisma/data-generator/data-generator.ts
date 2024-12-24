@@ -61,6 +61,12 @@ export class DataGenerator {
             }
           },
           reviews: undefined,
+          requests: undefined,
+          recievedRequests: undefined,
+          friendship: undefined,
+          friends: undefined,
+          sertificates: undefined, 
+          subscriptions: undefined,
           passwordHash
         }
       });

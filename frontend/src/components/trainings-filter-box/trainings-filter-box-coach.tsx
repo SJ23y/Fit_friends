@@ -92,7 +92,8 @@ function TrainingFilterBoxCoachTemplate({ maxPrice, minPrice, maxCallories, minC
       minCallories !== calloriesRange.minCallories ||
       maxCallories !== calloriesRange.maxCallories ||
       query.maxRating !== ratingRange.maxRating ||
-      query.minRating !== ratingRange.minRating
+      query.minRating !== ratingRange.minRating ||
+      query.durations !== durations
     ) {
         dispatch(changeQuery({
         ...query,

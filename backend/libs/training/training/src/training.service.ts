@@ -78,12 +78,12 @@ export class TrainingService {
       throw new ConflictException('Данное действие вам не доступно');
     }
 
-    const video = await this.fileService.writeFile(file);
+    const video = await this.fileService.writeFile(file, currentTraining.video);
 
     const trainingEntity = new TrainingEntity({
       ...currentTraining.toPOJO(),
       ...dto,
-      video: video?.replace(/\\/g, '/') ?? ''
+      video: video?.replace(/\\/g, '/') ?? currentTraining.video
     })
     await this.trainigRepository.update(trainingEntity);
     return trainingEntity;

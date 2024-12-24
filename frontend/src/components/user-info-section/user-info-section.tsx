@@ -14,7 +14,7 @@ type UserInfoSectionProps = {
 function UserInfoSectionTemplate({user}: UserInfoSectionProps): JSX.Element {
   const [editStatus, setEditStatus] = useState(false);
   const [formData, setFormData] = useState(user);
-  const [avatar, setAvatar] = useState<string>(`${Setting.BaseUrl}/${user.avatar}`);
+  const [avatar, setAvatar] = useState<string>(`${Setting.BaseUrl}/${user.avatar}`);  
   const avatarRef = useRef<HTMLInputElement | null>(null);
   const formRef = useRef<HTMLFormElement | null>(null);
   const dispatch = useAppDispatch();
@@ -22,7 +22,7 @@ function UserInfoSectionTemplate({user}: UserInfoSectionProps): JSX.Element {
   const formDataChangeHandler = (evt: React.FormEvent) => {
     evt.preventDefault();
     const {name, value} = evt.target as HTMLInputElement;
-    setFormData({...formData, [name]: value })
+    setFormData({...formData, [name]: value });    
   }
 
   const loadAvatarInputClickHandler = (evt: React.FormEvent<HTMLInputElement>) => {
@@ -66,13 +66,17 @@ function UserInfoSectionTemplate({user}: UserInfoSectionProps): JSX.Element {
     setFormData({...formData, questionnaire: {...formData.questionnaire, trainType: newTypes}})
   }
 
-  const formSubmitHandler = (evt: React.MouseEvent<HTMLButtonElement>) => {
+  const formSubmitHandler = (evt: React.MouseEvent<HTMLButtonElement>) => {    
+    evt.preventDefault();    
     if (!editStatus) {
       setEditStatus(true)
-    } else {
-      evt.preventDefault();
+    } else {      
+      const isNotError = (formData.name.length >= ValidationSetting.userNameMinLength && formData.name.length <= ValidationSetting.userNameMaxLength) &&
+        (formData.description.length >= ValidationSetting.CoachDescriptionMinLength && formData.description.length <= ValidationSetting.CoachDescriptionMaxLength) && (formData.questionnaire.trainType.length > 0);      
+      
       const avatarFile = avatarRef.current?.files?.[0] ?? avatar;
-      if (formRef.current && avatar) {
+
+      if (formRef.current && avatar && isNotError) {       
         const data = new FormData(formRef.current);
         data.append('location', formData.location);
         data.append('avatar', avatarFile);
@@ -84,7 +88,7 @@ function UserInfoSectionTemplate({user}: UserInfoSectionProps): JSX.Element {
           data.set('individualTraining', formData.questionnaire.individualTraining.toString())
         }
         dispatch(updateUser({user: data, cb: () => setEditStatus(false)}));
-      }
+      } 
     }
   }
 
@@ -112,6 +116,7 @@ function UserInfoSectionTemplate({user}: UserInfoSectionProps): JSX.Element {
               disabled={!editStatus}
               onChange={loadAvatarInputClickHandler}
             />
+            
             <span className={
               classNames({
                 "input-load-avatar__avatar input-load-avatar__btn": true
@@ -122,7 +127,9 @@ function UserInfoSectionTemplate({user}: UserInfoSectionProps): JSX.Element {
               width="98" height="98"
               alt="user photo"
             />
+            
             </span>
+            
           </label>
         </div>
         {
@@ -148,7 +155,13 @@ function UserInfoSectionTemplate({user}: UserInfoSectionProps): JSX.Element {
             </button>
           </div>
         }
+        
       </div>
+      { avatar.length === 0 &&
+        <span className="custom-input__error">
+          {`Загрузите аватар`}
+        </span>
+      }
       <form
         ref={formRef}
         className="user-info__form"
@@ -168,7 +181,12 @@ function UserInfoSectionTemplate({user}: UserInfoSectionProps): JSX.Element {
         </button>
         <div className="user-info__section">
           <h2 className="user-info__title">Обо мне</h2>
-          <div className="custom-input custom-input--readonly user-info__input">
+          <div className={
+            classNames({
+              "custom-input custom-input--readonly user-info__input": true,
+              "custom-input--error": !(formData.name.length >= ValidationSetting.userNameMinLength && formData.name.length <= ValidationSetting.userNameMaxLength)
+            })
+          }>
             <label>
               <span className="custom-input__label">Имя</span>
               <span className="custom-input__wrapper">
@@ -180,12 +198,22 @@ function UserInfoSectionTemplate({user}: UserInfoSectionProps): JSX.Element {
                   required
                   value={formData.name}
                   disabled={!editStatus}
-                  onChange={formDataChangeHandler}
+                  onChange={formDataChangeHandler}                  
                 />
               </span>
+              { !(formData.name.length >= ValidationSetting.userNameMinLength && formData.name.length <= ValidationSetting.userNameMaxLength) &&
+                <span className="custom-input__error">
+                  {`Имя должно быть длиной от ${ValidationSetting.userNameMinLength} до ${ValidationSetting.userNameMaxLength} символов`}
+                </span>
+              }
             </label>
           </div>
-          <div className="custom-textarea custom-textarea--readonly user-info__textarea">
+          <div className={
+            classNames({
+              "custom-textarea custom-textarea--readonly user-info__textarea": true,
+              "custom-textarea--error": !(formData.description.length >= ValidationSetting.CoachDescriptionMinLength && formData.description.length <= ValidationSetting.CoachDescriptionMaxLength)
+            })
+          }>
             <label>
               <span className="custom-textarea__label">Описание</span>
               <textarea
@@ -199,6 +227,11 @@ function UserInfoSectionTemplate({user}: UserInfoSectionProps): JSX.Element {
                 onChange={formDataChangeHandler}
               >
               </textarea>
+              { !(formData.description.length >= ValidationSetting.CoachDescriptionMinLength && formData.description.length <= ValidationSetting.CoachDescriptionMaxLength) &&
+                <span className="custom-textarea__error">
+                  {`Описание должно быть длиной от ${ValidationSetting.CoachDescriptionMinLength} до ${ValidationSetting.CoachDescriptionMaxLength} символов`}
+                </span>
+              }
             </label>
           </div>
         </div>
@@ -258,11 +291,15 @@ function UserInfoSectionTemplate({user}: UserInfoSectionProps): JSX.Element {
                       checked={formData.questionnaire.trainType.includes(type)}
                       onChange={changeSpecializationHandler}
                     />
-                    <span className="btn-checkbox__btn">{type}</span>
+                    <span className="btn-checkbox__btn">{type}</span>                    
                   </label>
                 </div>
               ))
             }
+            { formData.questionnaire.trainType.length === 0 &&
+              <span className="custom-input__error">
+                {`Требуется выбрать хотя бы один вариант, но не более трёх`}
+              </span>}
           </div>
         </div>
         <CustomSelect

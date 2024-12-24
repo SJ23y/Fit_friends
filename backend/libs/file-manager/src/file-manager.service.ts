@@ -38,8 +38,11 @@ export class FileManagerService {
       return null;
     }
 
-    if (formerFilePath) {
+    if (formerFilePath && file) {
+      console.log('Deleting file')
       await this.deleteFile(formerFilePath);
+    } else {
+      console.log('Not deleting file');
     }
 
     try {
@@ -49,6 +52,7 @@ export class FileManagerService {
       const subDirectory = this.getSubUploadDirectoryPath();
       const path = this.getDestinationFilePath(fileName);
 
+      console.log(join(this.getRootDirectoryPath(), subDirectory))
       await ensureDir(join(this.getRootDirectoryPath(), subDirectory));
       await writeFile(path, file.buffer);
 
