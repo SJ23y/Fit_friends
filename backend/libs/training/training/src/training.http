@@ -2,7 +2,7 @@
 
 POST http://localhost:3000/trainings HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwOTI5MGI0Ny02OTA1LTRjMWYtYmQ5Zi02NWUzM2RiNTdjMzciLCJuYW1lIjoiVGVkIExhc3NvIiwicm9sZSI6ImNvYWNoIiwiaWF0IjoxNzM0Mzk4NTE3LCJleHAiOjE3MzQzOTk0MTd9.W4GllxbN7uWUZ5Nm16YXaBuvljBV1QKHr7aqs1ye7po
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwOTI5MGI0Ny02OTA1LTRjMWYtYmQ5Zi02NWUzM2RiNTdjMzciLCJuYW1lIjoiVGVkIExhc3NvIiwicm9sZSI6ImNvYWNoIiwiaWF0IjoxNzM1MTY2OTQ4LCJleHAiOjE3MzUxNjc4NDh9.lp6jt5Nl5LP8cjhtd9-Oa__yjGXdZ9uUtuAWOJSOQRc
 
 {
   "title": "Email test 9",
@@ -30,4 +30,20 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhY2VhYmQxZ
 GET http://localhost:3000/trainings/95b84a04-25eb-4210-96fc-0fd8b6c2b98a HTTP/1.1
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhY2VhYmQxZi0wNGM5LTQyZDQtOWNjOS00NGE4Y2ZiMGYwMjEiLCJuYW1lIjoiVGVkIExhc3NvIiwicm9sZSI6ImNvYWNoIiwiaWF0IjoxNzMwNTYxODI1LCJleHAiOjE3MzA1NjI3MjV9.bqRh1RyPZDoaxLOEzOnuQJxQvSLVrKKUovUO4AS4EKU
 
+###
+
+# Update specific training
+POST http://localhost:3000/trainings/update/c0f2025b-dfe7-432c-9c3b-6c22ed452447 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwOTI5MGI0Ny02OTA1LTRjMWYtYmQ5Zi02NWUzM2RiNTdjMzciLCJuYW1lIjoiVGVkIExhc3NvIiwicm9sZSI6ImNvYWNoIiwiaWF0IjoxNzM1MTY2OTQ4LCJleHAiOjE3MzUxNjc4NDh9.lp6jt5Nl5LP8cjhtd9-Oa__yjGXdZ9uUtuAWOJSOQRc
+
+{
+  "title": "Ted Ped",
+  "level": "любитель",
+  "type": "пилатес",
+  "duration": "10-30 мин",
+  "price": 1000,
+  "callorieQuantity": 3000,
+  "isSpecialOffer": true
+}
 ###

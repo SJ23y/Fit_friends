@@ -1,4 +1,4 @@
-import { DEFAULT_TRAIN_IMAGE_NAMES, DEFAULT_VIDEO_NAMES, PaginationResult, Role, TokenPayload } from "@backend/shared-core";
+import { DEFAULT_TRAIN_IMAGE_NAMES, DEFAULT_VIDEO_NAMES, PaginationResult, TokenPayload } from "@backend/shared-core";
 import { TrainingQuery } from "./training.query";
 import { TrainigRepository } from "./training.repository";
 import { TrainingEntity } from "./training.entity";
@@ -21,10 +21,6 @@ export class TrainingService {
 
 
   public async createTraining(dto: CreateTrainingDto, user: TokenPayload, file: Express.Multer.File):  Promise<TrainingEntity> {
-    if (user.role !== Role.COACH) {
-      throw new ConflictException('Данное действие доступно только тренерам');
-    }
-
     const video = await this.fileService.writeFile(file);
 
     const trainingEntity = new TrainingEntity({
@@ -74,7 +70,7 @@ export class TrainingService {
       throw new NotFoundException(`Training with id ${trainingId} not found`);
     }
 
-    if (user.role !== Role.COACH && user.sub !== currentTraining.coachId) {
+    if (user.sub !== currentTraining.coachId) {
       throw new ConflictException('Данное действие вам не доступно');
     }
 

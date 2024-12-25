@@ -1,1 +1,1 @@
-export { CheckAuthGuard } from "./check-auth.guard";
+export { RoleCoachCheckGuard } from "./role-coach-check.guard";

@@ -67,6 +67,7 @@ export class PurchaseRepository extends BasePostgresRepository<PurchaseEntity, P
 
   public async getCoachOrders(userId?: string, query?: PurchaseQuery): Promise<PaginationResult<Order>> {
     const take = (query?.count && query.count < MAX_PURCHASE_COUNT_LIMIT) ? query.count : MAX_PURCHASE_COUNT_LIMIT;
+    console.log('Take', take);
     const skip = (query?.page && query?.count) ? (query.page - 1) * query.count : undefined;
     const where: Prisma.PurchaseWhereInput = {
       train: { coachId: userId }

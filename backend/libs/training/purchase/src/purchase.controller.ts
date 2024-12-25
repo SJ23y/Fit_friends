@@ -10,6 +10,7 @@ import { CreatePurchaseDto } from './dto/create-purchase.dto';
 import { ReduceTrainingsDto } from './dto/reduce-trainings.dto';
 import { RequestWithTokenPayload } from '@backend/shared-core';
 import { OrdersWithPaginationRdo } from './rdo/orders-with-pagination.rdo';
+import { RoleCoachCheckGuard } from '@backend/shared-guards';
 
 
 @ApiTags('purchase')
@@ -63,7 +64,7 @@ export class PurchaseController {
     status: HttpStatus.CONFLICT,
     description: 'Данная информация доступна только тренерам'
   })
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(RoleCoachCheckGuard)
   @Get('/orders')
   public async getCoachOrders(@Req() { user }: RequestWithTokenPayload, @Query() query?: PurchaseQuery) {
     const paginationResult = await this.purchaseService.getCoachOrders(user, query);

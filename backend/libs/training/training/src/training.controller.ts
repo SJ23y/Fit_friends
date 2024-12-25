@@ -10,6 +10,7 @@ import { RequestWithTokenPayload } from '@backend/shared-core';
 import { CreateTrainingDto } from './dto/create-training.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UpdateTrainingDto } from './dto/update-training.dto';
+import { RoleCoachCheckGuard } from '@backend/shared-guards';
 
 @ApiTags('Training')
 @Controller('trainings')
@@ -20,7 +21,7 @@ export class TrainingController {
    ) {}
 
 
-   @ApiResponse({
+  @ApiResponse({
     status: HttpStatus.CREATED,
     description: 'Успешно создана новая тренировка'
   })
@@ -33,7 +34,7 @@ export class TrainingController {
     description: 'Данное действие доступно только авторизованным пользователям'
   })
   @UseInterceptors(FileInterceptor('video'))
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(RoleCoachCheckGuard)
   @Post('')
   public async create(
     @Body() dto: CreateTrainingDto,
@@ -97,7 +98,7 @@ export class TrainingController {
     description: 'Данное действие доступно только авторизованным пользователям'
   })
   @UseInterceptors(FileInterceptor('video'))
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(RoleCoachCheckGuard)
   @Post('/update/:trainingId')
   public async update(
     @Body() dto: UpdateTrainingDto,
@@ -110,8 +111,7 @@ export class TrainingController {
       fileIsRequired: false})) file: Express.Multer.File) {
 
     const newTraining = await this.trainingService.updateTraining(trainingId, dto, user, file);
-    return fillDto(TrainingRdo, newTraining);
-  }
+    return fillDto(TrainingRdo, newTraining);  }
 
 
 }

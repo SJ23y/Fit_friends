@@ -20,10 +20,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxZDE1ZGZmY
 
 ###
 
-# Get all coach trainings with purchases stats
+# Get all coach orders
 
 GET http://localhost:3000/purchase/orders?page=1&count=5&sortBy=createdAt&sortDirection=asc HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxZDE1ZGZmYy1jNmE1LTQ5MGQtODEwOC1mNzYxNGUxMmM0ODAiLCJuYW1lIjoiQ2FybWVuIEhpY2tsZSIsInJvbGUiOiJjb2FjaCIsImlhdCI6MTczMTE1ODY0OCwiZXhwIjoxNzMxMTU5NTQ4fQ.d0x1vF2h_INYFGSOZPbeQe-H25WF30RIj0x87VETm68
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzNTViNWZhYy1jZTM4LTRkYTAtYmMzOS1kMGYzMTUxMzQ1Y2QiLCJuYW1lIjoiU0oiLCJyb2xlIjoidXNlciIsImlhdCI6MTczNTE2ODg4MywiZXhwIjoxNzM1MTY5NzgzfQ.wZLUC_E4IqRBJDXH5jquEKsgKnAcBRdxhNDiIgGVfpM
 
 ###
 
