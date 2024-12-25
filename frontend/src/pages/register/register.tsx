@@ -73,7 +73,9 @@ const formSubmitHandler = (evt: React.FormEvent<HTMLFormElement>) => {
                               className="visually-hidden"
                               type="file"
                               accept="image/png, image/jpeg"
-                              onChange={loadAvatarInputClickHandler} />
+                              onChange={loadAvatarInputClickHandler}
+                              data-testid="avatarElement"
+                            />
                             <span className="input-load-avatar__btn">
                               {
                                 !avatar &&
@@ -102,6 +104,7 @@ const formSubmitHandler = (evt: React.FormEvent<HTMLFormElement>) => {
                                 name="name"
                                 minLength={ValidationSetting.userNameMinLength}
                                 maxLength={ValidationSetting.userNameMaxLength}
+                                data-testid="nameElement"
                                 required
                                 />
                               </span>
@@ -110,13 +113,13 @@ const formSubmitHandler = (evt: React.FormEvent<HTMLFormElement>) => {
                         <div className="custom-input">
                           <label>
                             <span className="custom-input__label">E-mail</span><span className="custom-input__wrapper">
-                              <input type="email" name="email" required /></span>
+                              <input type="email" name="email" data-testid="emailElement" required  /></span>
                           </label>
                         </div>
                         <div className="custom-input">
                           <label>
                             <span className="custom-input__label">Дата рождения</span><span className="custom-input__wrapper">
-                              <input type="date" name="birthDate" max="2099-12-31" /></span>
+                              <input type="date" name="birthDate" max="2099-12-31" data-testid="birthdayElement" /></span>
                           </label>
                         </div>
                         <CustomSelect
@@ -137,6 +140,7 @@ const formSubmitHandler = (evt: React.FormEvent<HTMLFormElement>) => {
                                 autoComplete="off"
                                 minLength={ValidationSetting.passwordMinLength}
                                 maxLength={ValidationSetting.passwordMaxLength}
+                                data-testid="passwordElement"
                                 required
                                  />
                             </span>

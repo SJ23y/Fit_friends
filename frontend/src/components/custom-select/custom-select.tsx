@@ -51,7 +51,7 @@ function CustomSelectTemplate({title, items, disableStatus, defaultValue, additi
               >
                 {
                   items.map((item, index) => (
-                  <li role="option" key={`${title}-${item}-${index}`}>{item}</li>
+                  <li role="option" key={`${title}-${item}-${index}`} value={item}>{item}</li>
                   ))
                 }
             </ul>

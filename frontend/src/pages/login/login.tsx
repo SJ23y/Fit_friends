@@ -61,7 +61,7 @@ function Login(): JSX.Element {
                         <label>
                           <span className="custom-input__label">E-mail</span>
                           <span className="custom-input__wrapper">
-                            <input ref={emailRef} type="email" name="email" />
+                            <input ref={emailRef} type="email" name="email" data-testid="loginElement" />
                           </span>
                           {
                             (validationError?.message?.startsWith('Email')
@@ -80,6 +80,7 @@ function Login(): JSX.Element {
                               name="password"
                               minLength={ValidationSetting.passwordMinLength}
                               maxLength={ValidationSetting.passwordMaxLength}
+                              data-testid="passwordElement"
                             />
                           </span>
                           {
