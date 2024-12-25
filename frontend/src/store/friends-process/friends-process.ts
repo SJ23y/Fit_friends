@@ -8,7 +8,7 @@ const initialState: FriendsProcess = {
 };
 
 const friendProcess = createSlice({
-  name: NameSpace.TRAINING,
+  name: NameSpace.FRIEND,
   initialState,
   reducers: {},
   extraReducers(builder) {

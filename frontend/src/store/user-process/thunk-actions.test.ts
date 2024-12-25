@@ -59,14 +59,15 @@ describe('Async actions', () => {
     const data = new FormData();
 
     mockAxiosAdapter.onPost(ApiRoute.Register).reply(200, returnedData);
+    mockAxiosAdapter.onPost(ApiRoute.Login).reply(200);
 
     await store.dispatch(registerUser(data));
 
     const emittedActions = store.getActions();
     const actions = extactActionsType(emittedActions);
-    const receivedData = emittedActions.at(3) as ReturnType<typeof registerUser.fulfilled>;
+    const receivedData = emittedActions.at(4) as ReturnType<typeof registerUser.fulfilled>;
 
-    expect(actions).toEqual([registerUser.pending.type, loginUser.pending.type, redirectToRoute.type, registerUser.fulfilled.type]);
+    expect(actions).toEqual([registerUser.pending.type, loginUser.pending.type, loginUser.rejected.type, redirectToRoute.type, registerUser.fulfilled.type]);
     expect(receivedData.payload).toEqual(returnedData);
   });
 
@@ -90,9 +91,10 @@ describe('Async actions', () => {
 
     const emittedActions = store.getActions();
     const actions = extactActionsType(emittedActions);
-    const receivedData = emittedActions.at(1) as ReturnType<typeof saveQuestionnaireResult.fulfilled>;
+    const receivedData = emittedActions.at(2) as ReturnType<typeof saveQuestionnaireResult.fulfilled>;
+    
 
-    expect(actions).toEqual([saveQuestionnaireResult.pending.type, saveQuestionnaireResult.fulfilled.type]);
+    expect(actions).toEqual([saveQuestionnaireResult.pending.type, redirectToRoute.type, saveQuestionnaireResult.fulfilled.type]);
     expect(receivedData.payload).toEqual(returnedData.questionnaire);
   });
 

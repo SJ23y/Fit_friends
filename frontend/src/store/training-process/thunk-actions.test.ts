@@ -9,6 +9,7 @@ import { generateMockTraining } from '../../mock-data/mock-trainings';
 import { ApiRoute } from '../../consts';
 import { extactActionsType } from '../../utils';
 import { faker } from '@faker-js/faker';
+import { redirectToRoute } from '../actions';
 
 
 
@@ -43,9 +44,9 @@ describe('Async actions', () => {
 
     const emittedActions = store.getActions();
     const actions = extactActionsType(emittedActions);
-    const receivedData = emittedActions.at(1) as ReturnType<typeof addNewTraining.fulfilled>;
+    const receivedData = emittedActions.at(2) as ReturnType<typeof addNewTraining.fulfilled>;
 
-    expect(actions).toEqual([addNewTraining.pending.type, addNewTraining.fulfilled.type]);
+    expect(actions).toEqual([addNewTraining.pending.type, redirectToRoute.type, addNewTraining.fulfilled.type]);
     expect(receivedData.payload).toEqual(returnedData);
   });
 

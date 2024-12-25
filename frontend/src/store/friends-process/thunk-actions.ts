@@ -15,7 +15,6 @@ const addNewFriend = createAsyncThunk<
   { dispatch: Dispatch; state: State; extra: AxiosInstance }
 >('addNewFriend', async (friendId, { extra: api }) => {
   await api.post<void>(`${ApiRoute.Friends}/${friendId}`);
-
 });
 
 const deleteFriend = createAsyncThunk<

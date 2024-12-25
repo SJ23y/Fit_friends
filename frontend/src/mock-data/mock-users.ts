@@ -6,6 +6,7 @@ import { generateMockUserQuestionnaire } from './mock-questionnaire';
 
 export function generateMockUser(): UserData {
   return {
+    id: faker.string.uuid(),
     name:  faker.person.fullName(),
     email: faker.internet.email(),
     gender: getRanndomElement(Object.values(Gender)),
@@ -16,6 +17,12 @@ export function generateMockUser(): UserData {
     role: getRanndomElement(Object.values(Role)),
     questionnaire: generateMockUserQuestionnaire(),
     avatar: new File([new Blob()], "avatar"),
-    password: faker.internet.password()
+    password: faker.internet.password(),
+    requests: [], 
+    recievedRequests: [],
+    subscriptions: [],
+    friends: [],
+    trainings: [],
+    sertificates: []
   }
 }
