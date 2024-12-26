@@ -7,7 +7,6 @@ import { memo, useState } from "react";
 import { useAppDispatch } from "../../hooks/use-app-dispatch";
 import { sendTrainingRequest } from "../../store/friends-process/thunk-actions";
 import { addNewRequest } from "../../store/user-process/user-process";
-import Header from "../header/header";
 import classNames from "classnames";
 import SertificatesPopup from "../sertificates-popup/sertificates-popup";
 

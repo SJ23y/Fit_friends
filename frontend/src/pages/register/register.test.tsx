@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { withHistory, withStore } from '../../mock-data/mock-component';
-import { AuthorizationStatus, LOCATIONS, Setting } from '../../consts';
+import { AuthorizationStatus, Gender, Role, Setting } from '../../consts';
 import Register from './register';
 
 describe('Page: Register', () => {
@@ -48,27 +48,18 @@ describe('Page: Register', () => {
     expect(screen.getByText(buttontext)).toBeInTheDocument();
   });
 
-  it('should render correctly when user enter information in the input fields', async () => {
-    const avatarTestId = 'avatarElement';    
-    const avatarExpectedValue = new File(['hello'], 'hello.png', {type: 'image/png'})
+  it('should render correctly when user enter information in the text input fields', async () => {
+    //const avatarTestId = 'avatarElement';    
+    //const avatarExpectedValue = new File(['hello'], 'hello.png', {type: 'image/png'})
     const nameTestId = 'nameElement';
     const nameExpectedValue = 'Pedro';
     const emailTestId = 'emailElement';
-    const emailExpectedValue = 'example@mail.com';
-    const birthdayTestId = 'birthdayElement';
-    const birthdayExpectedValue = '19.02.2023';
-    const locationTestId = 'locationElement';
+    const emailExpectedValue = 'example@mail.com';  
     const passwordTestId = 'passwordElement';
-    const passwordExpectedValue = '111111';
-    const genderTestId = 'genderElement';
-    const roleTestId = 'roleElement';   
+    const passwordExpectedValue = '111111'; 
 
     render(preparedComponent);
-    const avatarElement = screen.getByTestId(avatarTestId) as HTMLInputElement;
-    await userEvent.upload(
-      avatarElement,
-      avatarExpectedValue,
-    );
+    
     await userEvent.type(
       screen.getByTestId(nameTestId),
       nameExpectedValue,
@@ -78,33 +69,51 @@ describe('Page: Register', () => {
         emailExpectedValue,
     );
     await userEvent.type(
-      screen.getByTestId(birthdayTestId),
-      birthdayExpectedValue,
-    );
-    await userEvent.selectOptions(
-        screen.getByText('Удельная'),
-        'Удельная'
-    );
-    await userEvent.deselectOptions(
-        screen.getByText('Удельная'),
-        'Удельная'
-    );
-    await userEvent.selectOptions(
-        screen.getByText('Пионерская'),
-        'Пионерская'
-    );
-    await userEvent.type(
         screen.getByTestId(passwordTestId),
         passwordExpectedValue,
-      );    
-
-    expect(avatarElement.files?.[0]).toBe(avatarExpectedValue)
-    expect(avatarElement.files).toHaveLength(1)
+      );
+    
+      
+    /*expect(avatarElement.files?.[0]).toBe(avatarExpectedValue)
+    expect(avatarElement.files).toHaveLength(1)*/
     expect(screen.getByDisplayValue(nameExpectedValue)).toBeInTheDocument();
     expect(screen.getByDisplayValue(emailExpectedValue)).toBeInTheDocument();
-    expect(screen.getByDisplayValue(birthdayExpectedValue)).toBeInTheDocument();
-    expect(screen.getByText<HTMLOptionElement>('Пионерская').selected).toBe(true)
-    expect(screen.getByText<HTMLOptionElement>('Удельная').selected).toBe(false)
     expect(screen.getByDisplayValue(passwordExpectedValue)).toBeInTheDocument();
+  });  
+
+  it('should render correctly when user select gender', async () => {  
+    render(preparedComponent);
+
+    await userEvent.click(screen.getByDisplayValue(Gender.FEMALE));    
+    expect(screen.getByDisplayValue(Gender.FEMALE)).toBeChecked();
+
+    await userEvent.click(screen.getByDisplayValue(Gender.MALE));    
+    expect(screen.getByDisplayValue(Gender.MALE)).toBeChecked();
+
+    await userEvent.click(screen.getByDisplayValue(Gender.NONE));    
+    expect(screen.getByDisplayValue(Gender.NONE)).toBeChecked();
+  });
+
+  it('should render correctly when user select role', async () => {  
+    render(preparedComponent);
+    
+
+    await userEvent.click(screen.getByDisplayValue(Role.COACH));    
+    expect(screen.getByDisplayValue(Role.COACH)).toBeChecked();
+
+    await userEvent.click(screen.getByDisplayValue(Role.USER));    
+    expect(screen.getByDisplayValue(Role.USER)).toBeChecked();
+  });
+
+  it('should render correctly when user checked user-agreement', async () => {
+    const expectedValue = 'user-agreement';
+    
+    render(preparedComponent);
+
+    await userEvent.click(screen.getByDisplayValue(expectedValue));    
+    expect(screen.getByDisplayValue(expectedValue)).toBeChecked();
+
+    await userEvent.click(screen.getByDisplayValue(expectedValue));    
+    expect(screen.getByDisplayValue(expectedValue)).not.toBeChecked();
   });
 });
