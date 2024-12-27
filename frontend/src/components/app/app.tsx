@@ -17,28 +17,35 @@ import CreateTrainingForm from '../../pages/create-training-form/create-training
 import MyTrainings from '../../pages/my-trainings/my-trainings';
 import UserCard from '../../pages/user-card/user-card';
 import { useAppSelector } from '../../hooks/use-app-dispatch';
-import { getUserLoadingStatus } from '../../store/user-process/selectors';
+import { getUserError, getUserLoadingStatus } from '../../store/user-process/selectors';
 import Questionnaire from '../../pages/questionnaire/questuinaire';
-import { getTrainingLoadingStatus } from '../../store/training-process/selectors';
 import EditTrainingPage from '../../pages/edit-training-page/edit-training-page';
 import HistoryRouter from '../history-route/history-route';
 import browserHistory from '../../browser-history';
 import UserCatalog from '../../pages/user-catalog/user-catalog';
 import MyFriends from '../../pages/my-friends/my-friends';
+import Page404 from '../../pages/page-404/page-404';
+import ErrorScreen from '../../pages/error-screen/error-screen';
+import Loader from '../loader/loader';
+
 
 function App(): JSX.Element {
   const userLoadingStatus = useAppSelector(getUserLoadingStatus);
-  const trainingLoadingStatus = useAppSelector(getTrainingLoadingStatus);
+  const error = useAppSelector(getUserError);
 
-  if ((userLoadingStatus || trainingLoadingStatus)) {
-    return <span>Loading ...</span>
+  if (userLoadingStatus) {
+    return (<Loader />)
+  }
+
+  if (error?.code === 'ERR_NETWORK') {
+    return (<ErrorScreen />)
   }
 
   return (
     <HelmetProvider>
       {
       !userLoadingStatus &&
-      !trainingLoadingStatus &&
+      !error &&
       <HistoryRouter history={browserHistory}>
         <Routes>
           <Route path="" element={<IntroPage />} />
@@ -140,6 +147,16 @@ function App(): JSX.Element {
                   </PrivateRoute>
                 }
               />
+
+              <Route
+                path='/*'
+                element={
+                  <PrivateRoute>
+                    <Page404 />
+                  </PrivateRoute>
+                }
+              />
+
           </Route>
 
           <Route
@@ -151,6 +168,8 @@ function App(): JSX.Element {
               }
           />
 
+
+
           <Route
               path={`${AppRoute.Training}/:trainingId`}
               element={
@@ -159,6 +178,8 @@ function App(): JSX.Element {
                 </PrivateRoute>
               }
           />
+
+
         </Routes>
       </HistoryRouter>
     }

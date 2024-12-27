@@ -1,0 +1,25 @@
+.error-screen {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  transform: translate(-50%,-50%);
+  top: 50%;
+  left: 50%;
+  font-size: 30px;
+}
+
+.error-screen * {
+  margin: 30px auto;
+}
+
+.error-screen h1 {
+  font-size: 150px;
+  margin-bottom: 100px;
+  text-transform: uppercase;
+}
+
+.error-screen button {
+  padding: 10px;
+  box-shadow: 0 0 0 1px black, 0 0 0 3px white, 0 0 0 7px black;
+  cursor: pointer;
+}

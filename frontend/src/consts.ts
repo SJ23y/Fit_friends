@@ -19,7 +19,8 @@ export enum AppRoute {
   Edit = '/edit-training',
   Users = '/users',
   User = '/user',
-  Friends = '/friends'
+  Friends = '/friends',
+  NotFound = '/404'
 }
 
 export enum AuthorizationStatus {

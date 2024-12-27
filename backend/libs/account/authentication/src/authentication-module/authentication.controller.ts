@@ -139,7 +139,7 @@ export class AuthenticationController {
   public async checkToken(@Req() {user: payload}: RequestWithTokenPayload) {
     const user = await this.authenticationService.getUser(payload.sub);
 
-    return  fillDto(UserRdo, user.toPOJO());;
+    return  fillDto(UserRdo, user.toPOJO());
   }
 
   @ApiResponse({
@@ -172,7 +172,6 @@ export class AuthenticationController {
   @Get('user/:userId')
   public async show(@Param('userId') userId: string) {
     const user = await this.authenticationService.getUser(userId);
-    console.log('User', user);
     return fillDto(UserRdo, user.toPOJO());
   }
 
