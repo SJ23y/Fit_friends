@@ -1,6 +1,6 @@
 import {  AppRoute, FilterBy, Role, Setting } from "../../consts";
 import { useAppDispatch, useAppSelector } from "../../hooks/use-app-dispatch";
-import { getQuery, getTrainings } from "../../store/main-process/selectors";
+import { getMainLoadingStatus, getQuery, getTrainings } from "../../store/main-process/selectors";
 import { useEffect } from "react";
 import DetailedTrainingCard from "../../components/detailed-training-card/detailed-training-card";
 import EmptyListCard from "../../components/empty-list-card/empty-list-card";
@@ -8,6 +8,7 @@ import TrainingFilterBoxCoach from "../../components/trainings-filter-box/traini
 import { getUserInfo } from "../../store/user-process/selectors";
 import { useNavigate } from "react-router-dom";
 import { uploadTrainings } from "../../store/main-process/thunk-actions";
+import Loader from "../../components/loader/loader";
 
 
 function MyTrainings(): JSX.Element {
@@ -16,6 +17,7 @@ function MyTrainings(): JSX.Element {
   const user = useAppSelector(getUserInfo);
   const paginatedTrainings = useAppSelector(getTrainings);
   const query = useAppSelector(getQuery);
+  const loadingStatus = useAppSelector(getMainLoadingStatus)
 
   const showMoreButtonClickHandler = (evt: React.MouseEvent<HTMLButtonElement>) => {
     evt.preventDefault();
@@ -44,6 +46,10 @@ function MyTrainings(): JSX.Element {
   useEffect(() => {
     dispatch(uploadTrainings({...query, filterBy: FilterBy.COACH}));
   }, [query])
+
+  if (loadingStatus) {
+    return <Loader />
+  }
 
   return(
     <div className="wrapper">

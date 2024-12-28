@@ -12,6 +12,7 @@ import { Query } from '../../types/query';
 const initialState: MainProcess = {
   trainings: null,
   featuredTrainings: null,
+  loadingStatus: false,
   errorStatus: false,
   specialTrainings: null,
   popularTrainings: null,
@@ -43,6 +44,11 @@ const mainProcess = createSlice({
   },
   extraReducers(builder) {
     builder
+      .addCase(uploadTrainings.pending, (state) => {
+        if (!state.trainings) {
+          state.loadingStatus = true;
+        }
+      })
       .addCase(uploadTrainings.fulfilled, (state, action) => {
         if (state.trainings && action.payload.currentPage > 1) {
           state.trainings = {
@@ -52,6 +58,7 @@ const mainProcess = createSlice({
         } else {
           state.trainings = action.payload;
         }
+        state.loadingStatus = false;
       })
       .addCase(uploadFeaturedTrainings.fulfilled, (state, action) => {
         state.featuredTrainings = action.payload;

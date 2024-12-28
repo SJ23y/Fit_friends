@@ -1,12 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import { AppRoute, Role, Setting, SortBy, SortDirection } from "../../consts";
 import { useAppDispatch, useAppSelector } from "../../hooks/use-app-dispatch";
-import { getOrders } from "../../store/purchase-process/selectors";
+import { getOrders, getPurchaseLoadingStatus } from "../../store/purchase-process/selectors";
 import { uploadCoachOrders, uploadPurchases } from "../../store/purchase-process/thunk-actions";
 import React, { useEffect, useState } from "react";
 import DetailedTrainingCard from "../../components/detailed-training-card/detailed-training-card";
 import { getUserInfo } from "../../store/user-process/selectors";
 import EmptyListCard from "../../components/empty-list-card/empty-list-card";
+import Loader from "../../components/loader/loader";
 
 
 function MyOrders(): JSX.Element {
@@ -17,6 +18,7 @@ function MyOrders(): JSX.Element {
   const [totalPriseSorting, setTotalPriceSorting] = useState({status: false, sortDirection: SortDirection.DESC});
   const [totalCountSorting, setTotalCountSorting] = useState({status: false, sortDirection: SortDirection.DESC});
   const paginatedOrders = useAppSelector(getOrders);
+  const loadingStatus = useAppSelector(getPurchaseLoadingStatus)
 
   const changeTotalPriceSortingHandler = () => {
     if (totalPriseSorting.status) {
@@ -100,6 +102,9 @@ function MyOrders(): JSX.Element {
     }
   }, [currentSorting]);
 
+  if (loadingStatus) {
+    return <Loader />
+  }
 
   return(
       <main>

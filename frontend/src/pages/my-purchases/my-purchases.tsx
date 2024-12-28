@@ -1,17 +1,19 @@
 import { useNavigate } from "react-router-dom";
 import { AppRoute, FilterBy, Setting } from "../../consts";
 import { useAppDispatch, useAppSelector } from "../../hooks/use-app-dispatch";
-import { getPurchases } from "../../store/purchase-process/selectors";
+import { getPurchaseLoadingStatus, getPurchases } from "../../store/purchase-process/selectors";
 import { uploadPurchases } from "../../store/purchase-process/thunk-actions";
 import React, { useEffect, useState } from "react";
 import DetailedTrainingCard from "../../components/detailed-training-card/detailed-training-card";
 import EmptyListCard from "../../components/empty-list-card/empty-list-card";
+import Loader from "../../components/loader/loader";
 
 function MyPurchases(): JSX.Element {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const paginatedPurhases = useAppSelector(getPurchases);
   const [activeFlag, setActiveFlag] = useState(false);
+  const loadingStatus = useAppSelector(getPurchaseLoadingStatus);
 
 
   const showMoreButtonClickHandler = (evt: React.MouseEvent<HTMLButtonElement>) => {
@@ -35,6 +37,7 @@ function MyPurchases(): JSX.Element {
     }))
   }, [ ]);
 
+
   useEffect(() => {
     if (activeFlag) {
       dispatch(uploadPurchases({
@@ -53,6 +56,10 @@ function MyPurchases(): JSX.Element {
       }))
     }
   }, [activeFlag]);
+
+  if (loadingStatus) {
+    return <Loader />
+  }
 
   return(
       <main>

@@ -16,6 +16,7 @@ export type MainProcess = {
   specialTrainings: null | Trainings;
   popularTrainings: null | Trainings;
   errorStatus: boolean;
+  loadingStatus: boolean;
   query: Query;
 };
 

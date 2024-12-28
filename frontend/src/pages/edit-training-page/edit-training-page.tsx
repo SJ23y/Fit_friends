@@ -2,18 +2,20 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import Header from "../../components/header/header";
 import ReviewSidebar from "../../components/reviews-sidebar/reviews-sidebar";
 import { useAppDispatch, useAppSelector } from "../../hooks/use-app-dispatch";
-import { getCurrentTraining } from "../../store/training-process/selectors";
+import { getCurrentTraining, getTrainingLoadingStatus } from "../../store/training-process/selectors";
 import React, { useEffect, useRef, useState } from "react";
 import { updateTraining, uploadTrainingById } from "../../store/training-process/thunk-actions";
 import { AppRoute, Gender, Setting, ValidationSetting } from "../../consts";
 import classNames from "classnames";
 import { getUserInfo } from "../../store/user-process/selectors";
 import { UpdateTraining } from "../../types/trainings";
+import Loader from "../../components/loader/loader";
 
 function EditTrainingPage(): JSX.Element {
   const training = useAppSelector(getCurrentTraining);
   const user = useAppSelector(getUserInfo);
   const {trainingId} = useParams();
+  const loadingStatus = useAppSelector(getTrainingLoadingStatus)
 
   const [editStatus, setEditStatus] = useState(false);
   const [formData, setFormData] = useState<UpdateTraining>({
@@ -107,6 +109,9 @@ function EditTrainingPage(): JSX.Element {
     }
   }, []);
 
+  if (loadingStatus) {
+    return <Loader />
+  }
 
 
   return(

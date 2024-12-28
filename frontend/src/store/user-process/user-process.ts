@@ -164,6 +164,11 @@ const userProcess = createSlice({
       .addCase(saveQuestionnaireResult.rejected, (state) => {
         state.loadingStatus = false;
       })
+      .addCase(uploadUsers.pending, (state) => {
+        if (!state.users) {
+          state.loadingStatus = true;
+        }
+      })
       .addCase(uploadUsers.fulfilled, (state, action) => {
         state.error = null;
         if (state.users && action.payload.currentPage > Setting.DefaultStartPage) {
@@ -174,6 +179,7 @@ const userProcess = createSlice({
         } else {
           state.users = action.payload;
         }
+        state.loadingStatus = false;
       })
       .addCase(addSubscription.fulfilled, (state, action) => {
         state.error = null;

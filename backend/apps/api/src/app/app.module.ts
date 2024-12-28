@@ -12,12 +12,18 @@ import { MessagesConfigModule } from '@backend/messages-config';
 import { SubscriptionModule } from '@backend/subscription';
 import { MessagesBrokerModule } from '@backend/messages-broker';
 import { MessagesEmailModule } from '@backend/messages-email';
+import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
+import { getRabbitMqOptions } from '@backend/shared-helpers';
 
 @Module({
   imports: [
     AccountConfigModule,
     MessagesConfigModule,
     FileManagerConfigModule,
+    RabbitMQModule.forRootAsync(
+      RabbitMQModule,
+      getRabbitMqOptions('messages')
+    ),
     AuthenticationModule,
     TrainingModule,
     ReviewModule,

@@ -19,11 +19,15 @@ const getQuery = (state: Pick<State, NameSpace.MAIN>) =>
 const getErrorStatus = (state: Pick<State, NameSpace.MAIN>) =>
   state[NameSpace.MAIN].errorStatus;
 
+const getMainLoadingStatus = (state: Pick<State, NameSpace.MAIN>) =>
+  state[NameSpace.MAIN].loadingStatus;
+
 export {
   getTrainings,
   getFeaturedTrainings,
   getSpecialTrainings,
   getQuery,
   getErrorStatus,
-  getPopularlTrainings
+  getPopularlTrainings,
+  getMainLoadingStatus
 };

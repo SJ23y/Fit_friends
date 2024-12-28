@@ -1,16 +1,18 @@
 import {  Setting } from "../../consts";
 import { useAppDispatch, useAppSelector } from "../../hooks/use-app-dispatch";
-import { getQuery, getTrainings } from "../../store/main-process/selectors";
+import { getMainLoadingStatus, getQuery, getTrainings } from "../../store/main-process/selectors";
 import { useEffect } from "react";
 import DetailedTrainingCard from "../../components/detailed-training-card/detailed-training-card";
 import EmptyListCard from "../../components/empty-list-card/empty-list-card";
 import TrainingFilterBoxUser from "../../components/trainings-filter-box/trainings-filter-box-user";
 import { uploadTrainings } from "../../store/main-process/thunk-actions";
+import Loader from "../../components/loader/loader";
 
 function TrainingCatalog(): JSX.Element {
   const dispatch = useAppDispatch();
   const paginatedTrainings = useAppSelector(getTrainings);
   const query = useAppSelector(getQuery);
+  const loadingStatus = useAppSelector(getMainLoadingStatus)
 
   const showMoreButtonClickHandler = (evt: React.MouseEvent<HTMLButtonElement>) => {
     evt.preventDefault();
@@ -34,6 +36,10 @@ function TrainingCatalog(): JSX.Element {
   useEffect(() => {
     dispatch(uploadTrainings(query));
   }, [query]);
+
+  if (loadingStatus) {
+    return <Loader />
+  }
 
   return(
     <div className="wrapper">

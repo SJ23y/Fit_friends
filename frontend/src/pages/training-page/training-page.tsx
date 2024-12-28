@@ -2,7 +2,7 @@ import { Link, useParams } from "react-router-dom";
 import Header from "../../components/header/header";
 import ReviewSidebar from "../../components/reviews-sidebar/reviews-sidebar";
 import { useAppDispatch, useAppSelector } from "../../hooks/use-app-dispatch";
-import { getCurrentTraining } from "../../store/training-process/selectors";
+import { getCurrentTraining, getTrainingLoadingStatus } from "../../store/training-process/selectors";
 import { useEffect, useRef, useState } from "react";
 import { uploadTrainingById } from "../../store/training-process/thunk-actions";
 import { AppRoute, Gender, Setting } from "../../consts";
@@ -11,6 +11,7 @@ import NewPurchasePopup from "../../components/new-purchase-popup/new-purchase-p
 import classNames from "classnames";
 import { reducePurchaseTrainings, uploadPurchaseByTrainingId } from "../../store/purchase-process/thunk-actions";
 import { getTrainingPurchase } from "../../store/purchase-process/selectors";
+import Loader from "../../components/loader/loader";
 
 function TrainingPage(): JSX.Element {
   const [reviewPopupStatus, setReviewPopupStatus] = useState(false);
@@ -22,6 +23,7 @@ function TrainingPage(): JSX.Element {
   const dispatch = useAppDispatch();
   const training = useAppSelector(getCurrentTraining);
   const purchase = useAppSelector(getTrainingPurchase);
+  const loadingStatus = useAppSelector(getTrainingLoadingStatus)
 
   const keyDownClickHandler = (evt: React.KeyboardEvent) => {
     if (evt.key === 'Escape') {
@@ -59,6 +61,10 @@ function TrainingPage(): JSX.Element {
       }
     }
   }, [])
+
+  if (loadingStatus) {
+    return <Loader />
+  }
 
   return(
       <div

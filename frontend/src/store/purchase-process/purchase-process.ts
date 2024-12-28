@@ -23,7 +23,9 @@ const purchaseProcess = createSlice({
   extraReducers(builder) {
     builder
       .addCase(uploadPurchases.pending, (state) => {
-        state.loadingStatus = true;
+        if (!state.purchases) {
+          state.loadingStatus = true;
+        }
       })
       .addCase(uploadPurchases.fulfilled, (state, action) => {
         if (state.purchases && action.payload.currentPage > 1) {
@@ -63,7 +65,9 @@ const purchaseProcess = createSlice({
         state.currentTrainingPurchase = action.payload;
       })
       .addCase(uploadCoachOrders.pending, (state) => {
-        state.loadingStatus = true
+        if (!state.coachOrders) {
+          state.loadingStatus = true;
+        }
       })
       .addCase(uploadCoachOrders.fulfilled, (state, action) => {
         if (state.coachOrders && action.payload.currentPage > 1) {

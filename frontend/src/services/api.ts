@@ -1,9 +1,11 @@
 import axios, { AxiosError, AxiosInstance } from 'axios';
-import { ApiRoute, Setting } from '../consts';
+import { ApiRoute, AppRoute, Setting } from '../consts';
 import { getAccessToken, getRefreshToken, saveToken } from './token';
 import { DetailMessageType } from '../types/error';
 import { TokenData } from '../types/auth';
 import { isTokenExpired } from '../utils';
+import { store } from '../store';
+import { redirectToRoute } from '../store/actions';
 
 const createAPI = (): AxiosInstance => {
   const api = axios.create({
@@ -36,6 +38,10 @@ const createAPI = (): AxiosInstance => {
   api.interceptors.response.use(
     (response) => response,
     (error: AxiosError<DetailMessageType>) => {
+      if (error.response?.status && error.response.status >= 400) {
+        store.dispatch(redirectToRoute(AppRoute.NotFound));
+        throw error;
+      }
       throw error;
     }
   );

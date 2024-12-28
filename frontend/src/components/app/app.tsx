@@ -45,7 +45,7 @@ function App(): JSX.Element {
     <HelmetProvider>
       {
       !userLoadingStatus &&
-      !error &&
+      error?.code !== 'ERR_NETWORK' &&
       <HistoryRouter history={browserHistory}>
         <Routes>
           <Route path="" element={<IntroPage />} />
