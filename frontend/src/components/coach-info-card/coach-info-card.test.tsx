@@ -1,7 +1,6 @@
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { render, screen, waitFor } from '@testing-library/react';
 import { withHistory, withStore } from '../../mock-data/mock-component';
-import { AuthorizationStatus, Gender, Role, Setting } from '../../consts';
+import { AuthorizationStatus, Setting } from '../../consts';
 import CoachInfoCard from './coach-info-card';
 import { generateMockUser } from '../../mock-data/mock-users';
 import { generateMockCoachQuestionnaire } from '../../mock-data/mock-questionnaire';
@@ -31,6 +30,7 @@ describe('Component: CoachInfoCard', () => {
       hasSubscription: true,
       onSubscriptionChange: (coachId: string, coachName: string) => 'void'
     }
+
     const { withStoreComponent } = withStore(<CoachInfoCard {...componentProps}  />, {USER: {...initialState}});
     const preparedComponent = withHistory(withStoreComponent);
 
@@ -64,6 +64,112 @@ describe('Component: CoachInfoCard', () => {
     render(preparedComponent);
     
     expect(screen.getByText(expectedText)).toBeInTheDocument();    
-  });  
+  });
+  
+  it('should render correct with two sertificates', async () => {
+    componentProps.user.sertificates = ['sertificate1', 'sertificate2'];    
+    const expectedText = 'Посмотреть сертификаты';
 
+    render(preparedComponent);
+    
+    expect(screen.getByText(expectedText)).toBeInTheDocument();    
+  });
+
+  it('should render correct with empty sertificates', async () => {
+    componentProps.user.sertificates = [];    
+    const expectedText = 'Посмотреть сертификаты';
+
+    render(preparedComponent);
+    
+    await waitFor(() => {
+      expect(screen.queryByText(expectedText)).toBeNull()
+    })   
+  });
+
+  it('should render correct with isFriend prop true', async () => {
+    componentProps.isFriend = true;   
+    const expectedText = 'Удалить из друзей';
+    const notExpectedText = 'Добавить в друзья';
+
+    render(preparedComponent);
+    
+    expect(screen.getByText(expectedText)).toBeInTheDocument()
+    await waitFor(() => {
+      expect(screen.queryByText(notExpectedText)).toBeNull()
+    })    
+  });
+
+  it('should render correct with isFriend prop false', async () => {
+    componentProps.isFriend = false;   
+    const notExpectedText = 'Удалить из друзей';
+    const expectedText = 'Добавить в друзья';
+    const { withStoreComponent } = withStore(<CoachInfoCard {...componentProps}  />, {USER: {...initialState}});
+    const preparedComponent = withHistory(withStoreComponent);
+    render(preparedComponent);
+    
+    expect(screen.getByText(expectedText)).toBeInTheDocument()
+    await waitFor(() => {
+      expect(screen.queryByText(notExpectedText)).toBeNull()
+    })    
+  });
+
+  it('should render correct with isFriend prop false and individualTrainings true', async () => {
+    componentProps.isFriend = false;
+    componentProps.user.questionnaire = generateMockCoachQuestionnaire();
+    componentProps.user.questionnaire.individualTraining = true;   
+    const notExpectedText = 'Хочу персональную тренировку';
+    const { withStoreComponent } = withStore(<CoachInfoCard {...componentProps}  />, {USER: {...initialState}});
+    const preparedComponent = withHistory(withStoreComponent);
+    render(preparedComponent);
+    
+    await waitFor(() => {
+      expect(screen.queryByText(notExpectedText)).toBeNull()
+    })    
+  });
+
+  it('should render correct with isFriend prop true and individualTrainings true', async () => {
+    componentProps.isFriend = true;
+    componentProps.user.questionnaire = generateMockCoachQuestionnaire();
+    componentProps.user.questionnaire.individualTraining = true;   
+    const expectedText = 'Хочу персональную тренировку';
+    const { withStoreComponent } = withStore(<CoachInfoCard {...componentProps}  />, {USER: {...initialState}});
+    const preparedComponent = withHistory(withStoreComponent);
+    render(preparedComponent);
+    
+    expect(screen.getByText(expectedText)).toBeInTheDocument()   
+  });
+
+  it('should render correct with isFriend prop true and individualTrainings false', async () => {
+    componentProps.isFriend = true;
+    componentProps.user.questionnaire = generateMockCoachQuestionnaire();
+    componentProps.user.questionnaire.individualTraining = false;   
+    const notExpectedText = 'Хочу персональную тренировку';
+    const { withStoreComponent } = withStore(<CoachInfoCard {...componentProps}  />, {USER: {...initialState}});
+    const preparedComponent = withHistory(withStoreComponent);
+    render(preparedComponent);
+    
+    await waitFor(() => {
+      expect(screen.queryByText(notExpectedText)).toBeNull()
+    })  
+  });
+
+  it('should render correct with hasSubscription true', async () => {
+    const individualTrainingsTestId = 'personalTrainingCheckbox';
+    componentProps.hasSubscription = true;
+    const { withStoreComponent } = withStore(<CoachInfoCard {...componentProps}  />, {USER: {...initialState}});
+    const preparedComponent = withHistory(withStoreComponent);
+    render(preparedComponent);
+    
+    expect(screen.getByTestId(individualTrainingsTestId)).toBeChecked()
+  });
+
+  it('should render correct with hasSubscription false', async () => {
+    const individualTrainingsTestId = 'personalTrainingCheckbox';
+    componentProps.hasSubscription = false;
+    const { withStoreComponent } = withStore(<CoachInfoCard {...componentProps}  />, {USER: {...initialState}});
+    const preparedComponent = withHistory(withStoreComponent);
+    render(preparedComponent);
+    
+    expect(screen.getByTestId(individualTrainingsTestId)).not.toBeChecked()
+  });
 });

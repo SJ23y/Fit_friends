@@ -76,7 +76,7 @@ function CoachSertificatesSectionTemplate({ sertificates }: CoachSertificatesSec
           </div>
         }
       </div>
-        <ul className="personal-account-coach__list">
+        <ul className="personal-account-coach__list" data-testid="sertificateCardElement">
           {
             sertificates?.length === 0 &&
             <div className="personal-account-coach__calendar">
@@ -99,7 +99,7 @@ function CoachSertificatesSectionTemplate({ sertificates }: CoachSertificatesSec
             sertificates
               .slice(startIndex, startIndex + Setting.SertificateCardPerStep)
               .map((sertificate) => (
-                <li className="personal-account-coach__item" key={`sertificate-${sertificate}`}>
+                <li className="personal-account-coach__item" key={`sertificate-${sertificate}`} data-testId={`${sertificate}`}>
                   <SertificateCard sertificate={sertificate} isControlsVisible={true} />
                 </li>
               ))

@@ -11,7 +11,7 @@ export function generateMockUser(): UserData {
     email: faker.internet.email(),
     gender: getRanndomElement(Object.values(Gender)),
     birthDate: faker.date.birthdate().toISOString(),
-    description: faker.person.bio(),
+    description: faker.person.bio().replace(/[^\x00-\x7F]/g, "").trim(),
     location: getRanndomElement(LOCATIONS),
     backgroundImage: faker.system.fileName(),
     role: getRanndomElement(Object.values(Role)),

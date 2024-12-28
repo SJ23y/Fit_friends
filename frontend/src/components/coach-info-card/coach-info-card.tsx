@@ -205,6 +205,7 @@ function CoachInfoCardTemplate({
                                       name="user-agreement"
                                       checked={hasSubscription}
                                       onChange={() => onSubscriptionChange(user.id, user.name)}
+                                      data-testid="personalTrainingCheckbox"
                                       />
                                     <span className="custom-toggle__icon">
                                       <svg width="9" height="6" aria-hidden="true">

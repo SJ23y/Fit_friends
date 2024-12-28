@@ -45,20 +45,20 @@ function CoachTrainingsBoxTemplate({trainings, indiviDualTrainings}: CoachTraini
                           </div>
                         </div>
                         <ul className="user-card-coach__training-list">
-                        {
-                  trainings &&
-                  trainings
-                  .slice(startIndex, startIndex + Setting.PopularCardPerStep)
-                  .map((training) => (
-                    <li className="popular-trainings__item" key={`popular-${training.id}`}>
-                      <DetailedTrainingCard training={training}  />
-                    </li>
-                  ))
-                }
-                {
-                  trainings && trainings.length === 0
-                  && <EmptyListCard />
-                }
+                          {
+                            trainings &&
+                            trainings
+                            .slice(startIndex, startIndex + Setting.PopularCardPerStep)
+                            .map((training) => (
+                              <li className="popular-trainings__item" key={`popular-${training.id}`} data-testid='trainingElement'>
+                                <DetailedTrainingCard training={training}  />
+                              </li>
+                            ))
+                          }
+                          {
+                            trainings && trainings.length === 0
+                            && <EmptyListCard />
+                          }
                         </ul>
 
                       </>
