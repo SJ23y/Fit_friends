@@ -21,10 +21,10 @@ describe('Friend process async actions', () => {
   let store: ReturnType<typeof mockStoreCreator>;
 
   const initialState = {
-    friends: null 
+    friends: null
   }
 
-  
+
   beforeEach(() => {
     store = mockStoreCreator({
       Friend: { ...initialState }
@@ -67,7 +67,7 @@ describe('Friend process async actions', () => {
             totalPages: 2,
             currentPage: 1,
             totalItems: 10,
-            itemsPerPage: 6        
+            itemsPerPage: 6
           }
 
     mockAxiosAdapter.onGet(`${ApiRoute.Friends}?${createQueryString(query)}`).reply(200, returnedData);
@@ -88,11 +88,11 @@ describe('Friend process async actions', () => {
     }
 
     const requestData = {
-      senderId: faker.string.uuid(), 
-      recieverId: faker.string.uuid(), 
-      status: RequestStatus.APPROVED      
+      senderId: faker.string.uuid(),
+      recieverId: faker.string.uuid(),
+      status: RequestStatus.APPROVED
     }
-    
+
     vi.spyOn(fakeModule, 'cb');
     mockAxiosAdapter.onPost(ApiRoute.Requests).reply(200);
 

@@ -67,7 +67,7 @@ describe('Purchase-process slice', () => {
 
   it('Should set loadingStatus to true with uploadPurchases.pending', () => {
     const result = purchaseProcess.reducer(
-      state,
+      initialState,
       uploadPurchases.pending
     );
 
@@ -158,7 +158,7 @@ describe('Purchase-process slice', () => {
   });
 
   it('Should set loadingStatus to true with uploadCoachOrders.pending', () => {
-    const result = purchaseProcess.reducer(state, uploadCoachOrders.pending);
+    const result = purchaseProcess.reducer(initialState, uploadCoachOrders.pending);
 
     expect(result.loadingStatus).toBe(true);
   });

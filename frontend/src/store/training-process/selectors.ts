@@ -5,4 +5,6 @@ const getCurrentTraining = (state: Pick<State, NameSpace.TRAINING>) => state[Nam
 
 const getTrainingLoadingStatus = (state: Pick<State, NameSpace.TRAINING>) => state[NameSpace.TRAINING].loadingStatus;
 
-export { getCurrentTraining, getTrainingLoadingStatus };
+const getTrainingErrorStatus = (state: Pick<State, NameSpace.TRAINING>) => state[NameSpace.TRAINING].error;
+
+export { getCurrentTraining, getTrainingLoadingStatus, getTrainingErrorStatus };

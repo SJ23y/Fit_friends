@@ -8,6 +8,7 @@ import { faker } from '@faker-js/faker';
 describe('Main-process slice', () => {
   const initialState = {
     trainings: null,
+    loadingStatus: false,
     featuredTrainings: null,
     errorStatus: false,
     specialTrainings: null,
@@ -45,6 +46,7 @@ describe('Main-process slice', () => {
       errorStatus: false,
       specialTrainings: Array.from({length: 3}, () => generateMockTraining()),
       popularTrainings: Array.from({length: 3}, () => generateMockTraining()),
+      loadingStatus: false,
       query: {
         count: Setting.TrainingsCatalogItemsPerPage,
         sortBy: Setting.DefaultSortBy,

@@ -21,7 +21,7 @@ describe('User-process slice', () => {
       }
   };
 
-  const newFriend = {      
+  const newFriend = {
     userId: faker.string.uuid(),
     friendId: faker.string.uuid()
   }
@@ -45,7 +45,7 @@ describe('User-process slice', () => {
       totalPages: 2,
       currentPage: 1,
       totalItems: 10,
-      itemsPerPage: 6  
+      itemsPerPage: 6
     },
     query: {
       count: Setting.MaxUserCatalogCount,
@@ -111,14 +111,14 @@ describe('User-process slice', () => {
   });
 
   it('Should set newFriend to state.currentlyViewedUser.friends  with addFriendToUser', () => {
-    
+
     const result = userProcess.reducer(state, addFriendToUser(newFriend));
 
     expect(result.currentlyViewedUser?.friends).toContainEqual(newFriend);
   });
 
-  it('Should delete newFriend from state.currentlyViewedUser.friends with deleteFriendFromUser', () => { 
-    userProcess.reducer(state, addFriendToUser(newFriend));   
+  it('Should delete newFriend from state.currentlyViewedUser.friends with deleteFriendFromUser', () => {
+    userProcess.reducer(state, addFriendToUser(newFriend));
     const result = userProcess.reducer(state, deleteFriendFromUser(newFriend.friendId));
 
     expect(result.currentlyViewedUser?.friends).not.toContainEqual(newFriend);
@@ -298,23 +298,15 @@ describe('User-process slice', () => {
     expect(result.currentlyViewedUser).toEqual(mockUser);
   });
 
-  it('Should set loadingStatus to false with getUserById.rejected', () => {
-    const result = userProcess.reducer(
-      state,
-      getUserById.rejected);
-
-    expect(result.loadingStatus).toBe(false);
-  });
-
   it('Should set mockUsers to state.users and loadingStatus to false and error to null with uploadUsers.fulfilled', () => {
     const mockUsers = {
       entities: Array.from({length: 5}, () => generateMockUser()),
         totalPages: 2,
         currentPage: 1,
         totalItems: 10,
-        itemsPerPage: 6        
+        itemsPerPage: 6
       }
-    
+
     const query = {
       count: Setting.FriendsPerPageCount,
       page: Setting.DefaultStartPage,
@@ -374,7 +366,7 @@ describe('User-process slice', () => {
   it('Should add newSertificate to state.user.sertificates with addNewSertificate.fulfilled', () => {
     const newSertificate = faker.system.filePath();
     const formData = new FormData();
-  
+
     const result = userProcess.reducer(
       state,
       addNewSertificate.fulfilled(

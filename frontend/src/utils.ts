@@ -3,6 +3,20 @@ import { CoachQuestionnaire, UserQuestionnaire } from "./types/auth";
 import { Query } from "./types/query"
 import dayjs from "dayjs";
 import { Action } from "@reduxjs/toolkit";
+import customParseFormat from 'dayjs/plugin/customParseFormat.js';
+import updateLocale from 'dayjs/plugin/updateLocale.js'
+
+dayjs.extend(updateLocale)
+
+dayjs.updateLocale('en', {
+  months: [
+    "Января", "Февраля", "Марта", "Апреля", "Мая", "Июня", "Июля",
+    "Августа", "Сентября", "Октября", "Ноября", "Декабря"
+  ]
+})
+dayjs.extend(customParseFormat);
+
+export const parseDate = (date: string, format: string) => dayjs(date).format(format);
 
 export const createQueryString = ({
   count,
@@ -94,3 +108,4 @@ export const getRandomInteger = (a: number, b: number) => {
 export const getRanndomElement = <T>(arr: T[]) => arr[getRandomInteger(0, arr.length - 1)];
 
 export const extactActionsType = (actions: Action<string>[]) => actions.map(({ type }) => type);
+

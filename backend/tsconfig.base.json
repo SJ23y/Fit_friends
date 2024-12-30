@@ -27,6 +27,7 @@
       ],
       "@backend/messages-config": ["libs/messages/config/src/index.ts"],
       "@backend/messages-email": ["libs/messages/messages-email/src/index.ts"],
+      "@backend/notiifcation": ["libs/messages/notification/src/index.ts"],
       "@backend/shared-core": ["libs/shared/core/src/index.ts"],
       "@backend/shared-guards": ["libs/shared/guards/src/index.ts"],
       "@backend/shared-helpers": ["libs/shared/helpers/src/index.ts"],

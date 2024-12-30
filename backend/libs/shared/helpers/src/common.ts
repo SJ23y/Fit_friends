@@ -1,4 +1,3 @@
-//import { File } from '@project/shared-core';
 import { CoachQuestionnarie, UserQuestionnarie } from '@backend/shared-core';
 import { ClassTransformOptions, plainToInstance } from 'class-transformer';
 

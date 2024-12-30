@@ -14,6 +14,7 @@ import { MessagesBrokerModule } from '@backend/messages-broker';
 import { MessagesEmailModule } from '@backend/messages-email';
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { getRabbitMqOptions } from '@backend/shared-helpers';
+import { NotificationModule } from '@backend/notiifcation'
 
 @Module({
   imports: [
@@ -33,7 +34,8 @@ import { getRabbitMqOptions } from '@backend/shared-helpers';
     TrainingRequestModule,
     SubscriptionModule,
     MessagesBrokerModule,
-    MessagesEmailModule
+    MessagesEmailModule,
+    NotificationModule
   ],
   controllers: [],
   providers: [],

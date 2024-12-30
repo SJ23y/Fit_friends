@@ -1,7 +1,7 @@
 #add friend
-POST http://localhost:3000/friends/0e7586f4-3f28-439e-a4ca-647226d8482a HTTP/1.1
+POST http://localhost:3000/friends/4f846010-d965-441b-9f73-7146f089a57d HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzNTViNWZhYy1jZTM4LTRkYTAtYmMzOS1kMGYzMTUxMzQ1Y2QiLCJuYW1lIjoiU0oiLCJyb2xlIjoidXNlciIsImlhdCI6MTczMzY2MTMxNiwiZXhwIjoxNzMzNjYyMjE2fQ.AI6-mFjYtf3vtMY0la6wowOyn-avquz5aOM70lNPA1g
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzNTViNWZhYy1jZTM4LTRkYTAtYmMzOS1kMGYzMTUxMzQ1Y2QiLCJuYW1lIjoiU0oiLCJyb2xlIjoidXNlciIsImlhdCI6MTczNTQyOTE0NywiZXhwIjoxNzM1NDMwMDQ3fQ.dCL1GevRsoNjH28f2mSLBs_FPvIHhzKLxLWDjUvieUE
 
 {
 }

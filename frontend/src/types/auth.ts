@@ -25,6 +25,7 @@ export type UserData = {
   "backgroundImage": string;
   "trainings": Trainings;
   "friends": UserFriend[];
+  "friendship": UserFriend[];
   "recievedRequests": TrainingRequest[];
   "requests": TrainingRequest[];
   "subscriptions": Subscription[];

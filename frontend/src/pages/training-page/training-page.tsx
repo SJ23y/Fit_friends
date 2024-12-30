@@ -13,6 +13,7 @@ import { reducePurchaseTrainings, uploadPurchaseByTrainingId } from "../../store
 import { getTrainingPurchase } from "../../store/purchase-process/selectors";
 import Loader from "../../components/loader/loader";
 
+
 function TrainingPage(): JSX.Element {
   const [reviewPopupStatus, setReviewPopupStatus] = useState(false);
   const [purchasePopupStatus, setPurchasePopupStatus] = useState(false);
@@ -23,7 +24,7 @@ function TrainingPage(): JSX.Element {
   const dispatch = useAppDispatch();
   const training = useAppSelector(getCurrentTraining);
   const purchase = useAppSelector(getTrainingPurchase);
-  const loadingStatus = useAppSelector(getTrainingLoadingStatus)
+  const loadingStatus = useAppSelector(getTrainingLoadingStatus);
 
   const keyDownClickHandler = (evt: React.KeyboardEvent) => {
     if (evt.key === 'Escape') {
@@ -60,7 +61,7 @@ function TrainingPage(): JSX.Element {
         dispatch(uploadPurchaseByTrainingId(trainingId));
       }
     }
-  }, [])
+  }, []);
 
   if (loadingStatus) {
     return <Loader />

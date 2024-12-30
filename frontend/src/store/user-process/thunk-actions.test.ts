@@ -92,7 +92,7 @@ describe('Async actions', () => {
     const emittedActions = store.getActions();
     const actions = extactActionsType(emittedActions);
     const receivedData = emittedActions.at(2) as ReturnType<typeof saveQuestionnaireResult.fulfilled>;
-    
+
 
     expect(actions).toEqual([saveQuestionnaireResult.pending.type, redirectToRoute.type, saveQuestionnaireResult.fulfilled.type]);
     expect(receivedData.payload).toEqual(returnedData.questionnaire);
@@ -159,18 +159,6 @@ describe('Async actions', () => {
 
     expect(actions).toEqual([getUserById.pending.type, getUserById.fulfilled.type]);
     expect(receivedData.payload).toEqual(returnedData);
-  });
-
-  it('should dispatch "getUserById.pending" and "getUserById.rejected" with thunk getUserById and code 400', async () => {
-    const userId = faker.string.uuid();
-
-    mockAxiosAdapter.onGet(`${ApiRoute.User}/${userId}`).reply(400);
-    await store.dispatch(getUserById(userId));
-
-    const emittedActions = store.getActions();
-    const actions = extactActionsType(emittedActions);
-
-    expect(actions).toEqual([getUserById.pending.type, getUserById.rejected.type]);
   });
 
   it('should dispatch "loginUser.pending" and "loginUser.rejected" with thunk loginUser and code 400', async () => {

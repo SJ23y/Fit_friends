@@ -2,3 +2,4 @@ export { fillDto, parseTime, getRanndomElement, getRandomInteger, isUserQuestion
 export { createJwtPayload } from "./jwt";
 export { getRabbitMqOptions } from "./broker";
 export { getMailerAsyncOptions } from "./mailer";
+export { createNotificationData } from "./notification";

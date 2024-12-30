@@ -6,6 +6,7 @@ import { mainProcess } from './main-process/main-process';
 import { reviewProcess } from './review-process/review-process';
 import { purchaseProcess } from './purchase-process/purchase-process';
 import { friendProcess } from './friends-process/friends-process';
+import { notificationProcess } from './notification-process/notification-process';
 
 const rootReducer = combineReducers({
   [NameSpace.USER]: userProcess.reducer,
@@ -14,6 +15,7 @@ const rootReducer = combineReducers({
   [NameSpace.REVIEW]: reviewProcess.reducer,
   [NameSpace.PURCHASE]: purchaseProcess.reducer,
   [NameSpace.FRIEND]: friendProcess.reducer,
+  [NameSpace.NOTIFICATION]: notificationProcess.reducer,
 });
 
 export { rootReducer };

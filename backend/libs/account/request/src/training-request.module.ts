@@ -3,12 +3,12 @@ import { TrainingRequestController } from './training-request.controller';
 import { TrainingRequestFactory } from './training-request.factory';
 import { TrainingRequestService } from './training-request.service';
 import { TrainingRequestRepository } from './training-request.repository';
-import { AuthenticationModule } from '@backend/authentication';
 import { FriendsModule } from '@backend/friends'
+import { NotificationModule } from '@backend/notiifcation';
 
 @Module({
   controllers: [TrainingRequestController],
   providers: [TrainingRequestFactory, TrainingRequestService, TrainingRequestRepository],
-  imports: [AuthenticationModule, FriendsModule],
+  imports: [FriendsModule, NotificationModule],
 })
 export class TrainingRequestModule {}

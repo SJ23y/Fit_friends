@@ -1,9 +1,12 @@
 #make request for training
-POST http://localhost:3000/requests/09290b47-6905-4c1f-bd9f-65e33db57c37/pending HTTP/1.1
+POST http://localhost:3000/requests HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzNTViNWZhYy1jZTM4LTRkYTAtYmMzOS1kMGYzMTUxMzQ1Y2QiLCJuYW1lIjoiU0oiLCJyb2xlIjoidXNlciIsImlhdCI6MTczMzc5MjMzOCwiZXhwIjoxNzMzNzkzMjM4fQ.aOWO3NGUrrKdcK47b5k9wg0K9IqFnfGDG4iNKvkOSws
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzNTViNWZhYy1jZTM4LTRkYTAtYmMzOS1kMGYzMTUxMzQ1Y2QiLCJuYW1lIjoiU0oiLCJyb2xlIjoidXNlciIsImlhdCI6MTczNTQyOTE0NywiZXhwIjoxNzM1NDMwMDQ3fQ.dCL1GevRsoNjH28f2mSLBs_FPvIHhzKLxLWDjUvieUE
 
 {
+  "senderId": "355b5fac-ce38-4da0-bc39-d0f3151345cd",
+  "recieverId": "4f846010-d965-441b-9f73-7146f089a57d",
+  "status": "pending"
 }
 
 ###

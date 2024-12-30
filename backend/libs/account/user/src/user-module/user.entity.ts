@@ -21,7 +21,8 @@ export class UserEntity extends Entity implements StorableEntity<AuthUser> {
   public reviews?: Review[];
   public trainings?: Training[];
   public purchases?: Purchase[];
-  public friends?: Friend[]
+  public friends?: Friend[];
+  public friendship?: Friend[]
   public requests?: Request[];
   public recievedRequests?: Request[];
   public subscriptions?: Subscription[];
@@ -51,6 +52,7 @@ export class UserEntity extends Entity implements StorableEntity<AuthUser> {
       this.trainings = user.trainings;
       this.purchases = user.purchases;
       this.friends = user.friends;
+      this.friendship = user.friendship;
       this.requests = user.requests;
       this.recievedRequests = user.recievedRequests;
       this.subscriptions = user.subscriptions;
@@ -91,7 +93,8 @@ export class UserEntity extends Entity implements StorableEntity<AuthUser> {
       requests: this.requests,
       recievedRequests: this.recievedRequests,
       subscriptions: this.subscriptions,
-      sertificates: this.sertificates
+      sertificates: this.sertificates,
+      friendship: this.friendship
     }
   }
 }

@@ -13,12 +13,12 @@ import {
   UseGuards} from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { fillDto } from '@backend/shared-helpers';
-import { RequestWithTokenPayload } from '@backend/shared-core';
 import { FriendsService } from './friends.service';
-import { JwtAuthGuard } from '@backend/authentication';
 import { FriendsErrorMessages } from './friend.conts';
 import { FriendsQuery } from './friends.query';
 import { FriendsWithPaginationRdo } from './rdo/friends-with-pagination';
+import { AuthCheckGuard } from '@backend/shared-guards';
+import { RequestWithUserPayload } from '@backend/shared-core';
 
 @ApiTags('friends')
 @Controller('friends')
@@ -49,9 +49,9 @@ export class FriendsController {
     status: HttpStatus.BAD_REQUEST,
     description: FriendsErrorMessages.IsNotUUID
   })
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthCheckGuard)
   @Post('/:friendId')
-  public async create(@Param('friendId', ParseUUIDPipe) friendId: string, @Req() {user}: RequestWithTokenPayload) {
+  public async create(@Param('friendId', ParseUUIDPipe) friendId: string, @Req() {user}: RequestWithUserPayload) {
     await this.friendsService.addFriend(user, friendId);
   }
 
@@ -75,9 +75,9 @@ export class FriendsController {
     status: HttpStatus.BAD_REQUEST,
     description: FriendsErrorMessages.IsNotUUID
   })
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthCheckGuard)
   @Delete('/:friendId')
-  public async delete(@Param('friendId', ParseUUIDPipe) friendId: string,@Req() {user}: RequestWithTokenPayload) {
+  public async delete(@Param('friendId', ParseUUIDPipe) friendId: string,@Req() {user}: RequestWithUserPayload) {
     await this.friendsService.deleteFriend(user, friendId);
   }
 
@@ -88,13 +88,10 @@ export class FriendsController {
     status: HttpStatus.UNAUTHORIZED,
     description: FriendsErrorMessages.Unauthorized
   })
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthCheckGuard)
   @Get('')
-  public async index(@Req() {user}: RequestWithTokenPayload, @Query() query?: FriendsQuery) {
-    const paginatedFriends = await this.friendsService.getFriendsList(user.sub, query);
+  public async index(@Req() {user}: RequestWithUserPayload, @Query() query?: FriendsQuery) {
+    const paginatedFriends = await this.friendsService.getFriendsList(user.id ?? '', query);
     return fillDto(FriendsWithPaginationRdo, paginatedFriends);
   }
-
-
-
 }

@@ -59,3 +59,5 @@ export { UserQuestionnarie, CoachQuestionnarie } from './interfaces/questionnari
 export { RequestForTraining } from './interfaces/request-for-training.inteface';
 export { Subscription } from './interfaces/subscription.interface';
 export { RabbitRouting } from './settings/messages.setting';
+export { Notification } from './interfaces/notification.interface';
+export { RequestWithUserPayload } from './interfaces/request-with-user-payload';

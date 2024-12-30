@@ -109,6 +109,14 @@ export class LoggedUserRdo {
     public friends: UserFriendRdo;
 
     @ApiProperty({
+      description: 'User list of friendship',
+      example: '[friends]'
+    })
+    @Type(() => UserFriendRdo)
+    @Expose()
+    public friendship: UserFriendRdo;
+
+    @ApiProperty({
       description: 'User list of friends',
       example: '[friends]'
     })

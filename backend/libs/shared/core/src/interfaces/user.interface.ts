@@ -19,6 +19,7 @@ export interface User {
   trainings?: Training[];
   purchases?: Purchase[];
   friends?: Friend[];
+  friendship?: Friend[];
   requests?: Request[];
   recievedRequests?: Request[];
   subscriptions?: Subscription[];

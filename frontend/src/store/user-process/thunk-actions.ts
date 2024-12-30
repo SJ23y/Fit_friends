@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { AxiosInstance } from 'axios';
+import { AxiosError, AxiosInstance } from 'axios';
 import { Dispatch, State } from '../../types/state';
 import { ApiRoute, AppRoute, Role } from '../../consts';
 import { dropToken, saveToken } from '../../services/token';
@@ -9,6 +9,7 @@ import { Query } from '../../types/query';
 import { PaginatedResult } from '../../types/paginatedResult';
 import { createQueryString } from '../../utils';
 import { Subscription } from '../../types/subscription';
+import { DetailMessageType } from '../../types/error';
 
 
 const checkAuthorization = createAsyncThunk<
@@ -76,12 +77,17 @@ const logoutUser = createAsyncThunk<
 });
 
 const getUserById = createAsyncThunk<
-  UserData,
+  UserData | void,
   string,
   { dispatch: Dispatch; state: State; extra: AxiosInstance }
->('getUserById', async (userId, { extra: api }) => {
-  const { data } = await api.get<UserData>(`${ApiRoute.User}/${userId}`);
-  return data;
+>('getUserById', async (userId, { dispatch, extra: api }) => {
+  try {
+    const { data } = await api.get<UserData>(`${ApiRoute.User}/${userId}`);
+    return data;
+  } catch(error) {
+    dispatch(redirectToRoute(AppRoute.NotFound));
+  }
+
 });
 
 const uploadUsers = createAsyncThunk<

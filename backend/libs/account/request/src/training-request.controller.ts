@@ -3,22 +3,19 @@ import {
   Body,
   Controller,
   HttpStatus,
-  Logger,
   Post,
   Req,
   UseGuards} from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { RequestWithTokenPayload } from '@backend/shared-core';
+import { RequestWithUserPayload } from '@backend/shared-core';
 import { TrainingRequestService } from './training-request.service';
-import { JwtAuthGuard } from '@backend/authentication';
 import { RequestsMessages } from './training-request.conts';
 import { TrainingRequestDto } from './dto/training-request-dto';
+import { AuthCheckGuard } from '@backend/shared-guards';
 
 @ApiTags('Training requests')
 @Controller('requests')
 export class TrainingRequestController {
-  private logger = new Logger('Friends controller');
-
   constructor(
     private readonly requetsService: TrainingRequestService
   ) {}
@@ -43,9 +40,9 @@ export class TrainingRequestController {
     status: HttpStatus.BAD_REQUEST,
     description: RequestsMessages.IsNotUUID
   })
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthCheckGuard)
   @Post('')
-  public async create(@Body() {senderId, recieverId, status}: TrainingRequestDto, @Req() {user}: RequestWithTokenPayload) {
+  public async create(@Body() {senderId, recieverId, status}: TrainingRequestDto, @Req() {user}: RequestWithUserPayload) {
     await this.requetsService.saveRequest(user, senderId, recieverId, status);
   }
 }

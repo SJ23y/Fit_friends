@@ -32,6 +32,7 @@ model User {
   recievedRequests Request[]  @relation(name: "reciever")
   subscriptions Subscription[]
   sertificates String[]
+  notifications Notification[]
 
   @@map("users")
 }
@@ -155,3 +156,15 @@ model Subscription {
   @@id([subscribeById, subscribeToId])
   @@map("subscriptions")
 }
+
+model Notification {
+  id String @id @default(uuid()) @map("id")
+  text String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId String @map("user_id")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+
+  @@map("notifications")
+}
+

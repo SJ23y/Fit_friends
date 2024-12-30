@@ -32,9 +32,13 @@ const uploadTrainingById = createAsyncThunk<
   Training | void,
   string,
   { dispatch: Dispatch; state: State; extra: AxiosInstance }
->('uploadTrainingById', async (trainingId, { extra: api }) => {
-  const { data } = await api.get<Training>(`${ApiRoute.Trainings}/${trainingId}`);
+>('uploadTrainingById', async (trainingId, { dispatch, extra: api }) => {
+  try {
+    const { data } = await api.get<Training>(`${ApiRoute.Trainings}/${trainingId}`);
     return data;
+  } catch {
+    dispatch(redirectToRoute(AppRoute.NotFound));
+  }
 });
 
 

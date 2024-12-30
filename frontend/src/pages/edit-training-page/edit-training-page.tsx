@@ -15,7 +15,8 @@ function EditTrainingPage(): JSX.Element {
   const training = useAppSelector(getCurrentTraining);
   const user = useAppSelector(getUserInfo);
   const {trainingId} = useParams();
-  const loadingStatus = useAppSelector(getTrainingLoadingStatus)
+  const loadingStatus = useAppSelector(getTrainingLoadingStatus);
+  const navigate = useNavigate();
 
   const [editStatus, setEditStatus] = useState(false);
   const [formData, setFormData] = useState<UpdateTraining>({
@@ -33,10 +34,8 @@ function EditTrainingPage(): JSX.Element {
   const [isVideoPaused, setIsVideoPaused] = useState(true);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const formRef = useRef<HTMLFormElement | null>(null)
-
+  const formRef = useRef<HTMLFormElement | null>(null);
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
   const formDataChangeHandler = (evt: React.FormEvent)  => {
     evt.preventDefault();

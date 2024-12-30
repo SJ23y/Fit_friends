@@ -9,6 +9,7 @@ import { PaginatedResult, TrainingPaginatedResult } from './paginatedResult';
 import { Query } from './query';
 import { Review } from './review';
 import { Order, Purchase } from './purchase';
+import { Notification } from './notifcation';
 
 export type MainProcess = {
   trainings: null | TrainingPaginatedResult<Training>;
@@ -18,6 +19,11 @@ export type MainProcess = {
   errorStatus: boolean;
   loadingStatus: boolean;
   query: Query;
+};
+
+export type NotificationProcess = {
+  notifications: null | Notification[];
+  loadingStatus: boolean;
 };
 
 export type ReviewProcess = {

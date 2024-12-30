@@ -61,6 +61,15 @@ const userProcess = createSlice({
           friends: friends
         }
       }
+      if (state.currentlyViewedUser?.friendship) {
+        const friendship = state.currentlyViewedUser.friendship.filter(
+          (friend) => friend.friendId !== action.payload && friend.userId !== action.payload
+        );
+        state.currentlyViewedUser = {
+          ...state.currentlyViewedUser,
+          friendship: friendship
+        }
+      }
     }
   },
   extraReducers(builder) {
@@ -103,7 +112,8 @@ const userProcess = createSlice({
           "recievedRequests": action.payload.recievedRequests,
           "friends": action.payload.friends,
           "subscriptions": action.payload.subscriptions,
-          "sertificates": action.payload.sertificates
+          "sertificates": action.payload.sertificates,
+          "friendship": action.payload.friendship
         };
         state.error = null;
         state.loadingStatus = false;
@@ -150,8 +160,9 @@ const userProcess = createSlice({
         state.currentlyViewedUser = action.payload;
         state.error = null;
       })
-      .addCase(getUserById.rejected, (state) => {
+      .addCase(getUserById.rejected, (state, action) => {
         state.loadingStatus = false;
+        state.error = action.error;
       })
       .addCase(saveQuestionnaireResult.pending, (state) => {
         state.loadingStatus = true;

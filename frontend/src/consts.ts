@@ -54,7 +54,8 @@ export enum NameSpace {
   MAIN = 'MAIN',
   REVIEW = 'Review',
   PURCHASE = 'Purchase',
-  FRIEND = 'Friend'
+  FRIEND = 'Friend',
+  NOTIFICATION = 'Notification'
 }
 
 export const ValidationSetting = {
@@ -91,7 +92,8 @@ export enum ApiRoute {
   Friends = '/friends',
   Requests = '/requests',
   Subscription = '/subscription',
-  Sertificate = '/sertificate'
+  Sertificate = '/sertificate',
+  Notifications = '/notifications'
 }
 
 export enum UserLevel {
@@ -161,7 +163,10 @@ export const Setting = {
   OrdersPerPageCount: 4,
   TrainingsCatalogItemsPerPage: 6,
   UserFilterIntitalCount: 4,
-  FriendsPerPageCount: 9
+  FriendsPerPageCount: 9,
+  MaxNotificationListElements: 5,
+  NotificationHumanDateFormat: 'DD MMMM, HH:mm',
+  NotificationAttributeDateFormat: 'YYYY-MM-DD HH:mm'
 } as const;
 
 

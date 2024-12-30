@@ -1,0 +1,13 @@
+# get notification list
+GET http://localhost:3000/notifications HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0Zjg0NjAxMC1kOTY1LTQ0MWItOWY3My03MTQ2ZjA4OWE1N2QiLCJuYW1lIjoiRXZhIFB1cmR5Iiwicm9sZSI6InVzZXIiLCJpYXQiOjE3MzU0Mjk5MTIsImV4cCI6MTczNTQzMDgxMn0.-dwPQs-94oxOq2oBpt4cefGF2Mm6sLkTfzug2-ZMd8o
+
+
+###
+
+# delete notification
+DELETE http://localhost:3000/notifications/09290b47-6905-4c1f-bd9f-65e33db57c37 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzNTViNWZhYy1jZTM4LTRkYTAtYmMzOS1kMGYzMTUxMzQ1Y2QiLCJuYW1lIjoiU0oiLCJyb2xlIjoidXNlciIsImlhdCI6MTczNTQyOTE0NywiZXhwIjoxNzM1NDMwMDQ3fQ.dCL1GevRsoNjH28f2mSLBs_FPvIHhzKLxLWDjUvieUE
+
+###

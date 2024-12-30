@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks/use-app-dispatch";
 import { getUserCardInfo, getUserInfo } from "../../store/user-process/selectors";
 import { useEffect, useState } from "react";
 import { addSubscription, deleteSubscription, getUserById } from "../../store/user-process/thunk-actions";
-import { Role } from "../../consts";
+import {  Role } from "../../consts";
 import CoachInfoCard from "../../components/coach-info-card/coach-info-card";
 import UserInfoCard from "../../components/user-info-card/user-info-card";
 import { addNewFriend, deleteFriend } from "../../store/friends-process/thunk-actions";
@@ -60,12 +60,16 @@ function UserCard(): JSX.Element {
   }, [])
 
   useEffect(() => {
+    let status = false;
     if (viewedUser?.friends && viewedUser.friends.length > 0) {
-      const status = viewedUser.friends.some((friend) => friend.friendId === loggedUser?.id || friend.userId === loggedUser?.id);
-      setIsFriend(status);
-    } else {
-      setIsFriend(false);
+      status = viewedUser.friends.some((friend) => friend.friendId === loggedUser?.id || friend.userId === loggedUser?.id);
+      console.log('friends', status)
     }
+    if (!(status) && viewedUser?.friendship && viewedUser.friendship.length > 0) {
+      status = viewedUser.friendship.some((friend) => friend.friendId === loggedUser?.id || friend.userId === loggedUser?.id);
+      console.log('friendship', status)
+    }
+    setIsFriend(status);
   }, [viewedUser])
 
   useEffect(() => {
@@ -75,7 +79,7 @@ function UserCard(): JSX.Element {
     } else {
       setHasSubscription(false);
     }
-  }, [loggedUser])
+  }, [loggedUser]);
 
   return(
     <main>
