@@ -1,5 +1,4 @@
 import { useState } from "react";
-import CoachSertificatesSection from "../coach-sertificates-section/coach-sertificate-section";
 import SertificateCard from "../sertificate-card/sertificate-card";
 
 type SertificatesPopupProps = {

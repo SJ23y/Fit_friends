@@ -23,11 +23,6 @@ function UserListCardTemplate({user}: UserListCardProps): JSX.Element {
           <img src={`${Setting.BaseUrl}/${user.avatar}`} width="82" height="82" alt="" />
         </picture>
       </div>
-      {/*<div className="thumbnail-user__top-status thumbnail-user__top-status--role-user">
-        <svg width="12" height="12" aria-hidden="true">
-          <use xlinkHref="#icon-crown"></use>
-        </svg>
-      </div>*/}
       <div className="thumbnail-user__header">
         <h3 className="thumbnail-user__name">{user.name}</h3>
         <div className="thumbnail-user__location">

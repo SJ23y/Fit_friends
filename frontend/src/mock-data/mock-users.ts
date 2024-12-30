@@ -18,10 +18,11 @@ export function generateMockUser(): UserData {
     questionnaire: generateMockUserQuestionnaire(),
     avatar: new File([new Blob()], "avatar"),
     password: faker.internet.password(),
-    requests: [], 
+    requests: [],
     recievedRequests: [],
     subscriptions: [],
     friends: [],
+    friendship: [],
     trainings: [],
     sertificates: []
   }

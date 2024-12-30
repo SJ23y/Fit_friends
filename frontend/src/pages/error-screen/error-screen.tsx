@@ -1,9 +1,9 @@
-import { useAppDispatch } from "../../hooks/use-app-dispatch";
-import { checkAuthorization } from "../../store/user-process/thunk-actions";
 import './error-screen.style.css';
+import { AppRoute } from "../../consts";
+import { redirectToRoute } from "../../store/actions";
+import { store } from '../../store';
 
 function ErrorScreen(): JSX.Element {
-  const dispatch = useAppDispatch();
 
   return (
     <div className="error-screen">
@@ -11,9 +11,7 @@ function ErrorScreen(): JSX.Element {
       <p>Не удалось получить ответ от сервера</p>
       <button
         type="button"
-        onClick={() => {
-          dispatch(checkAuthorization());
-        }}
+        onClick={() => store.dispatch(redirectToRoute(AppRoute.Main))}
       >
         Попробовать ещё раз
       </button>

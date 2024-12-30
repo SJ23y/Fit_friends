@@ -1,4 +1,4 @@
-import { AuthorizationStatus, NameSpace } from '../../consts';
+import { AuthorizationStatus, NameSpace, Setting } from '../../consts';
 import { generateMockUser } from '../../mock-data/mock-users';
 import { checkAuthentication, getUserCardInfo, getUserError, getUserInfo, getUserLoadingStatus } from './selectors';
 
@@ -9,7 +9,14 @@ describe('User-process selectors', () => {
       user: generateMockUser(),
       error: null,
       loadingStatus: false,
-      currentlyViewedUser: generateMockUser()
+      currentlyViewedUser: generateMockUser(),
+      users: null,
+      query: {
+              count: Setting.MaxUserCatalogCount,
+              sortBy: Setting.DefaultSortBy,
+              sortDirection: Setting.DefaultSortDirection,
+              page: Setting.DefaultStartPage
+            }
       }
   };
 

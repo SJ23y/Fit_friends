@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { AxiosError, AxiosInstance } from 'axios';
+import { AxiosInstance } from 'axios';
 import { Dispatch, State } from '../../types/state';
 import { ApiRoute, AppRoute, Role } from '../../consts';
 import { dropToken, saveToken } from '../../services/token';
@@ -9,8 +9,6 @@ import { Query } from '../../types/query';
 import { PaginatedResult } from '../../types/paginatedResult';
 import { createQueryString } from '../../utils';
 import { Subscription } from '../../types/subscription';
-import { DetailMessageType } from '../../types/error';
-
 
 const checkAuthorization = createAsyncThunk<
   UserData,
@@ -122,7 +120,6 @@ const addNewSertificate = createAsyncThunk<
   FormData,
   { dispatch: Dispatch; state: State; extra: AxiosInstance }
 >('addNewSertificate', async (formData, { extra: api }) => {
-  console.log('in thunk action')
   const {data} = await api.post<string>(`${ApiRoute.Sertificate}/upload`, formData);
   return data;
 });
@@ -132,7 +129,6 @@ const updateSertificate = createAsyncThunk<
   FormData,
   { dispatch: Dispatch; state: State; extra: AxiosInstance }
 >('updateSertificate', async (formData, { extra: api }) => {
-  console.log('in thunk action')
   const {data} = await api.post<string>(`${ApiRoute.Sertificate}/upload`, formData);
   return {newSertificate: data, oldSertificate: formData.get('path') as string};
 });
@@ -142,7 +138,6 @@ const deleteSertificate = createAsyncThunk<
   string,
   { dispatch: Dispatch; state: State; extra: AxiosInstance }
 >('deleteSertificate', async (path, { extra: api }) => {
-  console.log('in delete thunk action', )
   await api.post(`${ApiRoute.Sertificate}/delete`, {path});
   return path;
 });

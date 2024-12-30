@@ -20,6 +20,31 @@ services:
     networks:
       - fit_friends
 
+  fit_friends.fakesmtp:
+    image: gessnerfl/fake-smtp-server:2.2.0
+    container_name: "fit_friends.fakesmtp"
+    hostname: "notification.fakesmtp"
+    ports:
+      - "8025:8025"
+      - "1085:8080"
+
+  fit_friends.rabbitmq:
+      image: rabbitmq:3.11-management
+      container_name: fit_friends.rabbitmq
+      env_file:
+      - ./notification.env
+      hostname: rabbitmq
+      ports:
+        - '1088:15672'
+        - '5672:5672'
+      healthcheck:
+        test: rabbitmq-diagnostics -q ping
+        interval: 10s
+        timeout: 5s
+        retries: 5
+      networks:
+      - fit_friends
+
   fit_friends.backend:
     image: fitfriends-backend:v.1.0
     container_name: fit_friends.backend
@@ -30,6 +55,7 @@ services:
       - ./api.env
       - ./account.env
       - ./file.env
+      - ./notification.env
     ports:
       - 3000:3000
     networks:
@@ -37,13 +63,15 @@ services:
 
 
   fit_friends.frontend:
-    image: fitfriends-frontend:v.1.0
+    image: fitfriends-frontend:v.1.1
     container_name: fit_friends.frontend
     restart: always
     depends_on:
       - fit_friends.backend
     ports:
       - 80:80
+    networks:
+      - fit_friends
 
   fit_friends.pgadmin:
     image: dpage/pgadmin4
@@ -56,6 +84,7 @@ services:
       - fit_friends.postgres
     networks:
       - fit_friends
+
 
 volumes:
   fit_friends.postgres:

@@ -20,12 +20,19 @@ model User {
   birthDate String @map("birth_date") @default("")
   description String
   location String
-  backgroundImage String  @map("background_image")
+  backgroundImage String @map("background_image")
   questionnaire Questionnaire?
   role String
   reviews Review[]
   trainings Training[]
   purchases Purchase[]
+  friends Friend[]  @relation(name: "friend")
+  friendship Friend[]  @relation(name: "user")
+  requests Request[]  @relation(name: "sender")
+  recievedRequests Request[]  @relation(name: "reciever")
+  subscriptions Subscription[]
+  sertificates String[]
+  notifications Notification[]
 
   @@map("users")
 }
@@ -109,5 +116,55 @@ model Purchase {
   paymentType String @map("payment_type")
 
   @@map("purchases")
+}
+
+model Friend {
+  user User @relation(name: "user", fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  userId String @map("user_id")
+  friend User @relation(name: "friend", fields: [friendId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  friendId String @map("friend_id")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@id([userId, friendId])
+  @@map("friends")
+}
+
+model Request {
+  reciever User @relation(name: "reciever", fields: [recieverId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  recieverId String @map("reciever_id")
+  sender User @relation(name: "sender", fields: [senderId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  senderId String @map("sender_id")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @default(now()) @map("updated_at")
+  status String
+
+  @@id([recieverId, senderId])
+  @@map("requests")
+}
+
+model Subscription {
+  subscriber User @relation(fields: [subscribeById], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  subscribeById String @map("subscibe_by_id")
+  subscribeByName String @map("subscibe_by_name")
+  subscribeByEmail String @map("subscibe_by_email")
+  subscribeToId String @map("subscribe_to_id")
+  subscribeToName String @map("subscribe_to_name")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @default(now()) @map("updated_at")
+  lastEmail  DateTime @default(now()) @map("last_email")
+
+  @@id([subscribeById, subscribeToId])
+  @@map("subscriptions")
+}
+
+model Notification {
+  id String @id @default(uuid()) @map("id")
+  text String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId String @map("user_id")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+
+  @@map("notifications")
 }
 

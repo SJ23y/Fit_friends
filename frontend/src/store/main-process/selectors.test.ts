@@ -18,6 +18,7 @@ describe('Main-process selectors', () => {
       },
       featuredTrainings: Array.from({length: 3}, () => generateMockTraining()),
       errorStatus: false,
+      loadingStatus: false,
       specialTrainings: Array.from({length: 3}, () => generateMockTraining()),
       popularTrainings: Array.from({length: 3}, () => generateMockTraining()),
       query: {

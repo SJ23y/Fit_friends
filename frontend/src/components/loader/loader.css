@@ -16,44 +16,43 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: 0 auto;
+}
 
-
-.l1, .r1 {
+.all  .l1, .r1 {
   transform: rotateX(20deg) translateZ(0px);
 }
 
-.l2, .r2 {
+.all  .l2, .r2 {
   transform: rotateX(40deg) translateZ(0px);
 }
 
-.l3, .r3 {
+.all  .l3, .r3 {
   transform: rotateX(60deg) translateZ(0px);
 }
 
-    .l4, .r4 {
+.all .l4, .r4 {
       transform: rotateX(80deg) translateZ(0px);
     }
-    .l5, .r5 {
-      transform: rotateX(100deg) translateZ(0px);
-    }
 
-  .l1, .l2, .l3, .l4, .l5, .c, .r1, .r2, .r3, .r4, .r5 {
+.all  .l5, .r5 {
+  transform: rotateX(100deg) translateZ(0px);
+}
+
+.all .l1, .l2, .l3, .l4, .l5, .c, .r1, .r2, .r3, .r4, .r5 {
     border-radius: 100px;
     background: #000;
     color: #000;
-  }
 }
-  .l1, .l2, .l3, .l4, .l5, .c, .r1, .r2, .r3, .r4, .r5 {
+
+
+.l1, .l2, .l3, .l4, .l5, .c, .r1, .r2, .r3, .r4, .r5 {
     width: 20px;
     height: 200px;
-    background: #ddd;
     margin: 1px;
     display: flex;
     align-items: flex-start;
     justify-content: center;
     transition: all 2s;
   }
-  .l1, .l2, .l3, .l4, .l5, .r1, .r2, .r3, .r4, .r5 {
-    transform: rotateX(0deg) translateZ(0px);
-    transition: all 2s;
-  }
+

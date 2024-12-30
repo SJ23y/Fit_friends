@@ -9,7 +9,7 @@ import { extactActionsType } from '../../utils';
 import { AuthData, } from '../../types/auth';
 import { redirectToRoute } from '../actions';
 import * as tokenStorage from '../../services/token';
-import { checkAuthorization, getUserById, loginUser, /*logoutUser,*/ registerUser, saveQuestionnaireResult, updateUser } from './thunk-actions';
+import { checkAuthorization, getUserById, loginUser, registerUser, saveQuestionnaireResult, updateUser } from './thunk-actions';
 import { faker } from '@faker-js/faker';
 import { generateMockUser } from '../../mock-data/mock-users';
 
@@ -207,24 +207,4 @@ describe('Async actions', () => {
     expect(mockSaveToken).toBeCalledTimes(1);
     expect(mockSaveToken).toBeCalledWith(returnedData.accessToken, returnedData.refreshToken);
   });
-  /*
-  it('should dispatch "logoutUser.pending" and "logoutUser.fulfilled" with thunk logoutUser and code 204', async () => {
-
-    mockAxiosAdapter.onDelete(ApiRoute.Logout).reply(204);
-
-    await store.dispatch(logoutUser());
-
-    const actions = extactActionsType(store.getActions());
-    expect(actions).toEqual([logoutUser.pending.type, logoutUser.fulfilled.type]);
-  });
-
-  it('should call dropToken one time with thunk logotUser', async () => {
-    mockAxiosAdapter.onDelete(ApiRoute.Logout).reply(204);
-
-    vi.spyOn(tokenStorage, 'dropToken');
-
-    await store.dispatch(logoutUser());
-
-    expect(tokenStorage.dropToken).toBeCalledTimes(1);
-  });*/
 });

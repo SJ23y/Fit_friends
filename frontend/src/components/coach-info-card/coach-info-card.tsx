@@ -177,7 +177,6 @@ function CoachInfoCardTemplate({
                           user.trainings &&
                           <CoachTrainingsBox
                             trainings={user.trainings}
-                            indiviDualTrainings={isCoachQuestionnaire(user.questionnaire) && user.questionnaire.individualTraining}
                           />
                         }
                         <form className="user-card-coach__training-form">

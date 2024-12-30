@@ -162,33 +162,6 @@ export class TrainigRepository extends BasePostgresRepository<TrainingEntity, Pr
     return (currentTraining) ? this.createEntityFromDocument(currentTraining) : null;
   }
 
-  /*
-  public async getTrainingsWithPurchasesStats(query?: TrainingQuery, user?: AuthUser):
-  Promise<PaginationResult<TrainingEntity>> {
-    const take = (query?.count && query.count < MAX_TRAINING_COUNT_LIMIT) ? query.count : MAX_TRAINING_COUNT_LIMIT;
-    const skip = (query?.page && query?.count) ? (query.page - 1) * query.count : undefined;
-    const where: Prisma.TrainingWhereInput = {coachId: user?.id};
-    const orderBy: Prisma.TrainingOrderByWithRelationInput = {};
-
-    const [trainings, trainingsCount] = await Promise.all([
-      this.client.training.findMany({
-        where,
-        take,
-        skip,
-        orderBy
-      }),
-      this.getTrainingsCount(where)
-    ])
-
-    return {
-      entities: trainings.map((training) => this.createEntityFromDocument(training)),
-      totalItems: trainingsCount,
-      currentPage: query?.page ?? DEFAULT_PAGE_NUMBER,
-      totalPages: Math.ceil(trainingsCount/take),
-      itemsPerPage: take
-    }
-  }*/
-
   public async update(trainingEntity: TrainingEntity): Promise<void> {
     const training = trainingEntity.toPOJO();
     await this.client.training.update(

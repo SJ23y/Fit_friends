@@ -11,7 +11,7 @@ type SertificateCardProps = {
 
 function SertificateCardTemplate({ sertificate, isControlsVisible }: SertificateCardProps): JSX.Element {
   const [editStatus, setEditStatus] = useState<boolean>(false);
-  const [sertificateUrl, setSertificateUrl] = useState<string | null>(`${Setting.BaseUrl}${sertificate}`);
+  const [sertificateUrl, setSertificateUrl] = useState<string | null>(`${Setting.BaseUrl}/${sertificate}`);
   const sertificateRef = useRef<HTMLInputElement | null>(null);
   const dispatch = useAppDispatch();
 

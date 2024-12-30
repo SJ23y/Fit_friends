@@ -63,11 +63,11 @@ function UserCard(): JSX.Element {
     let status = false;
     if (viewedUser?.friends && viewedUser.friends.length > 0) {
       status = viewedUser.friends.some((friend) => friend.friendId === loggedUser?.id || friend.userId === loggedUser?.id);
-      console.log('friends', status)
+
     }
     if (!(status) && viewedUser?.friendship && viewedUser.friendship.length > 0) {
       status = viewedUser.friendship.some((friend) => friend.friendId === loggedUser?.id || friend.userId === loggedUser?.id);
-      console.log('friendship', status)
+
     }
     setIsFriend(status);
   }, [viewedUser])

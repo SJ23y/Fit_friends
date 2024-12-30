@@ -117,24 +117,6 @@ function QuestionnaireCoach(): JSX.Element {
                       </div>
                     </div>
                   </div>
-                  {
-                  /*
-                    <div className="questionnaire-coach__block">
-                      <span className="questionnaire-coach__legend">Ваши дипломы и сертификаты</span>
-
-                      <div className="drag-and-drop questionnaire-coach__drag-and-drop">
-                        <label>
-                          <span className="drag-and-drop__label" tabIndex={0}>Загрузите сюда файлы формата PDF, JPG или PNG
-                            <svg width={20} height={20} aria-hidden="true">
-                              <use xlinkHref="#icon-import" />
-                            </svg>
-                          </span>
-                          <input type="file" name="import" tabIndex={-1} accept=".pdf, .jpg, .png" />
-                        </label>
-                      </div>
-                    </div>
-                  */
-                  }
                   <div className="questionnaire-coach__block">
                     <span className="questionnaire-coach__legend">Расскажите о своём опыте, который мы сможем проверить</span>
                     <div className="custom-textarea questionnaire-coach__textarea">

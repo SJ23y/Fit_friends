@@ -84,7 +84,6 @@ const userProcess = createSlice({
       })
       .addCase(checkAuthorization.rejected, (state, action) => {
         state.authorizationStatus = AuthorizationStatus.NoAuth;
-        console.log(action.error);
         state.error = action.error;
         state.loadingStatus = false;
         state.user = null
@@ -157,8 +156,10 @@ const userProcess = createSlice({
       })
       .addCase(getUserById.fulfilled, (state, action) => {
         state.loadingStatus = false;
-        state.currentlyViewedUser = action.payload;
         state.error = null;
+        if (action.payload) {
+          state.currentlyViewedUser = action.payload;
+        }
       })
       .addCase(getUserById.rejected, (state, action) => {
         state.loadingStatus = false;

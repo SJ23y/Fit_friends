@@ -5,11 +5,10 @@ import { Trainings } from "../../types/trainings";
 import { Setting } from "../../consts";
 
 type CoachTrainingsBoxProps = {
-  trainings: Trainings,
-  indiviDualTrainings?: boolean
+  trainings: Trainings
 }
 
-function CoachTrainingsBoxTemplate({trainings, indiviDualTrainings}: CoachTrainingsBoxProps): JSX.Element {
+function CoachTrainingsBoxTemplate({trainings}: CoachTrainingsBoxProps): JSX.Element {
   const [startIndex, setStartIndex] = useState(0);
 
   return(

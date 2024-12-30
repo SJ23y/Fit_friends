@@ -96,8 +96,6 @@ export class AuthenticationController {
         fileIsRequired: false
       }),
     ) file: Express.Multer.File) {
-    console.log('UpdateUserDto', dto);
-    console.log('file', file);
     const user = await this.authenticationService.update(dto, file, payload.sub);
     return fillDto(UserRdo, user.toPOJO());
   }
@@ -239,7 +237,7 @@ export class AuthenticationController {
   @UseGuards(RoleCoachCheckGuard)
   @Post('sertificate/delete')
   public async deleteSertificate(@Body() dto: SertificateDto, @Req() {user}: RequestWithTokenPayload) {
-    console.log('sertificate delete', [user, undefined, dto]);
+
     await this.authenticationService.updateSertificates(user, undefined, dto.path);
   }
 }

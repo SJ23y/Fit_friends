@@ -1,13 +1,11 @@
 import { registerAs } from '@nestjs/config'
 import * as Joi from 'joi';
 
-const ENVIRONMENTS = ['development', 'production', 'stage'] as const;
 const DEFAULT_RABBIT_PORT = '5672';
 const DEFAULT_SMTP_PORT = '25';
 const DEFAULT_CLIENT_PORT = '5173';
 
 export interface MessagesConfig {
-  environment?: string,
   clientPort: number,
   rabbit: {
     host: string;
@@ -27,7 +25,6 @@ export interface MessagesConfig {
 }
 
 const validationSchema = Joi.object({
-  environment: Joi.string().valid(...ENVIRONMENTS).required(),
   clientPort: Joi.number().port().default(DEFAULT_CLIENT_PORT),
   rabbit: Joi.object({
     host: Joi.string().hostname().required(),
@@ -56,7 +53,6 @@ function validateConfig(config: MessagesConfig): void {
 
 function getConfig(): MessagesConfig {
   const config: MessagesConfig = {
-    environment: process.env.NODE_ENV,
     clientPort: parseInt(process.env.CLIENT_PORT ?? DEFAULT_CLIENT_PORT, 10),
     rabbit: {
       host: process.env.RABBIT_HOST,

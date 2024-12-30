@@ -21,11 +21,31 @@ FitFriends — это онлайн площадка для поиска трен
       DATABASE_URL=postgres://user:password@fit_friends.postgres:5432/fitfriends - путь к базе данных для Prisma
     - file.env:  
       STATIC_DIRECTORY_PATH=H:\static - абсолютный путь на сервере, где будут храниться статические файлы  
-      UPLOADS_DIRECTORY_PATH=\uploads - маршрут, по которому будут отдаваться сохранённые ранее пользовательские файлы  
+      UPLOADS_DIRECTORY_PATH=\uploads - маршрут, по которому будут отдаваться сохранённые ранее пользовательские файлы
+    - notification.env  
+      RABBITMQ_DEFAULT_USER=admin - имя пользователя для rabbitMQ  
+      RABBITMQ_DEFAULT_PASS=test - пароль пользователя для rabbitMQ  
+      RABBIT_HOST=localhost - имя хоста для rabbitMQ  
+      RABBIT_PASSWORD=test - пароль пользователя для rabbitMQ  
+      RABBIT_PORT=5672 - порт для rabbitMQ
+      RABBIT_USER=admin - пароль пользователя для rabbitMQ  
+      RABBIT_QUEUE=readme.notify.income - имя queue для rabbitMQ  
+      RABBIT_EXCHANGE=readme.notify - имя exchange для rabbitMQ  
+      MAIL_SMTP_HOST=localhost - имя хоста для SMTP сервера  
+      MAIL_SMTP_PORT=25 - номер порта для SMTP сервера
+      MAIL_USER=readmeMail - имя пользователя для SMTP сервера  
+      MAIL_PASSWORD=1111 - пароль пользователя для SMTP сервера  
+      MAIL_FROM=noreply@readme.com - почтовый адрес отпраителя для инормационных писем  
+      CLIENT_PORT=5173 - номер порта для SMTP клиента    
 
   Перед запуском сервера необходимо развернуть БД в докер-контейнере с помощью команды:
   ```bash
   docker compose --file apps/api/docker-compose.yml --env-file apps/api/env/api.env up -d
+  ```
+
+  Перед запуском сервера необходимо развернуть запустить брокер сообщений и почтовый сервер в докер-контейнере с помощью команды:
+  ```bash
+  docker compose --file apps/api/notify.compose.dev.yml --env-file apps/api/env/notification.env up -d
   ```
 
   Запуск сервера бекенда осуществляется командой:
@@ -57,7 +77,7 @@ FitFriends — это онлайн площадка для поиска трен
   Из дерикториии 'frontend' запустить команды:
   ```bash
   npm run build
-  docker build --file ./Docerfile --tag fitfriends-frontend:v.1.0 .
+  docker build --file ./Docerfile --tag fitfriends-frontend:v.1.1 .
   ```
 
   Из дерикториии 'backend' запустить команды:

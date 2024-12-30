@@ -163,10 +163,7 @@ export class AuthenticationService {
 
     if (formerFilePath) {
       await this.fileService.deleteFile(formerFilePath);
-      console.log('formerFilePath: ',formerFilePath );
-      console.log(sertificates);
       sertificates = sertificates.filter((sertificate) => sertificate !== formerFilePath);
-      console.log('filtered sertificates: ', sertificates);
     }
 
    await this.userRepository.update(

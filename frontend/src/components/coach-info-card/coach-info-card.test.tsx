@@ -28,7 +28,7 @@ describe('Component: CoachInfoCard', () => {
       isReadyForTraining: true,
       loggedUserId: 'string',
       hasSubscription: true,
-      onSubscriptionChange: (coachId: string, coachName: string) => 'void'
+      onSubscriptionChange: () => 'void'
     }
 
     const { withStoreComponent } = withStore(<CoachInfoCard {...componentProps}  />, {USER: {...initialState}});
@@ -37,7 +37,7 @@ describe('Component: CoachInfoCard', () => {
   it('check for keywords', () => {
     const headlineText = /Карточка пользователя роль тренер/i;
     const notificationLabelText = /Получать уведомление на почту о новой тренировке/i
-   
+
     render(preparedComponent);
 
     expect(screen.getByText(headlineText)).toBeInTheDocument();
@@ -45,7 +45,7 @@ describe('Component: CoachInfoCard', () => {
   });
 
   it('should render correct text information about user', async () => {
-    
+
     render(preparedComponent);
 
     expect(screen.getByText(componentProps.user.name)).toBeInTheDocument();
@@ -55,102 +55,102 @@ describe('Component: CoachInfoCard', () => {
         expect(screen.getByText(`#${type}`)).toBeInTheDocument();
     })
   });
-  
+
   it('should render correct with individualTrainings false', async () => {
     componentProps.user.questionnaire = generateMockCoachQuestionnaire();
     componentProps.user.questionnaire.individualTraining = false;
     const expectedText = 'Не готов тренировать';
 
     render(preparedComponent);
-    
-    expect(screen.getByText(expectedText)).toBeInTheDocument();    
+
+    expect(screen.getByText(expectedText)).toBeInTheDocument();
   });
-  
+
   it('should render correct with two sertificates', async () => {
-    componentProps.user.sertificates = ['sertificate1', 'sertificate2'];    
+    componentProps.user.sertificates = ['sertificate1', 'sertificate2'];
     const expectedText = 'Посмотреть сертификаты';
 
     render(preparedComponent);
-    
-    expect(screen.getByText(expectedText)).toBeInTheDocument();    
+
+    expect(screen.getByText(expectedText)).toBeInTheDocument();
   });
 
   it('should render correct with empty sertificates', async () => {
-    componentProps.user.sertificates = [];    
+    componentProps.user.sertificates = [];
     const expectedText = 'Посмотреть сертификаты';
 
     render(preparedComponent);
-    
+
     await waitFor(() => {
       expect(screen.queryByText(expectedText)).toBeNull()
-    })   
+    })
   });
 
   it('should render correct with isFriend prop true', async () => {
-    componentProps.isFriend = true;   
+    componentProps.isFriend = true;
     const expectedText = 'Удалить из друзей';
     const notExpectedText = 'Добавить в друзья';
 
     render(preparedComponent);
-    
+
     expect(screen.getByText(expectedText)).toBeInTheDocument()
     await waitFor(() => {
       expect(screen.queryByText(notExpectedText)).toBeNull()
-    })    
+    })
   });
 
   it('should render correct with isFriend prop false', async () => {
-    componentProps.isFriend = false;   
+    componentProps.isFriend = false;
     const notExpectedText = 'Удалить из друзей';
     const expectedText = 'Добавить в друзья';
     const { withStoreComponent } = withStore(<CoachInfoCard {...componentProps}  />, {USER: {...initialState}});
     const preparedComponent = withHistory(withStoreComponent);
     render(preparedComponent);
-    
+
     expect(screen.getByText(expectedText)).toBeInTheDocument()
     await waitFor(() => {
       expect(screen.queryByText(notExpectedText)).toBeNull()
-    })    
+    })
   });
 
   it('should render correct with isFriend prop false and individualTrainings true', async () => {
     componentProps.isFriend = false;
     componentProps.user.questionnaire = generateMockCoachQuestionnaire();
-    componentProps.user.questionnaire.individualTraining = true;   
+    componentProps.user.questionnaire.individualTraining = true;
     const notExpectedText = 'Хочу персональную тренировку';
     const { withStoreComponent } = withStore(<CoachInfoCard {...componentProps}  />, {USER: {...initialState}});
     const preparedComponent = withHistory(withStoreComponent);
     render(preparedComponent);
-    
+
     await waitFor(() => {
       expect(screen.queryByText(notExpectedText)).toBeNull()
-    })    
+    })
   });
 
   it('should render correct with isFriend prop true and individualTrainings true', async () => {
     componentProps.isFriend = true;
     componentProps.user.questionnaire = generateMockCoachQuestionnaire();
-    componentProps.user.questionnaire.individualTraining = true;   
+    componentProps.user.questionnaire.individualTraining = true;
     const expectedText = 'Хочу персональную тренировку';
     const { withStoreComponent } = withStore(<CoachInfoCard {...componentProps}  />, {USER: {...initialState}});
     const preparedComponent = withHistory(withStoreComponent);
     render(preparedComponent);
-    
-    expect(screen.getByText(expectedText)).toBeInTheDocument()   
+
+    expect(screen.getByText(expectedText)).toBeInTheDocument()
   });
 
   it('should render correct with isFriend prop true and individualTrainings false', async () => {
     componentProps.isFriend = true;
     componentProps.user.questionnaire = generateMockCoachQuestionnaire();
-    componentProps.user.questionnaire.individualTraining = false;   
+    componentProps.user.questionnaire.individualTraining = false;
     const notExpectedText = 'Хочу персональную тренировку';
     const { withStoreComponent } = withStore(<CoachInfoCard {...componentProps}  />, {USER: {...initialState}});
     const preparedComponent = withHistory(withStoreComponent);
     render(preparedComponent);
-    
+
     await waitFor(() => {
       expect(screen.queryByText(notExpectedText)).toBeNull()
-    })  
+    })
   });
 
   it('should render correct with hasSubscription true', async () => {
@@ -159,7 +159,7 @@ describe('Component: CoachInfoCard', () => {
     const { withStoreComponent } = withStore(<CoachInfoCard {...componentProps}  />, {USER: {...initialState}});
     const preparedComponent = withHistory(withStoreComponent);
     render(preparedComponent);
-    
+
     expect(screen.getByTestId(individualTrainingsTestId)).toBeChecked()
   });
 
@@ -169,7 +169,7 @@ describe('Component: CoachInfoCard', () => {
     const { withStoreComponent } = withStore(<CoachInfoCard {...componentProps}  />, {USER: {...initialState}});
     const preparedComponent = withHistory(withStoreComponent);
     render(preparedComponent);
-    
+
     expect(screen.getByTestId(individualTrainingsTestId)).not.toBeChecked()
   });
 });

@@ -14,9 +14,7 @@ function CoachSertificatesSectionTemplate({ sertificates }: CoachSertificatesSec
   const dispatch = useAppDispatch();
 
   const loadSertificateInputClickHandler = () => {
-    console.log('in callback');
     if (sertificateRef.current && sertificateRef.current.files?.[0]) {
-      console.log('in if section');
       const formData = new FormData();
       formData.append('sertificate', sertificateRef.current.files[0]);
       dispatch(addNewSertificate(formData));
