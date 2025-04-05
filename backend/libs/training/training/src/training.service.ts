@@ -31,7 +31,6 @@ export class TrainingService {
       rate: 0
     })
     await this.trainigRepository.save(trainingEntity);
-    await this.subscriptionService.sendEmail(trainingEntity.toPOJO());
     return trainingEntity;
   }
 

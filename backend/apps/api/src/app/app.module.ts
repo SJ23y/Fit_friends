@@ -8,23 +8,12 @@ import { FileManagerModule } from '@backend/file-manager';
 import { FileManagerConfigModule } from '@backend/file-manager-config'
 import { FriendsModule } from '@backend/friends';
 import { TrainingRequestModule } from '@backend/trainingRequest';
-import { MessagesConfigModule } from '@backend/messages-config';
-import { SubscriptionModule } from '@backend/subscription';
-import { MessagesBrokerModule } from '@backend/messages-broker';
-import { MessagesEmailModule } from '@backend/messages-email';
-import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
-import { getRabbitMqOptions } from '@backend/shared-helpers';
 import { NotificationModule } from '@backend/notiifcation'
 
 @Module({
   imports: [
     AccountConfigModule,
-    MessagesConfigModule,
     FileManagerConfigModule,
-    RabbitMQModule.forRootAsync(
-      RabbitMQModule,
-      getRabbitMqOptions('messages')
-    ),
     AuthenticationModule,
     TrainingModule,
     ReviewModule,
@@ -32,9 +21,6 @@ import { NotificationModule } from '@backend/notiifcation'
     FileManagerModule,
     FriendsModule,
     TrainingRequestModule,
-    SubscriptionModule,
-    MessagesBrokerModule,
-    MessagesEmailModule,
     NotificationModule
   ],
   controllers: [],
