@@ -1,5 +1,5 @@
 #create a new user
-POST http://localhost:3000/register HTTP/1.1
+POST http://83.217.210.193:3000/register HTTP/1.1
 Content-Type: application/json
 
 {
@@ -22,12 +22,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmOWVmY2JhM
 ###
 
 #Login user
-POST http://localhost:3000/login HTTP/1.1
+POST http://83.217.210.193:3000/login HTTP/1.1
 Content-Type: application/json
 
 {
-  "email": "Maureen98@gmail.com",
-  "password": "password"
+  "email": "ted@mail.com",
+  "password": "111111"
 }
 
 ###
@@ -66,8 +66,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0ZjY0YTNkY
 ###
 
 # Get all users
-GET http://localhost:3000/user HTTP/1.1
+GET http://83.217.210.193:3000/user HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzNTViNWZhYy1jZTM4LTRkYTAtYmMzOS1kMGYzMTUxMzQ1Y2QiLCJuYW1lIjoiU0oiLCJyb2xlIjoidXNlciIsImlhdCI6MTczMzM3NTMyOSwiZXhwIjoxNzMzMzc2MjI5fQ.db6h0aCvryEXdIrlyE5jtEkMJcBqAtcpybvNR9EGHnQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5MWQ5YzJiMS04YjYwLTRjZmEtOTI0OC0wY2RiMjIyMGUxY2MiLCJuYW1lIjoiVGVkIExhc3NvIiwicm9sZSI6InVzZXIiLCJpYXQiOjE3Mzg0MzE4MTYsImV4cCI6MTczODQzMjcxNn0.aVAawr3ufttuNaLQc1DO-wcya5Mhzfw70NLGFZ9loZM
 
 ###

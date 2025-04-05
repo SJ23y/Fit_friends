@@ -137,8 +137,7 @@ export enum SortDirection {
 
 export const Setting = {
   ApiTimeout: 5000,
-  BaseUrl: 'http://localhost:3000',
-  StaticUrl: 'http://localhost:5173/public',
+  BaseUrl: 'http://83.217.210.193:3000',
   DefaultSortDirection: SortDirection.DESC,
   DefaultSortBy: SortBy.DATE,
   DefaultStartPage: 1,
