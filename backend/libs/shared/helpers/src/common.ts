@@ -59,10 +59,6 @@ export const  isUserQuestionnaire = (questionnaire: UserQuestionnarie | CoachQue
   return (questionnaire as UserQuestionnarie).trainDuration !== undefined && (questionnaire as UserQuestionnarie).trainDuration !== null
 }
 
-export function getRabbitMqConnectionString({user, password, host, port}: {user:string, password: string, host:string, port:string}) {
-  return `amqp://${user}:${password}@${host}:${port}`;
-}
-
 /*
 export function getArrayOfUniques<T>(arr: T[]): T[] {
   const set = new Set(arr);

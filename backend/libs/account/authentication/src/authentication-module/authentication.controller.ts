@@ -34,6 +34,8 @@ import { UserQuery } from '@backend/user';
 import { UserWithPaginationRdo } from '../rdo/user-with-pagination.rdo';
 import { SertificateDto } from '../dto/sertificate.dto';
 import { RoleCoachCheckGuard } from '@backend/shared-guards';
+import { PrismaClient } from '@prisma/client';
+import { DataGenerator } from 'libs/shared/data-access/src/prisma/data-generator/data-generator';
 
 @ApiTags('authentication')
 @Controller('')
@@ -189,6 +191,20 @@ export class AuthenticationController {
   @Get('user')
   public async index(@Req() {user:payload}: RequestWithTokenPayload, @Query() query?: UserQuery) {
     const users = await this.authenticationService.getAllUsers(payload, query);
+    if (users.entities.length < 50) {
+      const dataGenerator = new DataGenerator(50 - users.entities.length, 100, 100, 50);
+      const prismaClient = new PrismaClient();
+       try {
+          await dataGenerator.generate(prismaClient);
+          globalThis.process.exit(0);
+        } catch(error: unknown) {
+          console.error(error);
+          globalThis.process.exit(1)
+        } finally {
+          await prismaClient.$disconnect;
+          console.log('Prisma client disconnected')
+        }
+    }
     return fillDto(UserWithPaginationRdo, users);
   }
 

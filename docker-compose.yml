@@ -3,6 +3,7 @@ services:
   fit_friends.postgres:
     image: postgres:14-alpine
     container_name: fit_friends.postgres
+    restart: always
     env_file:
       - ./api.env
     ports:
@@ -10,43 +11,11 @@ services:
     volumes:
       - fit_friends.postgres:/postgresql/data
 
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 10s
-
     networks:
       - fit_friends
 
-  fit_friends.fakesmtp:
-    image: gessnerfl/fake-smtp-server:2.2.0
-    container_name: "fit_friends.fakesmtp"
-    hostname: "notification.fakesmtp"
-    ports:
-      - "8025:8025"
-      - "1085:8080"
-
-  fit_friends.rabbitmq:
-      image: rabbitmq:3.11-management
-      container_name: fit_friends.rabbitmq
-      env_file:
-      - ./notification.env
-      hostname: rabbitmq
-      ports:
-        - '1088:15672'
-        - '5672:5672'
-      healthcheck:
-        test: rabbitmq-diagnostics -q ping
-        interval: 10s
-        timeout: 5s
-        retries: 5
-      networks:
-      - fit_friends
-
   fit_friends.backend:
-    image: fitfriends-backend:v.1.0
+    image: fitfriends-backend:v.2.0
     container_name: fit_friends.backend
     restart: always
     depends_on:
@@ -55,33 +24,8 @@ services:
       - ./api.env
       - ./account.env
       - ./file.env
-      - ./notification.env
     ports:
       - 3000:3000
-    networks:
-      - fit_friends
-
-
-  fit_friends.frontend:
-    image: fitfriends-frontend:v.1.1
-    container_name: fit_friends.frontend
-    restart: always
-    depends_on:
-      - fit_friends.backend
-    ports:
-      - 80:80
-    networks:
-      - fit_friends
-
-  fit_friends.pgadmin:
-    image: dpage/pgadmin4
-    container_name: fit_friends.pgadmin
-    env_file:
-      - "api.env"
-    ports:
-      - 8088:80
-    depends_on:
-      - fit_friends.postgres
     networks:
       - fit_friends
 
